@@ -1,0 +1,31 @@
+<html>
+
+<head><title>Playgrounds</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/writ.min.css">
+</head>
+
+<body>
+  <header>
+    <h1>fcanas</h1>
+    <nav>
+    <ul style="list-style-type:none">
+      <li><a href='/'>about</a></li>
+      <li><a href='/blog/'>blog</a></li>
+      <li><a href='/software/'>software</a></li>
+      |
+      <li><a href='https://www.github.com/fcanas'>GitHub</a></li>
+      <li><a href='https://www.twitter.com/fcanas'>Twitter</a></li>
+    </ul>
+    </nav>
+  </header>
+  <main>
+<article>
+  <h1>Playgrounds</h1>
+  <date>2015-01-29</date>
+<p>I have not found Xcode's Playgrounds useful. I desperately want them to be good, and I'm still excited about their future. I spent years working in interactive environments like MATLAB, Mathematica, and R. Beyond a REPL, the kind of notebook-style development those environments afford are excellent for exploring algorithms and data. They truly make play out of programming, mathematics, modeling, even prototyping.</p><p>Playgrounds seem to be useful for doing basic demonstrations of the Swift language. They are also suitable for exploring algorithms, or <a href="http://www.fewbutripe.com/swift/math/2015/01/06/proof-in-functions.html">the type system and generics</a>. But nearly every time I've tried to do real work, I've failed to use Playgrounds productively.</p><p>I think playgrounds could be a fantastic interactive environment some day. They may never be as powerfully interactive as MATLAB or Mathematica. They may never have the scientific and engineering packages those environments have. But they don't have to.</p><p>I want Playgrounds to work for me because I like writing software component-by-component in minimally necessary environments. That usually means writing libraries with well-defined interfaces that drive a minimal harness application that exercises and demonstrates the functionality of the library. But that approach brings with it a certain overhead — libraries and a harness application. If the component isn't going to be reusable, those artifacts are mere side-effects of my development with little value on their own. Playgrounds appeal to me because they may some day be the place I write all code before integrating it into an application. No more harness applications.</p><p>In the mean time, Playgrounds fall short.</p><p>I tried to use Playgrounds to prototype some tricky code for <a href="http://randomrunapp.com">RandomRun</a>. The app requires some fairly elaborate route processing and route drawing. Apple's Maps framework appears to load but does not work in Playgrounds. So I made a harness app.</p><p>On another project I needed to write custom CoreImage kernels. I was excited to relive days from years ago being incredibly productive writing image processing code in MATLAB. But CoreImage doesn't work in Playgrounds. So I made a harness app.</p><p>On top of this, Playgrounds get incredibly slow as they grow.</p><p>But I'm not giving up yet. I'm excited to see what future releases bring.</p><p>I hope to be able to load external frameworks into Playgrounds soon. It could lead to an explosion of cool uses for Playgrounds. They could be used as powerful notebook environments with tons of third-party libraries like MATLAB and Mathematica (not to mention diving into new vendor-provided libraries). With an inline testing framework, Test Driven Development could be pushed to the extreme with a local, focused suite of unit tests executing every time you change a line of code. Or maybe Playgrounds could become the de facto medium for demonstrating and trying out third-party libraries.</p><p>I would also expect that loading external resources (images, videos, sounds, etc) into Playgrounds will become easier. Currently, it's possible but an unfortunately complicated, manual process. The only way I'm aware you can add resources is to put files directly into the Playground's bundle. Playgrounds ought to have support for asset catalogs like apps do. It would also be great if Playgrounds could fetch, save, and load data freely between the network and file system. </p><p>Playgrounds offer a teasing glimpse of an accessible direct-manipulation computing platform might look like. But it hasn't delivered yet.</p>
+</article>
+  </main>
+</body>
+</html>

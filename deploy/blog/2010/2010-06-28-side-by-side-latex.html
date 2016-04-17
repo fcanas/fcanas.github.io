@@ -1,0 +1,44 @@
+<html>
+<head><title>Side by Side Figures in LaTeX</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/writ.min.css">
+<link rel="stylesheet" href="/code.css">
+</head>
+
+<body>
+  <header>
+    <h1>fcanas</h1>
+    <nav>
+    <ul style="list-style-type:none">
+      <li><a href='/'>about</a></li>
+      <li><a href='/blog/'>blog</a></li>
+      <li><a href='/software/'>software</a></li>
+      |
+      <li><a href='https://www.github.com/fcanas'>GitHub</a></li>
+      <li><a href='https://www.twitter.com/fcanas'>Twitter</a></li>
+    </ul>
+    </nav>
+  </header>
+  <main>
+<article>
+<h1>Side by Side Figures in LaTeX</h1>
+<date>2010-06-28</date>
+<p>In another note to myself, here I describe how to put two figures side by side in LaTeX with the minipage environment. I know there are many other ways to do it, including the subfigure package, but I prefer minipage because each subfigure gets its own caption, labeling works like I want it to, and most of all the markup is easy to understand and extend. That is, it’s easy to see how you can put three or four figures together, and I prefer that to other alternatives with an opaque command.</p>
+<pre>
+\begin{figure}[htbp]
+  \begin{minipage}[b]{0.5\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{figure01.eps}
+    \caption{The caption for figure 1}
+    \label{fig:chapter001_dist_001}
+  \end{minipage}
+  \hspace{0.5cm}
+  \begin{minipage}[b]{0.5\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{figure02.eps}
+    \caption{The caption for figure 2.}
+    \label{fig:chapter001_reward_001}
+  \end{minipage}
+\end{figure}
+</pre>

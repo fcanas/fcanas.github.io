@@ -1,0 +1,35 @@
+<html>
+<head><title>Double-spacing and 1-inch Margins in LaTeX</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/writ.min.css">
+<link rel="stylesheet" href="/code.css">
+</head>
+
+<body>
+  <header>
+    <h1>fcanas</h1>
+    <nav>
+    <ul style="list-style-type:none">
+      <li><a href='/'>about</a></li>
+      <li><a href='/blog/'>blog</a></li>
+      <li><a href='/software/'>software</a></li>
+      |
+      <li><a href='https://www.github.com/fcanas'>GitHub</a></li>
+      <li><a href='https://www.twitter.com/fcanas'>Twitter</a></li>
+    </ul>
+    </nav>
+  </header>
+  <main>
+<article>
+<h1>Double-spacing and 1-inch Margins in LaTeX</h1>
+<date>2010-04-11</date>
+<p>Once or twice a year, I inevitably have to write a paper for a professor who wants 1-inch margins and double-spacing. Being a <a href="http://www.latex-project.org/">LaTeX</a> user, I generally don’t concern myself with document formatting — I’ve always thought that’s the <em>point</em> of LaTeX: let it worry about formatting for you. As a result, I use formatting commands extraordinarily infrequently, and never actually learn them. So instead of playing around with various commands every few months until my memory gets it right, I’m going to put the appropriate snippet of code here. I know where to find it next time.</p><p>The code goes in the preamble. The first line sets the margins to 1-inch. The next two lines together make the document double-spaced.</p>
+
+<pre>
+\usepackage{fullpage}
+\usepackage{setspace}
+\doublespacing
+</pre>
+
+<p>As with almost anything in LaTeX, there are tons of ways of accomplishing the same thing. This is just the simplest and clearest method I’m aware of.</p>

@@ -1,0 +1,133 @@
+---
+layout: post
+title: Detecting Displays
+categories: []
+tags:
+- cocoa
+- mac
+- objective-c
+- quartz
+status: publish
+type: post
+published: true
+meta: {}
+---
+<p style="margin-left:0px; margin-right:0px">In the process of making <a href="http://www.fabiancanas.com/Projects/MirrorDisplays/">Mirror Displays</a> I learned more or less what Quartz Display Services in Mac <span>OS X</span>has to offer. It more or less lets to get and set all size, position, color, gamma, mirroring settings for attached monitors. It lets you fade the monitors in and out, and lets your app monopolize output to any monitors. An important element to the Display Services though, is that you can register to be notified of any changes to the displays.</p><p>I’m writing this particular post because I know that Java has some <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4417795">problems</a> when it comes to dynamically detecting multiple monitors when you go and connect and disconnect them. Though I certainly hope Sun eventually fixes the problem, this sounded like the sort of thing that unfortunately needs to be solved on the native platform. I haven’t done any programming in Windows or Linux in a long time, but I hope I can help those using Mac <span>OS X</span> by showing you a barebones program that just sits and listens for display changes. I’m not going to make it talk to Java, but you make a little client-server setup, or maybe you could use the <a href="http://developer.apple.com/documentation/Cocoa/Conceptual/ScriptingBridgeConcepts/Introduction/Introduction.html">Scripting Bridge</a> that’s available with Leopard if you want to get fancy.</p><p>First, the design for the app is not particularly important. I chose one of the easier paths, but probably not the sleekest. I made a new Cocoa application, defined a new Cocoa object named Detector, and put an instance of it in the application’s nib file so it one would get initialized as soon as the app started running. All the object does is register a function callback for notifications when it’s loaded, and stop the function from being called when the object is deallocated (the program exits). As I said, this was just what I decided to do to get the thing up and running as fast as possible. It’s only important to mention so the code actually makes sense.</p><pre>@implementation Detector
+
+-(void) awakeFromNib
+{
+CGError err = CGDisplayRegisterReconfigurationCallback(ReconfigurationCallBack,self);
+if (err != kCGErrorSuccess){
+NSLog(CGErrorToString(err));
+return;
+}
+}
+
+-(void) dealloc
+{
+CGError err = CGDisplayRemoveReconfigurationCallback(ReconfigurationCallBack, self);
+if (err != kCGErrorSuccess){
+NSLog(CGErrorToString(err));
+return;
+}
+[super dealloc];
+}
+
+@end
+</pre><p>The heavy lifting gets done with the callback function ReconfigurationCallBack.</p><pre>void ReconfigurationCallBack (CGDirectDisplayID display, CGDisplayChangeSummaryFlags flags,void *userInfo){
+CGDisplayCount onlineDisplays;
+CGDisplayCount activeDisplays;
+CGDisplayCount maxDisplays = 3;
+CGDirectDisplayID displayArray[] = {0,0,0};
+
+NSString *title, *message;
+BOOL addedOrRemoved = FALSE;
+
+if (flags &amp; kCGDisplayAddFlag) {
+title = @"Display Added";
+addedOrRemoved = TRUE;
+} else if (flags &amp; kCGDisplayRemoveFlag) {
+title = @"Display Removed";
+addedOrRemoved = TRUE;
+}
+
+if (addedOrRemoved){
+
+// Checking for online displays (monitors physically available)
+CGDisplayErr err = CGGetOnlineDisplayList (maxDisplays, displayArray, &amp;onlineDisplays);
+if (err != kCGErrorSuccess){
+NSLog(CGErrorToString(err));
+return;
+}
+// Checking for the number of screens available.
+err = CGGetActiveDisplayList(maxDisplays, displayArray, &amp;activeDisplays);
+if (err != kCGErrorSuccess){
+NSLog(CGErrorToString(err));
+return;
+}
+
+message = [NSString stringWithFormat:@"%d physical displays available.\n%d screens to draw to.",onlineDisplays,activeDisplays];
+
+if (onlineDisplays&gt;1)
+message = [NSString stringWithFormat:@"%@\n\nMirroring is turned %@",message,
+ (activeDisplays &lt; onlineDisplays)?@"on":@"off"];
+
+id panel = NSGetAlertPanel(title, message, @"Ok",nil,nil);
+NSModalSession session = [NSApp beginModalSessionForWindow:panel];
+for (;;) {
+if ([NSApp runModalSession:session] != NSRunContinuesResponse)
+break;
+}
+[NSApp endModalSession:session];
+NSReleaseAlertPanel(panel);
+}
+}
+
+</pre><p>This function uses another function I wrote when working with Display services to decode the CGErrorsthat come up:</p><pre>NSString* CGErrorToString(CGError err){
+switch (err) {
+case kCGErrorSuccess:
+return @"The requested operation was completed successfully.";
+break;
+case kCGErrorFailure:
+return @"A general failure occurred.";
+break;
+case kCGErrorIllegalArgument:
+return @"One or more of the parameters passed to a function are invalid. Check for NULL pointers.";
+break;
+case kCGErrorInvalidConnection:
+return @"The parameter representing a connection to the window server is invalid.";
+break;
+case kCGErrorInvalidContext:
+return @"The CPSProcessSerNum or context identifier parameter is not valid.";
+break;
+case kCGErrorCannotComplete:
+return @"The requested operation is inappropriate for the parameters passed in, or the current system state.";
+break;
+case kCGErrorNameTooLong:
+return @"A parameter, typically a C string, is too long to be used without truncation.";
+break;
+case kCGErrorNotImplemented:
+return @"Return value from obsolete function stubs present for binary compatibility, but not normally called.";
+break;
+case kCGErrorRangeCheck:
+return @"A parameter passed in has a value that is inappropriate, or which does not map to a useful operation or value.";
+break;
+case kCGErrorTypeCheck:
+return @"A data type or token was encountered that did not match the expected type or token.";
+break;
+case kCGErrorNoCurrentPoint:
+return @"An operation relative to a known point or coordinate could not be done, as there is no known point.";
+break;
+case kCGErrorInvalidOperation:
+return @"The requested operation is not valid for the parameters passed in, or the current system state.";
+break;
+case kCGErrorNoneAvailable:
+return @"The requested operation could not be completed as the indicated resources were not found.";
+break;
+default:
+return @"An error occured but its code is unknown by Quartz Display Services as of v10.5.7";
+break;
+}
+}
+
+</pre><p>Whichever files these three code blocks end up in, they each need to have access to the Application Services framework, and so it must be added to the project and the appropriate header must be included</p>
