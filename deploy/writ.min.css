@@ -141,6 +141,8 @@ nav ul li {
   padding-left: 1ch;
 }
 
+.none+ol, .none+ul {list-style-type:none;}
+
 /* Tables */
 
 table {

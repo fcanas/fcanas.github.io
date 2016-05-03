@@ -1,6 +1,6 @@
 <nav>
-<ul style="list-style-type:none">
-  <li><a href='/blog/'>blog</a></li>
+<ul>
+  <li><a href='/blog/'>writing</a></li>
   <li><a href='/software/'>software</a></li>
   |
   <li><a href='https://www.github.com/fcanas'>GitHub</a></li>
