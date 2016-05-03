@@ -26,7 +26,6 @@ $for(css)$
 $endfor$
 </head>
 <body>
-<main>
 $if(title)$
 <header>
 <h1>$title$</h1>
@@ -41,6 +40,7 @@ $include-before$
 $endfor$
 </header>
 $endif$
+<main>
 $if(toc)$
 <nav id="$idprefix$TOC">
 $toc$
