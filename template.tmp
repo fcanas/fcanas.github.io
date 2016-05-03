@@ -26,27 +26,19 @@ $for(css)$
 $endfor$
 </head>
 <body>
-$if(title)$
 <header>
-<h1>$title$</h1>
-$if(subtitle)$
-<h1>$subtitle$</h1>
-$endif$
-$if(date)$
-<h3 class="date">$date$</h3>
-$endif$
 $for(include-before)$
 $include-before$
 $endfor$
 </header>
-$endif$
 <main>
-$if(toc)$
-<nav id="$idprefix$TOC">
-$toc$
-</nav>
-$endif$
 <article>
+$if(title)$
+<h1>$title$</h1>
+$endif$
+$if(date)$
+<date>$date$</h1>
+$endif$
 $body$
 </article>
 </main>
