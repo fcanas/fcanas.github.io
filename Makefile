@@ -76,6 +76,11 @@ $(addprefix $(DEPLOY_DIRECTORY),%.css): %.css
 	@mkdir -p $(dir $@)
 	@cp $< $@
 
+$(addprefix $(DEPLOY_DIRECTORY),CNAME): CNAME
+	@echo Moving $< to $@
+	@mkdir -p $(dir $@)
+	@cp $< $@
+
 REMOTE = origin
 BRANCH = master
 
