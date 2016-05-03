@@ -1,0 +1,86 @@
+---
+layout: page
+title: SafeCast
+categories: []
+tags: []
+status: publish
+type: page
+published: true
+meta: {}
+---
+<h1 id="safecastadatapreservehtmlnodetruehrefhttpsgithubcomfcanassafecasttarget_blankclasssocialgithuba">SafeCast <a href="https://github.com/fcanas/SafeCast" target="_blank" class="social-github"></a></h1>
+
+<p><a href="https://travis-ci.org/fcanas/SafeCast"><img src="http://img.shields.io/travis/fcanas/SafeCast.svg?style=flat" alt="CI Status" title="" /></a>
+<a href="http://cocoadocs.org/docsets/SafeCast"><img src="https://img.shields.io/cocoapods/v/SafeCast.svg?style=flat" alt="Version" title="" /></a>
+<a href="http://cocoadocs.org/docsets/SafeCast"><img src="https://img.shields.io/cocoapods/l/SafeCast.svg?style=flat" alt="License" title="" /></a>
+<a href="http://cocoadocs.org/docsets/SafeCast"><img src="https://img.shields.io/cocoapods/p/SafeCast.svg?style=flat" alt="Platform" title="" /></a></p>
+
+<ul>
+<li>Cast objects in Objective-C, not in C</li>
+<li>Enumerate objects in collections only if they're of a certain kind, or conform to a protocol</li>
+<li>Be Safe</li>
+<li>Be Concice</li>
+</ul>
+
+<p>Objective-C is C, and C is perilous. Don't blindly cast objects. Stick to high-level language features, and write more readable code.</p>
+
+<p>Quite simply, you can do things like this:</p>
+
+<pre>
+NSMutableArray *mArray = [NSMutableArray safe_cast:array];
+// `mArray` is nil if `array` is not a mutable array, or `array` if it is.
+</pre>
+
+<p>Or only call methods on collection members that can respond to the selector.</p>
+
+<pre>
+[array safe_makeObjectsSafelyPerformSelector:@selector(method)];
+</pre>
+
+<p>Or enumerate with a block on objects that are of a specific kind.</p>
+
+<pre>
+[array safe_enumerateObjectsOfKind:[MyObject class]
+                        usingBlock:^(MyObject *obj, NSUInteger idx, BOOL *stop) {
+                            [obj setNumber:@3];
+                        }];
+</pre>
+
+<p>Or a protocol</p>
+
+<pre>
+[array safe_enumerateObjectsConformingToProtocol:@protocol(MyProtocol)
+                                      usingBlock:^(id<MyProtocol> *obj, NSUInteger idx, BOOL *stop) {
+                                          [obj setNumber:@3];
+                                      }];
+</pre>
+
+<p>SafeCast has quite a few methods like this, covering <code>NSArray</code>, <code>NSSet</code>, <code>NSDictionary</code>, and <code>NSOrderedSet</code>.</p>
+
+<p>I doubt it would be a good idea to give coverage to collections like <code>NSMapTable</code> or <code>NSHashTable</code>, so that's not planned.</p>
+
+<h2 id="awholelibraryfor_that_">A Whole Library for <em>that</em>?</h2>
+
+<p>Well, first of all, it's <em>really</em> small. The documentation in the headers is <em>much</em> bigger than the code. And it's tested. You may not need it. But it has a lot of things going for it.</p>
+
+<h3 id="easytointegrate">Easy to integrate</h3>
+
+<p>SafeCast is available as a <a href="http://guides.cocoapods.org/using/getting-started.html">CocoaPod</a>.</p>
+
+<pre>
+pod 'SafeCast'
+</pre>
+
+<h3 id="beconciceanddirectwithyourintent">Be concice and direct with your intent</h3>
+
+<p>It definitely takes fewer lines of code. In my opinion it's easier to read and think about than the more verbose, way of doing it safely. It keeps your type-safety checks up front and at a high level.</p>
+
+<h3 id="besafe">Be Safe</h3>
+
+<p>Maybe you know what you're doing. But do you always do the right thing? How many people are in your code base? And how well do they all know Objective-C's C underbelly? More and more developers are coming in having worked with higher-level or dynamic languages, and may not realize what's safe and what's not.</p>
+
+<p>SafeCast wants to make it easier to safely cast ... to cast only when it's safe to do so.</p>
+
+<h2 id="status">Status</h2>
+
+<p>Please send feedback, pull-requests, and coffee.</p>
