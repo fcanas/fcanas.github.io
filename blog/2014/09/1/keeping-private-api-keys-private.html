@@ -3,7 +3,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <meta name="author" content="2014-09-01">
-  <title>Keeping Private API Keys Private x</title>
+  <title>Keeping Private API Keys Private</title>
   <style type="text/css">code{white-space: pre;}</style>
   <link rel="stylesheet" href="/writ.min.css">
 </head>
@@ -23,30 +23,28 @@
 </header>
 <main>
 <article>
-<h1>Keeping Private API Keys Private x</h1>
+<h1>Keeping Private API Keys Private</h1>
 <p>I <a href="https://github.com/fcanas/DropPin/tree/c0126916482866c335f85bef87d28ca7124ee6d4">used to</a> keep sensitive iOS project information in a <code>.gitignore</code>d plist like <a href="http://blog.lazerwalker.com/blog/2014/05/14/handling-private-api-keys-in-open-source-ios-apps/">Mike Walker</a>. Now I keep secrets in a few different <code>.gitignore</code>d xcconfig files. It turns out that xcconfig files let me flexibly configure build targets for different environments. I now use this approach in closed-source projects as well.</p>
 <h2 id="xcconfig">xcconfig</h2>
 <p>An open source iOS app I have in progress shows how I do it now: <a href="https://github.com/fcanas/HabitForming" class="uri">https://github.com/fcanas/HabitForming</a>.</p>
 <p>There is a <code>Keys.example.xcconfig</code> in the repository. The README has instructions to copy its contents into <code>Keys.xcconfig</code> and replace the IDs and keys with appropriate values. The real key files are in the repository's <code>.gitignore</code> file.</p>
-<pre>PARSE_APPLICATION_ID = YOUR_ID_HERE
+<pre><code>PARSE_APPLICATION_ID = YOUR_ID_HERE
 PARSE_CLIENT_KEY = YOUR_KEY_HERE
-FACEBOOK_APPLICATION_ID = YOUR_ID_HERE
-</pre>
+FACEBOOK_APPLICATION_ID = YOUR_ID_HERE</code></pre>
 <p>The Xcode project doesn't need a direct reference to the <code>Keys.xcconfig</code> files. The project instead has references to environment config files like this one:</p>
-<pre>#include "Keys.xcconfig"
-GCC_PREPROCESSOR_DEFINITIONS = $(inherited) PARSE_APPLICATION_ID=@\"$(PARSE_APPLICATION_ID)\" PARSE_CLIENT_KEY=@\"$(PARSE_CLIENT_KEY)\" FACEBOOK_APPLICATION_ID=@\"$(FACEBOOK_APPLICATION_ID)\"
-</pre>
+<pre><code>#include &quot;Keys.xcconfig&quot;
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) PARSE_APPLICATION_ID=@\&quot;$(PARSE_APPLICATION_ID)\&quot; PARSE_CLIENT_KEY=@\&quot;$(PARSE_CLIENT_KEY)\&quot; FACEBOOK_APPLICATION_ID=@\&quot;$(FACEBOOK_APPLICATION_ID)\&quot;</code></pre>
 <p>The <code>#include</code> directive will find xcconfig files in the directory without the Xcode project needing a reference to it, meaning your project isn't ever in an inconsistent state on initial check-out. The second line makes all the values available as preprocessor symbols.</p>
 <p>With this approach, you can keep a different Keys file for different environments (<em>e.g.</em> <code>Dev-Keys.xcconfig</code>, <code>Stage-Keys.xcconfig</code>, <code>Prod-Keys.xcconfig</code>) and tie them to different build configurations: <code>Dev-Config.xcconfig</code>, <code>Config.xcconfig</code>. You can then put any information that isn't sensitive in these cnofiguration files.</p>
 <p>You'll need to configure your project's build settings to use the configurations files like so:</p>
-<pre><code>  &lt;img src=&quot;http://static1.squarespace.com/static/53e976eae4b0162bed56938c/53e9780ce4b0b27e29a5e76d/54050699e4b0f72d40bb93e4/1409615514203//img.png&quot; alt=&quot;&quot;/&gt;</code></pre>
-<h2 id="configuringatarget">Configuring a Target</h2>
+<p><img src="http://static1.squarespace.com/static/53e976eae4b0162bed56938c/53e9780ce4b0b27e29a5e76d/54050699e4b0f72d40bb93e4/1409615514203//img.png" /></p>
+<h1 id="configuring-a-target">Configuring a Target</h1>
 <p>There's a great additional advantage to having values as preprocessor directives. They're available as symbols in you app's plist, meaning you can create URL scheme handlers like <code>fb${FACEBOOK_APPLICATION_ID}</code> and they'll always be configured correctly for your environment (incredibly useful for Facebook sign-in in development and production environments).</p>
-<pre><code>  &lt;img src=&quot;http://static1.squarespace.com/static/53e976eae4b0162bed56938c/53e9780ce4b0b27e29a5e76d/5404ff68e4b0a7034afd83d9/1409613672966//img.png&quot; alt=&quot;&quot;/&gt;</code></pre>
+<p><img src="" alt="http://static1.squarespace.com/static/53e976eae4b0162bed56938c/53e9780ce4b0b27e29a5e76d/5404ff68e4b0a7034afd83d9/1409613672966//img.png" /></p>
 <p>You can also keep separate bundle identifiers for the same target (useful for things like Enterprise distribution, and separate installs on the same phone from the same target). You can also configure product names, or anything else.</p>
 <p>All without maintaining multiple targets.</p>
 <h2 id="recap">Recap</h2>
-<p>Use xcconfig files to manage service keys, app IDs, service endpoints, or anything else for different environments. </p>
+<p>Use xcconfig files to manage service keys, app IDs, service endpoints, or anything else for different environments.</p>
 <p>And reap the rewards.</p>
 <ol>
 <li>Manage different values for different environments</li>
