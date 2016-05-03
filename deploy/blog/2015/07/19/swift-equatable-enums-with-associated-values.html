@@ -1,0 +1,208 @@
+<html>
+
+<head><title>Swift Equatable Enums with Associated Values</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/writ.min.css">
+<link rel="stylesheet" href="/code.css">
+</head>
+
+<body>
+  <header>
+    <h1>fcanas</h1>
+    <nav>
+    <ul style="list-style-type:none">
+      <li><a href='/'>about</a></li>
+      <li><a href='/blog/'>blog</a></li>
+      <li><a href='/software/'>software</a></li>
+      |
+      <li><a href='https://www.github.com/fcanas'>GitHub</a></li>
+      <li><a href='https://www.twitter.com/fcanas'>Twitter</a></li>
+    </ul>
+    </nav>
+  </header>
+  <main>
+<article>
+  <h1>Swift Equatable Enums with Associated Values</h1>
+      <date>2015-07-19</date>
+<p>I'm looking for an easy and safe way to make an <code>enum</code> with associated values conform to <code>Equatable</code>. </p>
+
+<p>Given an enum with arguments that are <code>Equatable</code>, (in this case just <code>String</code>s, but heterogenous types should also work)</p>
+
+<div class="highlight highlight-swift"><pre><span class="pl-st">enum</span> Constraint {
+    <span class="pl-k">case</span> Ascending(<span class="pl-s3">String</span>)
+    <span class="pl-k">case</span> Descending(<span class="pl-s3">String</span>)
+    <span class="pl-k">case</span> Exists(<span class="pl-s3">String</span>)
+    <span class="pl-k">case</span> DoesNotExist(<span class="pl-s3">String</span>)
+}</pre></div>
+
+<p>I want two <code>Constraint</code> cases to be equal if and only if the cases match, and their associated values are equal.</p>
+
+<div class="highlight highlight-swift"><pre><span class="pl-st">extension</span> Constraint :Equatable {}</pre></div>
+
+<p>Note that it's possible an enum simply isn't the right type for the job.<sup><a href="#fn1">1</a></sup> But for the task that prompted this writing, it feels excellent to <em>use</em> the resultant interface, just not to <em>write</em> its implementation. </p>
+
+<p>My first approach is to nest switch statements. However I find it unwieldly. Is there a better way?</p>
+
+<div class="highlight highlight-swift"><pre><span class="pl-st">func</span> <span class="pl-en">==</span> (lhs: Constraint, rhs: Constraint) <span class="pl-k">-&gt;</span> <span class="pl-s3">Bool</span> {
+    <span class="pl-k">switch</span> (lhs) {
+    <span class="pl-k">case</span> <span class="pl-k">.</span>Ascending(<span class="pl-st">let</span> lKey):
+        <span class="pl-k">switch</span> (rhs) {
+        <span class="pl-k">case</span> <span class="pl-k">.</span>Ascending(<span class="pl-st">let</span> rKey):
+            <span class="pl-k">return</span> lKey <span class="pl-k">==</span> rKey
+        <span class="pl-k">case</span> <span class="pl-k">.</span>Descending:
+            <span class="pl-k">return</span> <span class="pl-c1">false</span>
+        <span class="pl-k">case</span> <span class="pl-k">.</span>Exists:
+            <span class="pl-k">return</span> <span class="pl-c1">false</span>
+        <span class="pl-k">case</span> <span class="pl-k">.</span>DoesNotExist:
+            <span class="pl-k">return</span> <span class="pl-c1">false</span>
+        }
+    <span class="pl-k">case</span> <span class="pl-k">.</span>Descending(<span class="pl-st">let</span> lKey):
+        <span class="pl-k">switch</span> (rhs) {
+        <span class="pl-k">case</span> <span class="pl-k">.</span>Ascending:
+            <span class="pl-k">return</span> <span class="pl-c1">false</span>
+        <span class="pl-k">case</span> <span class="pl-k">.</span>Descending(<span class="pl-st">let</span> rKey):
+            <span class="pl-k">return</span> lKey <span class="pl-k">==</span> rKey
+        <span class="pl-k">case</span> <span class="pl-k">.</span>Exists:
+            <span class="pl-k">return</span> <span class="pl-c1">false</span>
+        <span class="pl-k">case</span> <span class="pl-k">.</span>DoesNotExist:
+            <span class="pl-k">return</span> <span class="pl-c1">false</span>
+        }
+    <span class="pl-k">case</span> <span class="pl-k">.</span>Exists(<span class="pl-st">let</span> lKey):
+        <span class="pl-k">switch</span> (rhs) {
+        <span class="pl-k">case</span> <span class="pl-k">.</span>Ascending:
+            <span class="pl-k">return</span> <span class="pl-c1">false</span>
+        <span class="pl-k">case</span> <span class="pl-k">.</span>Descending:
+            <span class="pl-k">return</span> <span class="pl-c1">false</span>
+        <span class="pl-k">case</span> <span class="pl-k">.</span>Exists(<span class="pl-st">let</span> rKey):
+            <span class="pl-k">return</span> lKey <span class="pl-k">==</span> rKey
+        <span class="pl-k">case</span> <span class="pl-k">.</span>DoesNotExist:
+            <span class="pl-k">return</span> <span class="pl-c1">false</span>
+        }
+    <span class="pl-k">case</span> <span class="pl-k">.</span>DoesNotExist(<span class="pl-st">let</span> lKey):
+        <span class="pl-k">switch</span> (rhs) {
+        <span class="pl-k">case</span> <span class="pl-k">.</span>Ascending:
+            <span class="pl-k">return</span> <span class="pl-c1">false</span>
+        <span class="pl-k">case</span> <span class="pl-k">.</span>Descending:
+            <span class="pl-k">return</span> <span class="pl-c1">false</span>
+        <span class="pl-k">case</span> <span class="pl-k">.</span>Exists:
+            <span class="pl-k">return</span> <span class="pl-c1">false</span>
+        <span class="pl-k">case</span> <span class="pl-k">.</span>DoesNotExist(<span class="pl-st">let</span> rKey):
+            <span class="pl-k">return</span> lKey <span class="pl-k">==</span> rKey
+        }
+    }
+}</pre></div>
+
+<p>This enum isn't minimal -- I could have shown off just two cases. It's also not nearly as large as I expect real uses to get. But it does help illustrate that the code will grow quadratically with the number of cases in the enum, and that gets large very quickly.</p>
+
+<p>There is a more concise way to define equality for this enum, but I worry that because of its reliance on non-exhaustive switch statements that they may prove to be error-prone.</p>
+
+<div class="highlight highlight-swift"><pre><span class="pl-st">func</span> <span class="pl-en">==</span> (lhs: Constraint, rhs: Constraint) <span class="pl-k">-&gt;</span> <span class="pl-s3">Bool</span> {
+    <span class="pl-k">switch</span> (lhs, rhs) {
+    <span class="pl-k">case</span> (<span class="pl-k">.</span>Ascending(<span class="pl-st">let</span> lKey), <span class="pl-k">.</span>Ascending(<span class="pl-st">let</span> rKey)):
+        <span class="pl-k">return</span> lKey <span class="pl-k">==</span> rKey
+    <span class="pl-k">case</span> (<span class="pl-k">.</span>Descending(<span class="pl-st">let</span> lKey), <span class="pl-k">.</span>Descending(<span class="pl-st">let</span> rKey)):
+        <span class="pl-k">return</span> lKey <span class="pl-k">==</span> rKey
+    <span class="pl-k">case</span> (<span class="pl-k">.</span>Exists(<span class="pl-st">let</span> lKey), <span class="pl-k">.</span>Exists(<span class="pl-st">let</span> rKey)):
+        <span class="pl-k">return</span> lKey <span class="pl-k">==</span> rKey
+    <span class="pl-k">case</span> (<span class="pl-k">.</span>DoesNotExist(<span class="pl-st">let</span> lKey), <span class="pl-k">.</span>DoesNotExist(<span class="pl-st">let</span> rKey)):
+        <span class="pl-k">return</span> lKey <span class="pl-k">==</span> rKey
+    <span class="pl-k">default</span>:
+        <span class="pl-k">return</span> <span class="pl-c1">false</span>
+    }
+}</pre></div>
+
+<p>We can also play a fun trick with switch statements in Swift by extracting the value comparison to a case constraint. So the case for <code>.Ascending</code> </p>
+
+<div class="highlight highlight-swift"><pre><span class="pl-k">case</span> (<span class="pl-k">.</span>Ascending(<span class="pl-st">let</span> lKey), <span class="pl-k">.</span>Ascending(<span class="pl-st">let</span> rKey)):
+    <span class="pl-k">return</span> lKey <span class="pl-k">==</span> rKey</pre></div>
+
+<p>becomes</p>
+
+<div class="highlight highlight-swift"><pre><span class="pl-k">case</span> (<span class="pl-k">.</span>Ascending(<span class="pl-st">let</span> lKey), <span class="pl-k">.</span>Ascending(<span class="pl-st">let</span> rKey)) <span class="pl-k">where</span> lKey <span class="pl-k">==</span> rKey:
+    <span class="pl-k">return</span> <span class="pl-c1">true</span></pre></div>
+
+<p>The overall function doesn't become much better, but I do feel there is some advantage or order to each <code>case</code> encapsulating a complete logical description. It feels less like a control flow structure and more like a list of satifying conditions. I like declarative code.</p>
+
+<div class="highlight highlight-swift"><pre><span class="pl-st">func</span> <span class="pl-en">==</span> (lhs: Constraint, rhs: Constraint) <span class="pl-k">-&gt;</span> <span class="pl-s3">Bool</span> {
+    <span class="pl-k">switch</span> (lhs, rhs) {
+    <span class="pl-k">case</span> (<span class="pl-k">.</span>Ascending(<span class="pl-st">let</span> lKey), <span class="pl-k">.</span>Ascending(<span class="pl-st">let</span> rKey)) <span class="pl-k">where</span> lKey <span class="pl-k">==</span> rKey:
+        <span class="pl-k">return</span> <span class="pl-c1">true</span>
+    <span class="pl-k">case</span> (<span class="pl-k">.</span>Descending(<span class="pl-st">let</span> lKey), <span class="pl-k">.</span>Descending(<span class="pl-st">let</span> rKey)) <span class="pl-k">where</span> lKey <span class="pl-k">==</span> rKey:
+        <span class="pl-k">return</span> <span class="pl-c1">true</span>
+    <span class="pl-k">case</span> (<span class="pl-k">.</span>Exists(<span class="pl-st">let</span> lKey), <span class="pl-k">.</span>Exists(<span class="pl-st">let</span> rKey)) <span class="pl-k">where</span> lKey <span class="pl-k">==</span> rKey:
+        <span class="pl-k">return</span> <span class="pl-c1">true</span>
+    <span class="pl-k">case</span> (<span class="pl-k">.</span>DoesNotExist(<span class="pl-st">let</span> lKey), <span class="pl-k">.</span>DoesNotExist(<span class="pl-st">let</span> rKey)) <span class="pl-k">where</span> lKey <span class="pl-k">==</span> rKey:
+        <span class="pl-k">return</span> <span class="pl-c1">true</span>
+    <span class="pl-k">default</span>:
+        <span class="pl-k">return</span> <span class="pl-c1">false</span>
+    }
+}</pre></div>
+
+<p>But there is still a control structure in place, and I take issue with how it's being used. We're using a <code>default</code> case to return <code>false</code> for any case not explicitly handled. This becomes a problem when a new case gets added to the enum. The <code>==</code> function's implementation becomes incorrect, but we don't know it. In the original implementation with nested cases the compiler immediately tells us something is wrong if the enum is grown. We would be missing one case in the main switch, and one case in each of that switch's cases. Complicated but safe. </p>
+
+<p>We can attempt to split the difference by reverting to nested switch statements, and use a <code>default</code> case on the inner switches, like so</p>
+
+<div class="highlight highlight-swift"><pre><span class="pl-st">func</span> <span class="pl-en">==</span> (lhs: Constraint, rhs: Constraint) <span class="pl-k">-&gt;</span> <span class="pl-s3">Bool</span> {
+    <span class="pl-k">switch</span> (lhs) {
+    <span class="pl-k">case</span> <span class="pl-k">.</span>Ascending(<span class="pl-st">let</span> lKey):
+        <span class="pl-k">switch</span> (rhs) {
+        <span class="pl-k">case</span> <span class="pl-k">.</span>Ascending(<span class="pl-st">let</span> rKey):
+            <span class="pl-k">return</span> lKey <span class="pl-k">==</span> rKey
+        <span class="pl-k">default</span>:
+            <span class="pl-k">return</span> <span class="pl-c1">false</span>
+        }
+    <span class="pl-k">case</span> <span class="pl-k">.</span>Descending(<span class="pl-st">let</span> lKey):
+        <span class="pl-k">switch</span> (rhs) {
+        <span class="pl-k">case</span> <span class="pl-k">.</span>Descending(<span class="pl-st">let</span> rKey):
+            <span class="pl-k">return</span> lKey <span class="pl-k">==</span> rKey
+        <span class="pl-k">default</span>:
+            <span class="pl-k">return</span> <span class="pl-c1">false</span>
+        }
+    <span class="pl-k">case</span> <span class="pl-k">.</span>Exists(<span class="pl-st">let</span> lKey):
+        <span class="pl-k">switch</span> (rhs) {
+        <span class="pl-k">case</span> <span class="pl-k">.</span>Exists(<span class="pl-st">let</span> rKey):
+            <span class="pl-k">return</span> lKey <span class="pl-k">==</span> rKey
+        <span class="pl-k">default</span>:
+            <span class="pl-k">return</span> <span class="pl-c1">false</span>
+        }
+    <span class="pl-k">case</span> <span class="pl-k">.</span>DoesNotExist(<span class="pl-st">let</span> lKey):
+        <span class="pl-k">switch</span> (rhs) {
+        <span class="pl-k">case</span> <span class="pl-k">.</span>DoesNotExist(<span class="pl-st">let</span> rKey):
+            <span class="pl-k">return</span> lKey <span class="pl-k">==</span> rKey
+        <span class="pl-k">default</span>:
+            <span class="pl-k">return</span> <span class="pl-c1">false</span>
+        }
+    }
+}</pre></div>
+
+<p>This has the benefit of becoming incorrect to the compiler if any new cases are added to <code>Constraint</code>, yet still only growing linearly with the number of cases. This is my current favorite solution for this particular code, but it still doesn't sit right with me. It works because we can carve out a small subset of combinations with one behavior, and treat all other combinations with another. I can't see a way to make enums interact more elegantly if more complex requirements were to arise.</p>
+
+<p>The trouble stems from the fact that it's not trivial to unpack an enumeration's case from its argument. As far as I can tell, you can only do so in a switch statement. And an enum's case isn't especially easy to manipulate either. Enums with raw values help with the manipulation of enums, but only because raw values allow us to use a more flexible type as a proxy for the enum's case. Implementing equality for a simple enum with a raw value is trivial:</p>
+
+<div class="highlight highlight-swift"><pre><span class="pl-st">enum</span> Suit <span class="pl-k">:</span> <span class="pl-s3">Int</span> {
+    <span class="pl-k">case</span> Clubs
+    <span class="pl-k">case</span> Diamonds
+    <span class="pl-k">case</span> Spades
+    <span class="pl-k">case</span> Hearts
+}
+
+<span class="pl-st">extension</span> Suit :Equatable {}
+
+<span class="pl-st">func</span> <span class="pl-en">==</span> (lhs: Suit, rhs: Suit) <span class="pl-k">-&gt;</span> <span class="pl-s3">Bool</span> {
+    <span class="pl-k">return</span> lhs<span class="pl-k">.</span>rawValue <span class="pl-k">==</span> rhs<span class="pl-k">.</span>rawValue
+}</pre></div>
+
+<p>But Swift doesn't allow an enum with a raw type to have cases with arguments. At this point, I'm kind of stuck. I'm not terribly happy with any solution so far. In other languages, a tight corner like this might lead me down a metaprogramming path. Swift is a bit limited on that front and I don't yet see a metaprogramming solution.</p>
+
+<p>I think it's worth reflecting that it's Swift's own expressiveness and type safety that set me up to be dissatisfied. I've grown accustomed to writing code that leans heavily on the type system to ensure its correctness. And Swift tends to remain quite legible: brief without being inscrutable terse, and descriptive without Objective-C's famous verbosity. I like Swift and I've grown accustomed to it. I don't think I would even be thinking about how to make this code as safe as it possibly could be if I were writing it in Objective-C.</p>
+
+<hr>
+
+<p><a name="user-content-fn1" rel="noreferrer">1</a>: I'm experimenting with a <a href="https://github.com/fcanas/WhichSide/blob/5df29cf8424dd9511cb3a0959e5d15b7ec0cf986/iOS/WhichSide/Parse.swift">value-typed <code>Query</code> construct</a> to wrap <a href="https://www.parse.com">Parse</a>. I happen to feel that a query, subquery, divorced from any request or results is a good candidate for a value type over a reference type. And wanting to perform <a href="http://faq.sealedabstract.com/structs_or_classes/">comparisons on queries plays no small part in that</a>.</p>
+<hr>
+Update: Swift 2 now has this behavior by default
+</article>
+  </main>
+</body>
+</html>
