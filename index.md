@@ -1,28 +1,5 @@
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>fcanas</title>
-  <style type="text/css">code{white-space: pre;}</style>
-  <link rel="stylesheet" href="/writ.min.css">
-</head>
-<body>
-<main>
-<header>
-<h1>fcanas</h1>
-<section>
-<nav>
-<ul style="list-style-type:none">
-  <li><a href='/blog/'>blog</a></li>
-  <li><a href='/software/'>software</a></li>
-  |
-  <li><a href='https://www.github.com/fcanas'>GitHub</a></li>
-  <li><a href='https://www.twitter.com/fcanas'>Twitter</a></li>
-</ul>
-</nav>
-</section>
-</header>
-<article>
+% fcanas
+
 <section>
   <ul>
     <li style="list-style-type:none">🐦 I build things at Twitter</li>
@@ -37,7 +14,3 @@
     <li style="list-style-type:none">🎓 Cornell University</li>
   </ul>
 </section>
-</article>
-</main>
-</body>
-</html>

@@ -1,0 +1,11 @@
+<section>
+<nav>
+<ul style="list-style-type:none">
+  <li><a href='/blog/'>blog</a></li>
+  <li><a href='/software/'>software</a></li>
+  |
+  <li><a href='https://www.github.com/fcanas'>GitHub</a></li>
+  <li><a href='https://www.twitter.com/fcanas'>Twitter</a></li>
+</ul>
+</nav>
+</section>
