@@ -35,10 +35,10 @@ FACEBOOK_APPLICATION_ID = YOUR_ID_HERE</code></pre>
 <pre><code>#include &quot;Keys.xcconfig&quot;
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) PARSE_APPLICATION_ID=@\&quot;$(PARSE_APPLICATION_ID)\&quot; PARSE_CLIENT_KEY=@\&quot;$(PARSE_CLIENT_KEY)\&quot; FACEBOOK_APPLICATION_ID=@\&quot;$(FACEBOOK_APPLICATION_ID)\&quot;</code></pre>
 <p>The <code>#include</code> directive will find xcconfig files in the directory without the Xcode project needing a reference to it, meaning your project isn't ever in an inconsistent state on initial check-out. The second line makes all the values available as preprocessor symbols.</p>
-<p>With this approach, you can keep a different Keys file for different environments (<em>e.g.</em> <code>Dev-Keys.xcconfig</code>, <code>Stage-Keys.xcconfig</code>, <code>Prod-Keys.xcconfig</code>) and tie them to different build configurations: <code>Dev-Config.xcconfig</code>, <code>Config.xcconfig</code>. You can then put any information that isn't sensitive in these cnofiguration files.</p>
+<p>With this approach, you can keep a different Keys file for different environments (<em>e.g.</em> <code>Dev-Keys.xcconfig</code>, <code>Stage-Keys.xcconfig</code>, <code>Prod-Keys.xcconfig</code>) and tie them to different build configurations: <code>Dev-Config.xcconfig</code>, <code>Config.xcconfig</code>. You can then put any information that isn't sensitive in these configuration files.</p>
 <p>You'll need to configure your project's build settings to use the configurations files like so:</p>
 <p><img src="http://static1.squarespace.com/static/53e976eae4b0162bed56938c/53e9780ce4b0b27e29a5e76d/54050699e4b0f72d40bb93e4/1409615514203//img.png" /></p>
-<h1 id="configuring-a-target">Configuring a Target</h1>
+<h2 id="configuring-a-target">Configuring a Target</h2>
 <p>There's a great additional advantage to having values as preprocessor directives. They're available as symbols in you app's plist, meaning you can create URL scheme handlers like <code>fb${FACEBOOK_APPLICATION_ID}</code> and they'll always be configured correctly for your environment (incredibly useful for Facebook sign-in in development and production environments).</p>
 <p><img src="http://static1.squarespace.com/static/53e976eae4b0162bed56938c/53e9780ce4b0b27e29a5e76d/5404ff68e4b0a7034afd83d9/1409613672966//img.png" /></p>
 <p>You can also keep separate bundle identifiers for the same target (useful for things like Enterprise distribution, and separate installs on the same phone from the same target). You can also configure product names, or anything else.</p>
