@@ -8,11 +8,11 @@
 
 <body>
   <header>
-    <h1>fcanas</h1>
+    <h1>fabián cañas</h1>
     <nav>
-    <ul style="list-style-type:none">
+    <ul>
       <li><a href='/'>about</a></li>
-      <li><a href='/blog/'>blog</a></li>
+      <li><a href='/blog/'>writing</a></li>
       <li><a href='/software/'>software</a></li>
       |
       <li><a href='https://www.github.com/fcanas'>GitHub</a></li>
@@ -57,13 +57,13 @@ end % function
 <pre>
 function grid = inject(grid,pattern,x,y)
   % 	INJECT inject pattern into grid at position x, y
-  % 		[GRID] = 
+  % 		[GRID] =
   %
   % 	inject pattern into grid at position x, y
   %
   % 	Created by Fabian Canas on 2011-04-12.
   % 	Copyright © Fabian Canas. All rights reserved.
-  
+
   [w,h] = size(pattern);
   grid(x:(x+w-1),y:(y+h-1))=pattern;
 end % function
@@ -78,18 +78,18 @@ diehard = [ ...
 ];
 g = zeros(30);
 g = inject(g,diehard,15,15);
-  
+
 fg = g;
 figure
-while (true) 
-  gp = life(g); 
-  if gp==g 
-    break; 
+while (true)
+  gp = life(g);
+  if gp==g
+    break;
   end
   g = gp;
   fg = cat(3,fg,g);
 end
-  
+
 h = patch(isosurface(fg));
 
 axis equal
@@ -99,13 +99,13 @@ light('Position’,[-2,2,20])
 lighting phong
 material([0.4,0.6,0.5,30])
 set(h,'EdgeAlpha’,0)
-set(h,'FaceColor’,[0.2 0.5 0.1],... 
+set(h,'FaceColor’,[0.2 0.5 0.1],...
       'BackFaceLighting’,'lit’)
 drawnow
 set(gcf, 'Position’, [552 -17 200 801])
-for i=0:179 
-  view([i 0]) 
-  print(gcf, '-dtiff’, '-r100’, sprintf('image_%04d’, i)); 
+for i=0:179
+  view([i 0])
+  print(gcf, '-dtiff’, '-r100’, sprintf('image_%04d’, i));
   drawnow
 end<
 </pre>
