@@ -1,0 +1,134 @@
+<html>
+
+<head><title>OHMKit</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/writ.min.css">
+<link rel="stylesheet" href="/code.css">
+</head>
+
+<body>
+  <header>
+    <h1>fabián cañas</h1>
+    <nav>
+    <ul>
+      <li><a href='/'>about</a></li>
+      <li><a href='/blog/'>writing</a></li>
+      <li><a href='/software/'>software</a></li>
+      |
+      <li><a href='https://www.github.com/fcanas'>GitHub</a></li>
+      <li><a href='https://www.twitter.com/fcanas'>Twitter</a></li>
+    </ul>
+    </nav>
+  </header>
+  <main>
+<article>
+<h1>OHMKit</h1>
+<date>2013-07-27</date>
+<p>I’ve written Objective-C code to turn a service response into a fully hydrated model object too many times. It also seems <a href="http://www.merowing.info/2013/07/stop-writing-data-parsing-code-in-your-apps/">I’m not the only one</a>. Just a couple of weeks ago, I decided to put together <a href="https://github.com/fcanas/OHMKit">OHMKit</a> so I’d never have to write boilerplate code for object mapping again.</p><p>Check out the source on <a href="https://github.com/fcanas/OHMKit">GitHub</a>!</p><p><a href="https://github.com/fcanas/OHMKit">OHMKit</a> is a <a href="http://en.wikipedia.org/wiki/Mixin">mixin</a> to make any Objective-C class easier to hydrate from a dictionary representation, such as you might get from a web service. It makes it easy to keep any direct knowledge of the idiosyncrasies of the service you’re consuming tucked away in a single place.</p><p>It exists because <a href="https://github.com/RestKit/RestKit">RestKit</a> (which is awesome by the way), is sometimes too big, heavy, and indirect.</p><p>This project doesn’t know about networks. Use <a href="https://github.com/AFNetworking/AFNetworking">AFNetworking</a>.</p><p>This project doesn’t know about routes. Use <a href="https://github.com/jverkoey/sockit">SOCKit</a>.</p><p>This project doesn’t know about CoreData. It will not manage graphs of entities for you quite like RestKit does. But it <em>is</em> built on KVO, and does not care about your model objects’ super class. So you can safely make subclasses of NSManagedObject mappable.</p>
+<h2>Usage</h2>
+<h3>Basic Mapping</h3>
+<p>Given a model</p>
+
+<pre><span class="pl-k">@interface</span> <span class="pl-en">MYModel</span> : <span class="pl-e">NSObject</span>
+<span class="pl-k">@property</span> (<span class="pl-k">nonatomic</span>, <span class="pl-k">strong</span>) <span class="pl-c1">NSString</span> *name;
+<span class="pl-k">@property</span> (<span class="pl-k">nonatomic</span>, <span class="pl-k">strong</span>) <span class="pl-c1">NSString</span> *favoriteWord;
+<span class="pl-k">@property</span> (<span class="pl-k">nonatomic</span>, <span class="pl-k">assign</span>) <span class="pl-k">NSInteger</span> favoriteNumber;
+<span class="pl-k">@end</span></pre>
+
+<p>Anywhere in you application, make the model mappable, and assign it a dictionary of mappings from the keys a service will provide to the keys your actual model object uses.</p>
+
+<pre><span class="pl-en">OHMMappable</span>([MYModel <span class="pl-c1">class</span>]);
+<span class="pl-en">OHMSetMapping</span>([MYModel <span class="pl-c1">class</span>], @{<span class="pl-s"><span class="pl-pds">@"</span>favorite_word<span class="pl-pds">"</span></span>  : <span class="pl-s"><span class="pl-pds">@"</span>favoriteWord<span class="pl-pds">"</span></span>,
+                                 <span class="pl-s"><span class="pl-pds">@"</span>favorite_number<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">@"</span>favoriteNumber<span class="pl-pds">"</span></span>);</pre>
+
+<p>And now anywhere in your application, objects of the class MYModel can be hydrated with a dictionary from a service whose keys will be translated by the mapping dictionary you provided.</p>
+
+<pre>MYModel *testModel = [[MYModel <span class="pl-c1">alloc</span>] <span class="pl-c1">init</span>];
+
+[testModel <span class="pl-c1">setValuesForKeysWithDictionary:</span>@{<span class="pl-s"><span class="pl-pds">@"</span>name<span class="pl-pds">"</span></span>           : <span class="pl-s"><span class="pl-pds">@"</span>Fabian<span class="pl-pds">"</span></span>,
+                                            <span class="pl-s"><span class="pl-pds">@"</span>favorite_word<span class="pl-pds">"</span></span>  : <span class="pl-s"><span class="pl-pds">@"</span>absurd<span class="pl-pds">"</span></span>,
+                                            <span class="pl-s"><span class="pl-pds">@"</span>favorite_number<span class="pl-pds">"</span></span>: @<span class="pl-c1">47</span>];</pre>
+
+<h3>Recursive Mapping</h3>
+
+<p>You don’t have to do anything special to get recursive mapping of mappable objects. If an object conforming to <code>&lt;OMMappable&gt;</code> has a property whose type also conforms to <code>&lt;OMMappable&gt;</code>, and the value for that key in the hydration dictionary is itself a dictionary, we’ll instantiate a new model object and hydrate it. (If that didn’t make sense, just read the next code snippet)</p><p> </p>
+
+<pre><span class="pl-k">@interface</span> <span class="pl-en">MYClass</span> : <span class="pl-e">NSObject</span>
+<span class="pl-k">@property</span> (<span class="pl-k">nonatomic</span>, <span class="pl-k">strong</span>) <span class="pl-c1">NSString</span> *name;
+<span class="pl-k">@end</span>
+
+<span class="pl-k">@interface</span> <span class="pl-en">MYClass2</span> : <span class="pl-e">NSObject</span>
+<span class="pl-k">@property</span> (<span class="pl-k">nonatomic</span>, <span class="pl-k">strong</span>) <span class="pl-c1">NSString</span> *name;
+<span class="pl-k">@property</span> (<span class="pl-k">nonatomic</span>, <span class="pl-k">strong</span>) <span class="pl-c1">NSString</span> *favoriteWord;
+<span class="pl-k">@property</span> (<span class="pl-k">nonatomic</span>, <span class="pl-k">assign</span>) <span class="pl-k">NSInteger</span> favoriteNumber;
+<span class="pl-k">@property</span> (<span class="pl-k">nonatomic</span>, <span class="pl-k">assign</span>) MYClass *favoriteObject;
+<span class="pl-k">@end</span>
+
+<span class="pl-en">OHMMappable</span>([MYClass <span class="pl-c1">class</span>]);
+
+<span class="pl-en">OHMMappable</span>([MYClass2 <span class="pl-c1">class</span>])
+OHMSetMapping([MYClass2 <span class="pl-c1">class</span>], @{<span class="pl-s"><span class="pl-pds">@"</span>favorite_word<span class="pl-pds">"</span></span>  : <span class="pl-s"><span class="pl-pds">@"</span>favoriteWord<span class="pl-pds">"</span></span>,
+                                <span class="pl-s"><span class="pl-pds">@"</span>favorite_number<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">@"</span>favoriteNumber<span class="pl-pds">"</span></span>,
+                                <span class="pl-s"><span class="pl-pds">@"</span>favorite_object<span class="pl-pds">"</span></span> : <span class="pl-s"><span class="pl-pds">@"</span>favoriteObject<span class="pl-pds">"</span></span>});
+
+MYModel *testModel = [[MYClass2 <span class="pl-c1">alloc</span>] <span class="pl-c1">init</span>];
+
+<span class="pl-c1">NSDictionary</span> *class2Response = @{<span class="pl-s"><span class="pl-pds">@"</span>name<span class="pl-pds">"</span></span>           : <span class="pl-s"><span class="pl-pds">@"</span>Fabian<span class="pl-pds">"</span></span>,
+                                 <span class="pl-s"><span class="pl-pds">@"</span>favorite_word<span class="pl-pds">"</span></span>  : <span class="pl-s"><span class="pl-pds">@"</span>absurd<span class="pl-pds">"</span></span>,
+                                 <span class="pl-s"><span class="pl-pds">@"</span>favorite_number<span class="pl-pds">"</span></span>: @<span class="pl-c1">2</span>,
+                                 <span class="pl-s"><span class="pl-pds">@"</span>favorite_object<span class="pl-pds">"</span></span>: @{<span class="pl-s"><span class="pl-pds">@"</span>name<span class="pl-pds">"</span></span> : <span class="pl-s"><span class="pl-pds">@"</span>Rock<span class="pl-pds">"</span></span>}};
+
+[testModel <span class="pl-c1">setValuesForKeysWithDictionary:</span>class2Response];</pre>
+
+<p dir="ltr"> </p><p>Now, <code>testModel.favoriteObject</code> is an instance of <code>MYClass</code> hydrated with <code>“Rock”</code> as its name.</p><p>Internally, the new model object is initialized with <code>[[ alloc] init]</code>, and then hydrated with <code>[ setValuesForKeysWithDictionary:dictionary]</code>. If you have a model that needs special consideration for initialization, use an adapter block.</p><h3>Adapter Blocks to handle special properties</h3><p>Users can pass a dictionary of blocks for field requiring special handling. Say a service sends back a dictionary that looks something like this:</p>
+
+<pre>{
+    <span class="pl-s"><span class="pl-pds">"</span>favorite_color<span class="pl-pds">"</span></span>: [
+        <span class="pl-c1">122</span>,
+        <span class="pl-c1">50</span>,
+        <span class="pl-c1">80</span>
+    ],
+    <span class="pl-s"><span class="pl-pds">"</span>least_favorite_color<span class="pl-pds">"</span></span>: [
+        <span class="pl-c1">121</span>,
+        <span class="pl-c1">51</span>,
+        <span class="pl-c1">81</span>
+    ]
+}</pre>
+
+<p>and we expect to map it to a model like this</p>
+
+<pre><span class="pl-k">@interface</span> <span class="pl-en">MYModel</span> : <span class="pl-e">NSObject</span>
+<span class="pl-k">@property</span> (<span class="pl-k">nonatomic</span>, <span class="pl-k">strong</span>) UIColor *favoriteColor;
+<span class="pl-k">@property</span> (<span class="pl-k">nonatomic</span>, <span class="pl-k">strong</span>) UIColor *leastFavoriteColor;
+<span class="pl-k">@end</span></pre>
+
+<p>You can adapt the response with an adapter block:</p>
+
+<pre><span class="pl-en">OHMMappable</span>([MYModel <span class="pl-c1">class</span>]);
+<span class="pl-en">OHMSetMapping</span>([MYModel <span class="pl-c1">class</span>], <span class="pl-s"><span class="pl-pds">@"</span>least_favorite_color<span class="pl-pds">"</span></span> : <span class="pl-s"><span class="pl-pds">@"</span>leastFavoriteColor<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">@"</span>favorite_color<span class="pl-pds">"</span></span> : <span class="pl-s"><span class="pl-pds">@"</span>favoriteColor<span class="pl-pds">"</span></span>)
+OHMValueAdapterBlock colorFromNumberArray = ^(<span class="pl-c1">NSArray</span> *numberArray) {
+    <span class="pl-k">return</span> [UIColor <span class="pl-c1">colorWithRed:</span>[numberArray[<span class="pl-c1">0</span>] <span class="pl-c1">integerValue</span>]/<span class="pl-c1">255.0</span>
+                           <span class="pl-c1">green:</span>[numberArray[<span class="pl-c1">1</span>] <span class="pl-c1">integerValue</span>]/<span class="pl-c1">255.0</span>
+                            <span class="pl-c1">blue:</span>[numberArray[<span class="pl-c1">2</span>] <span class="pl-c1">integerValue</span>]/<span class="pl-c1">255.0</span>
+                           <span class="pl-c1">alpha:</span><span class="pl-c1">1</span>];
+};
+<span class="pl-en">OHMSetAdapter</span>([MYModel <span class="pl-c1">class</span>], @{<span class="pl-s"><span class="pl-pds">@"</span>favoriteColor<span class="pl-pds">"</span></span>: colorFromNumberArray, <span class="pl-s"><span class="pl-pds">@"</span>leastFavoriteColor<span class="pl-pds">"</span></span>: colorFromNumberArray});</pre>
+
+<p>Note that the key for the adapter is the key on the model object, not on the response. And adapters are added for a property, not a type. If the above example had multiple properties that were colors, you would have to set an adapter block for each property. It would be smart to reuse adapter blocks in your code.</p>
+<p>The <code>OHMValueAdapterBlock</code> type is a block that takes an <code>id</code> and returns an <code>id</code>. <em>i.e.</em> </p>
+
+<pre>typedef id(^OHMValueAdapterBlock)(id);</pre>
+
+<h2>TODO</h2>
+<h3>Undefined Keys</h3>
+<p>The behavior of undefined keys should be configurable at 3 levels:</p>
+<ol>
+  <li>Raise, because I should know about everything.</li>
+  <li>Drop unrecognized keys. We don’t need them, but we shouldn’t crash.</li>
+  <li>Add keys to a dictionary so that serialization/deserialization can be symmetric</li>
+</ol>
+<p>Option 2 is currently the only behavior, and I’m inclined to leave is as the default behavior.</p>
+
+<h3>NSCoding</h3>
+<p>It might be nice if we built a way to make a class NSCoding compatible if it’s not already. I like <a href="https://github.com/github/Mantle">Mantle</a>, but I don’t want to be told what my super class should be (had you noticed?).</p>
