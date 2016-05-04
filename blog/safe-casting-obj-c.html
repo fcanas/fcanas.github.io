@@ -1,0 +1,75 @@
+<html>
+
+<head><title>Safe Casting in Objective-C</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/writ.min.css">
+<link rel="stylesheet" href="/code.css">
+</head>
+
+<body>
+  <header>
+    <h1>fabián cañas</h1>
+    <nav>
+    <ul>
+      <li><a href='/'>about</a></li>
+      <li><a href='/blog/'>writing</a></li>
+      <li><a href='/software/'>software</a></li>
+      |
+      <li><a href='https://www.github.com/fcanas'>GitHub</a></li>
+      <li><a href='https://www.twitter.com/fcanas'>Twitter</a></li>
+    </ul>
+    </nav>
+  </header>
+  <main>
+<article>
+<h1>Safe Casting in Objective-C</h1>
+<date>2014-02-15</date>
+<p style="margin-left:0px; margin-right:0px">I’m writing a small safe casting for Objective-C. I’ll be putting it on <a href="https://github.com/fcanas/SafeCast">GitHub</a></p><h2>The Story</h2><p>Somewhere on the web, there was some test I took to determine how well I know Objective-C. I think it was elance. One question which infuriated me at the time was something like “if you have an array NSArray *a, how do you make it an NSMutableArray?” The answer was supposedly</p><pre>NSMutableArray *mutableArray = (NSMutableArray *)a;
+</pre><p>But this is tremendously dangerous, wrong, crazy… The real answer of course is something like</p><pre>NSMutableArray *mutableArray = [a mutableCopy];
+</pre><p>Unless you want to actually modify the same instance that a is <em>if</em> it’s a mutable array, in which case you have to do the all-too-familiar dance</p><pre>NSMutableArray *mutableArray;
+if ([a isKindOfClass:[NSMutableArray class]]) {
+    mutableArray = a;
+}
+</pre>
+<p>At which point you proceed to mutate mutableArray, which is also a, possibly ignoring the fact that mutableArray may be nil. Or maybe you return early if it’s nil.</p><h2>Casting is Dangerous</h2><p>If you cast between object that are the same foundational type, no work is done. What I mean is that if you cast from an float to an int, since they’re represented differently in the machine, some work is done to represent that float as a int that changes the value you’re working with.</p><p>In Objective-C, when we’re dealing with objects, we’re dealing with pointers to objects. These are really <em>just</em>pointers. They represent a memory address, and not a real usable value. So if you cast an NSArray to an NSMutableArray, nothing happens. Same if you case an object to an int *. (Which is coincidentally prohibited by <span>ARC</span> for similar reasons that <span>ARC</span> prohibits putting objects in structs… It’s necessary to make certain restrictions in order to ensure the correctness of the program, which is what <span>ARC</span> concerns itself with. But anyway, casting an object to an int * used to be perfectly valid, if slightly insane.)</p><p>Almost every time I see a cast involving an Objective-C object, I get very worried. Objective-C has a lovely type system. We should use it. Our compiler helps us move finding bugs from run time to compile time. Casting is a way to tell the compiler “don’t worry, I know what I’m doing.” But I’ve seen too many cases of people not knowing what they’re doing. They forget that method signatures specify a more general type for a reason. If you are passed an object with type id&lt;MyProtocol&gt;, you shouldn’t even assume you’re working with an NSObject. And if you’re passing around raw ids all the time, you should strongly consider coming up with good protocols. Or maybe you’re taking a parameter that may be one of two very distinct types you say? Well that’s certainly odd, but I hope you’re at least doing the Objective-C casting dance.</p><h2>Getting Rid of the Casting Dance</h2><p>I wrote the casting dance out above. But here it is again with a little more detail.</p><pre>NSMutableArray *ma;
+if ([a isKindOfClass:[NSMutableArray class]]) {
+// You have a mutable array!
+ma = a;
+} else {
+// You don't have a mutable array!
+}
+// `ma` is `nil` if `a` wasn't originally an `NSMutableArray`
+</pre><p>I want to get rid of that, and many things like it. So this project aims to reduce the above down to this</p><pre>NSMutableArray *ma = [NSMutableArray cast:a];
+// `ma` is `nil` if `a` wasn't originally an `NSMutableArray`
+</pre><h3>Conditional Code</h3><p>Often what we really want to do is run certain code if an object is of a specific type.</p><pre>if ([a isKindOfClass:[NSMutableArray class]]) {
+NSMutableArray *ma = a;
+[ma addObject:x];
+}
+</pre><p>Technically, this could have the same effect</p><pre>[[NSMutableArray cast:a] addObject:x];
+</pre><p>Practically, this ends up getting more complex. Likely I will want to include ways of running a block with the passed object if the object is the kind that’s expected. Maybe something like</p><pre>[NSMutableArray cast:a intoBlock:^(NSMutableArray *ma){
+[ma addObject:x];
+[ma addObject:y];
+[ma addObject:z];
+}];
+</pre><p>or even</p><pre>BOOL success = [NSMutableArray cast:a intoBlock:^(NSMutableArray *ma){
+[ma addObject:x];
+[ma addObject:y];
+[ma addObject:z];
+}];
+if (!success){
+// Do whatever it is you need to do if `a` is not mutable...
+}
+</pre><h2>But what’s the point?</h2><h3>Conciseness</h3><p>It is more concise, while also being idiomatic.</p><h3>Education</h3><p>Every Objective-C programmer knows how to cast. Sadly, many don’t understand that it doesn’t give you any guarantees. It just tells the compiler “shut up, I know what I’m doing”. <a href="https://stackoverflow.com/questions/18043971/fast-enumeration-does-not-give-correct-object-type-in-objective-c">Here’s at least one example more related to fast enumeration</a>. But surely you’ve explained this sort of thing to somebody in the past? It’s an honest enough mistake to make.</p><p>It’s too easy to gloss over the casting dance, correct code that looks very familiar (and if and a cast), and not realize that there’s a <em>very</em> important technical decision being made there. I would rather somebody come across a weird cast: method in my code base and ask why it’s there. Then I can go on about the dangers of casting.</p><h3>Clarity</h3><p>The closer that code can read to prose the better the intent of the programmer can be understood. It also means that there’s fewer places for bugs to creep in. Consider doing something with items in an array.</p><p>We used to do things this way. Novices a day into a “learn to code” camp can read that. Loops are boring (and error prone).</p><pre>NSArray *a;
+for (int i = 0; i &amp;lt; a.count; i++) {
+NSLog(@"%@", a[i]);
+}
+</pre><p>Then fast enumeration came along, and off-by-one and out-of-bounds errors became rarer.</p><pre>NSArray *a;
+for (id object in a) {
+NSLog(@"%@", object);
+}
+</pre><p>And I even prefer block enumeration sometimes because it puts the semantics of what we’re doing in the message we’re sending instead of in understanding the syntactic sugar of fast enumeration.</p><pre>NSArray *a;
+[a enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+NSLog(@"%@", a);
+}];
+</pre><p>This is especially helpful when dealing with other collection types. Some people don’t know off the top of their heads whether fast enumeration of a dictionary iterates over objects or keys.</p><h2>Digress and Reflect</h2><p>With all the recent chatter about Apple needing to <a href="http://ashfurrow.com/blog/we-need-to-replace-objective-c">replace Objective-C</a>, one common call is to move away from C. That “we’re one NULL pointer dereference away from a crash”. I don’t remember the last time code I’ve worked closely with crashed from a NULL pointer dereference. It happens when you’re using C language features, and most code where you can’t avoid C is code that belongs in C (image manipulation, <span>DSP</span>). I think it’s clear that the very best Objective-C developers need to know and love C inside and out. But you can make a lot of pretty solid apps without knowing much about C.</p><p>I think it’s <em>much</em> more common for an app to crash with unrecognized selector sent to instance. And here’s why I brought up the “Apple needs to drop Objective-C” thing. Objective-C is remarkable for its powers of introspection and runtime manipulation. What I’ve described above is possible. I think it will be easy. So I’m making a project on GitHub, and starting work on it tonight.</p>
