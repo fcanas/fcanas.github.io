@@ -9,11 +9,11 @@
 
 <body>
   <header>
-    <h1>fcanas</h1>
+    <h1>fabián cañas</h1>
     <nav>
-    <ul style="list-style-type:none">
+    <ul>
       <li><a href='/'>about</a></li>
-      <li><a href='/blog/'>blog</a></li>
+      <li><a href='/blog/'>writing</a></li>
       <li><a href='/software/'>software</a></li>
       |
       <li><a href='https://www.github.com/fcanas'>GitHub</a></li>
@@ -68,15 +68,15 @@
 <span class="pl-en">OHMMappable</span>([MYClass <span class="pl-c1">class</span>]);
 
 <span class="pl-en">OHMMappable</span>([MYClass2 <span class="pl-c1">class</span>])
-OHMSetMapping([MYClass2 <span class="pl-c1">class</span>], @{<span class="pl-s"><span class="pl-pds">@"</span>favorite_word<span class="pl-pds">"</span></span>  : <span class="pl-s"><span class="pl-pds">@"</span>favoriteWord<span class="pl-pds">"</span></span>, 
-                                <span class="pl-s"><span class="pl-pds">@"</span>favorite_number<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">@"</span>favoriteNumber<span class="pl-pds">"</span></span>, 
+OHMSetMapping([MYClass2 <span class="pl-c1">class</span>], @{<span class="pl-s"><span class="pl-pds">@"</span>favorite_word<span class="pl-pds">"</span></span>  : <span class="pl-s"><span class="pl-pds">@"</span>favoriteWord<span class="pl-pds">"</span></span>,
+                                <span class="pl-s"><span class="pl-pds">@"</span>favorite_number<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">@"</span>favoriteNumber<span class="pl-pds">"</span></span>,
                                 <span class="pl-s"><span class="pl-pds">@"</span>favorite_object<span class="pl-pds">"</span></span> : <span class="pl-s"><span class="pl-pds">@"</span>favoriteObject<span class="pl-pds">"</span></span>});
 
 MYModel *testModel = [[MYClass2 <span class="pl-c1">alloc</span>] <span class="pl-c1">init</span>];
 
-<span class="pl-c1">NSDictionary</span> *class2Response = @{<span class="pl-s"><span class="pl-pds">@"</span>name<span class="pl-pds">"</span></span>           : <span class="pl-s"><span class="pl-pds">@"</span>Fabian<span class="pl-pds">"</span></span>, 
-                                 <span class="pl-s"><span class="pl-pds">@"</span>favorite_word<span class="pl-pds">"</span></span>  : <span class="pl-s"><span class="pl-pds">@"</span>absurd<span class="pl-pds">"</span></span>, 
-                                 <span class="pl-s"><span class="pl-pds">@"</span>favorite_number<span class="pl-pds">"</span></span>: @<span class="pl-c1">2</span>, 
+<span class="pl-c1">NSDictionary</span> *class2Response = @{<span class="pl-s"><span class="pl-pds">@"</span>name<span class="pl-pds">"</span></span>           : <span class="pl-s"><span class="pl-pds">@"</span>Fabian<span class="pl-pds">"</span></span>,
+                                 <span class="pl-s"><span class="pl-pds">@"</span>favorite_word<span class="pl-pds">"</span></span>  : <span class="pl-s"><span class="pl-pds">@"</span>absurd<span class="pl-pds">"</span></span>,
+                                 <span class="pl-s"><span class="pl-pds">@"</span>favorite_number<span class="pl-pds">"</span></span>: @<span class="pl-c1">2</span>,
                                  <span class="pl-s"><span class="pl-pds">@"</span>favorite_object<span class="pl-pds">"</span></span>: @{<span class="pl-s"><span class="pl-pds">@"</span>name<span class="pl-pds">"</span></span> : <span class="pl-s"><span class="pl-pds">@"</span>Rock<span class="pl-pds">"</span></span>}};
 
 [testModel <span class="pl-c1">setValuesForKeysWithDictionary:</span>class2Response];</pre>
@@ -114,7 +114,7 @@ OHMValueAdapterBlock colorFromNumberArray = ^(<span class="pl-c1">NSArray</span>
                            <span class="pl-c1">alpha:</span><span class="pl-c1">1</span>];
 };
 <span class="pl-en">OHMSetAdapter</span>([MYModel <span class="pl-c1">class</span>], @{<span class="pl-s"><span class="pl-pds">@"</span>favoriteColor<span class="pl-pds">"</span></span>: colorFromNumberArray, <span class="pl-s"><span class="pl-pds">@"</span>leastFavoriteColor<span class="pl-pds">"</span></span>: colorFromNumberArray});</pre>
-  
+
 <p>Note that the key for the adapter is the key on the model object, not on the response. And adapters are added for a property, not a type. If the above example had multiple properties that were colors, you would have to set an adapter block for each property. It would be smart to reuse adapter blocks in your code.</p>
 <p>The <code>OHMValueAdapterBlock</code> type is a block that takes an <code>id</code> and returns an <code>id</code>. <em>i.e.</em> </p>
 
