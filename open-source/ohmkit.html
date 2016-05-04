@@ -1,0 +1,233 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>OHMKit</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+  <link rel="stylesheet" href="/writ.min.css">
+</head>
+<body>
+<header>
+<h1>fabián cañas</h1>
+<nav>
+<ul>
+  <li><a href='/'>about</a></li>
+  <li><a href='/blog/'>writing</a></li>
+  <li><a href='/software/'>software</a></li>
+  |
+  <li><a href='https://www.github.com/fcanas'>GitHub</a></li>
+  <li><a href='https://www.twitter.com/fcanas'>Twitter</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<h1>OHMKit</h1>
+<p><a href="https://github.com/fcanas/OHMKit" target="_blank" class="social-github"></a></p>
+<p><a href="https://travis-ci.org/fcanas/OHMKit"><img src="http://img.shields.io/travis/fcanas/OHMKit.svg?style=flat" alt="CI Status" /></a><br />
+<a href="http://cocoadocs.org/docsets/OHMKit"><img src="https://img.shields.io/cocoapods/v/OHMKit.svg?style=flat" alt="Version" /></a><br />
+<a href="http://cocoadocs.org/docsets/OHMKit"><img src="https://img.shields.io/cocoapods/l/OHMKit.svg?style=flat" alt="License" /></a><br />
+<a href="http://cocoadocs.org/docsets/OHMKit"><img src="https://img.shields.io/cocoapods/p/OHMKit.svg?style=flat" alt="Platform" /></a></p>
+<p>OHMKit makes it easy to hydrate Objective-C model objects from web services or local files. It works especially well with JSON. It's a lot like <a href="https://github.com/Mantle/Mantle">Mantle</a> and <a href="https://github.com/icanzilb/JSONModel">JSONModel</a> except that OHMKit doesn't require your models to inherit from a base class, making it more suitable for use with <a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CoreData/cdProgrammingGuide.html">Core Data</a>, <a href="https://parse.com/">Parse</a>, <a href="http://realm.io/">Realm</a>, or other libraries that <em>do</em> require you to inherit from a base class.</p>
+<p>OHMKit is a system for declaratively expressing how to translate data from JSON or plist to native Objective-C model objects. OHMKit does it without requiring your model to inherit from a base class, so it works with NSObjects, NSManagedObjects, or anything else that fits with your class hierarchy. And you can specify custom mappings anywhere you want, not just in the model. So you can keep the details of mapping a service to you models out of your model code and in your service code where it may be more appropriate.</p>
+<p>Fit this JSON</p>
+<div class="sourceCode"><pre class="sourceCode json"><code class="sourceCode json"><span class="fu">{</span>
+  <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;Fabian&quot;</span><span class="fu">,</span>
+  <span class="dt">&quot;favorite_word&quot;</span><span class="fu">:</span>  <span class="st">&quot;absurd&quot;</span><span class="fu">,</span>
+  <span class="dt">&quot;favorite_number&quot;</span><span class="fu">:</span> <span class="dv">47</span>
+<span class="fu">}</span></code></pre></div>
+<p>into this object</p>
+<div class="sourceCode"><pre class="sourceCode objectivec"><code class="sourceCode objectivec"><span class="kw">@interface</span> MYModel : NSObject
+@property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSString *favoriteWord;
+@property (nonatomic, assign) NSInteger favoriteNumber;
+<span class="kw">@end</span></code></pre></div>
+<p>Map <code>user_name</code> from your web service to <code>userName</code> in your Objective-C models. Map a dictionary of numbers to a <code>UIColor</code>. Or hydrate a whole hierarchical JSON response, including arrays, dictionaries, and arbitrarily deep hierarchies of real Objective-C objects ... with a single line of code.</p>
+<h2 id="why">Why?</h2>
+<p>OHMKit exists because <a href="https://github.com/RestKit/RestKit">RestKit</a> (which is awesome by the way), is sometimes too big, heavy, and indirect. Because <a href="https://github.com/Mantle/Mantle">Mantle</a> and <a href="https://github.com/icanzilb/JSONModel">JSONModel</a> require your models to inherit from a base class.</p>
+<p>Because sometimes, the web services your code consumes doesn't perfectly match your model objects.</p>
+<p>OHMKit is under 200 lines of well-tested code being leveraged in the app store now in apps used by millions of users.</p>
+<h3 id="what-ohmkit-is-not">What OHMKit is Not</h3>
+<p>OHMKit doesn't know about networks. Use <a href="https://github.com/AFNetworking/AFNetworking">AFNetworking</a>.</p>
+<p>OHMKit doesn't know about routes. Use <a href="https://github.com/jverkoey/sockit">SOCKit</a>.</p>
+<p>OHMKit doesn't know about JSON. Use <a href="https://developer.apple.com/library/ios/documentation/foundation/reference/nsjsonserialization_class/Reference/Reference.html">NSJSONSerialization</a></p>
+<p>OHMKit doesn't know about CoreData. It will not manage graphs of entities for you quite like RestKit does. But OHMKit does not care about your model class' super class. So you can safely make subclasses of <code>NSManagedObject</code> mappable.</p>
+<h2 id="usage">Usage</h2>
+<h3 id="basic-mapping">Basic Mapping</h3>
+<p>Given a model</p>
+<div class="sourceCode"><pre class="sourceCode objectivec"><code class="sourceCode objectivec"><span class="kw">@interface</span> MYModel : NSObject
+@property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSString *favoriteWord;
+@property (nonatomic, assign) NSInteger favoriteNumber;
+<span class="kw">@end</span></code></pre></div>
+<p>Anywhere in you application, make the model mappable, and assign it a dictionary of mappings from the keys a service will provide to the keys your actual model object uses.</p>
+<div class="sourceCode"><pre class="sourceCode objectivec"><code class="sourceCode objectivec">OHMMappable([MYModel class]);
+OHMSetMapping([MYModel class], @{<span class="st">@&quot;favorite_word&quot;</span>  : <span class="st">@&quot;favoriteWord&quot;</span>,
+                                 <span class="st">@&quot;favorite_number&quot;</span>: <span class="st">@&quot;favoriteNumber&quot;</span>);</code></pre></div>
+<p>And now <em>anywhere</em> in your application, objects of the class <code>MYModel</code> can be hydrated with a dictionary from a service whose keys will be translated by the mapping dictionary you provided.</p>
+<div class="sourceCode"><pre class="sourceCode objectivec"><code class="sourceCode objectivec">MYModel *testModel = [[MYModel alloc] init];
+
+[testModel setValuesForKeysWithDictionary:@{<span class="st">@&quot;name&quot;</span>           : <span class="st">@&quot;Fabian&quot;</span>,
+                                            <span class="st">@&quot;favorite_word&quot;</span>  : <span class="st">@&quot;absurd&quot;</span>,
+                                            <span class="st">@&quot;favorite_number&quot;</span>: @<span class="dv">47</span>];</code></pre></div>
+<h3 id="recursive-mapping">Recursive Mapping</h3>
+<p>Recursive mapping of mappable objects comes for free. If an object conforming to <code>&lt;OMMappable&gt;</code> has a property whose type also conforms to <code>&lt;OMMappable&gt;</code>, and the value for that key in the hydration dictionary is itself a dictionary, we'll instantiate a new model object and hydrate it.</p>
+<div class="sourceCode"><pre class="sourceCode objectivec"><code class="sourceCode objectivec"><span class="kw">@interface</span> MYClass : NSObject
+@property (nonatomic, strong) NSString *name;
+<span class="kw">@end</span>
+
+<span class="kw">@interface</span> MYClass2 : NSObject
+@property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSString *favoriteWord;
+@property (nonatomic, assign) NSInteger favoriteNumber;
+@property (nonatomic, assign) MYClass *favoriteObject;
+<span class="kw">@end</span>
+
+OHMMappable([MYClass class]);
+
+OHMMappable([MYClass2 class])
+OHMSetMapping([MYClass2 class], @{<span class="st">@&quot;favorite_word&quot;</span>  : <span class="st">@&quot;favoriteWord&quot;</span>,
+                                <span class="st">@&quot;favorite_number&quot;</span>: <span class="st">@&quot;favoriteNumber&quot;</span>,
+                                <span class="st">@&quot;favorite_object&quot;</span> : <span class="st">@&quot;favoriteObject&quot;</span>});
+
+MYModel *testModel = [[MYClass2 alloc] init];
+
+NSDictionary *class2Response = @{<span class="st">@&quot;name&quot;</span>           : <span class="st">@&quot;Fabian&quot;</span>,
+                                 <span class="st">@&quot;favorite_word&quot;</span>  : <span class="st">@&quot;absurd&quot;</span>,
+                                 <span class="st">@&quot;favorite_number&quot;</span>: @<span class="dv">2</span>,
+                                 <span class="st">@&quot;favorite_object&quot;</span>: @{<span class="st">@&quot;name&quot;</span> : <span class="st">@&quot;Rock&quot;</span>}};
+
+[testModel setValuesForKeysWithDictionary:class2Response];</code></pre></div>
+<p>Now, <code>testModel.favoriteObject</code> is an instance of <code>MYClass</code> hydrated with &quot;Rock&quot; as its name.</p>
+<p>Internally, the new model object is initialized with <code>[[ alloc] init]</code>, and then hydrated with <code>[ setValuesForKeysWithDictionary:dictionary]</code>. If you have a model that needs special consideration for initialization, use an adapter block.</p>
+<h3 id="arrays">Arrays</h3>
+<p>Arrays of dictionaries can be mapped to a class as well.</p>
+<div class="sourceCode"><pre class="sourceCode objectivec"><code class="sourceCode objectivec"><span class="kw">@interface</span> Person : NSObject
+@property (nonatomic, copy) NSString *name;
+<span class="kw">@end</span>
+
+<span class="kw">@interface</span> Roster : NSObject
+@property (nonatomic, strong) NSArray *people;
+<span class="kw">@end</span>
+
+OHMMappable([Person class]);
+OHMSetArrayClasses([Roster class], @{<span class="st">@&quot;people&quot;</span>:[Person class]});
+
+NSDictionary *response = @{@[@{<span class="st">@&quot;name&quot;</span>:<span class="st">@&quot;Bert&quot;</span>},
+                             @{<span class="st">@&quot;name&quot;</span>:<span class="st">@&quot;Ernie&quot;</span>},
+                             @{<span class="st">@&quot;name&quot;</span>:<span class="st">@&quot;Count&quot;</span>}];
+
+Roster *roster = [Roster new];
+[roster setValuesForKeysWithDictionary:response];</code></pre></div>
+<h3 id="blocks-serve-as-adapters-to-handle-special-properties">Blocks serve as adapters to handle special properties</h3>
+<p>Users can pass a dictionary of blocks for field requiring special handling. Say a service sends back a dictionary that looks something like this:</p>
+<div class="sourceCode"><pre class="sourceCode json"><code class="sourceCode json"><span class="fu">{</span>
+    <span class="dt">&quot;favorite_color&quot;</span><span class="fu">:</span> <span class="ot">[</span>
+        <span class="dv">122</span><span class="ot">,</span>
+        <span class="dv">50</span><span class="ot">,</span>
+        <span class="dv">80</span>
+    <span class="ot">]</span><span class="fu">,</span>
+    <span class="dt">&quot;least_favorite_color&quot;</span><span class="fu">:</span> <span class="ot">[</span>
+        <span class="dv">121</span><span class="ot">,</span>
+        <span class="dv">51</span><span class="ot">,</span>
+        <span class="dv">81</span>
+    <span class="ot">]</span>
+<span class="fu">}</span></code></pre></div>
+<p>and we expect to map it to a model like this</p>
+<div class="sourceCode"><pre class="sourceCode objectivec"><code class="sourceCode objectivec"><span class="kw">@interface</span> MYModel : NSObject
+@property (nonatomic, strong) UIColor *favoriteColor;
+@property (nonatomic, strong) UIColor *leastFavoriteColor;
+<span class="kw">@end</span></code></pre></div>
+<p>You can adapt the response with an adapter block:</p>
+<div class="sourceCode"><pre class="sourceCode objectivec"><code class="sourceCode objectivec">OHMMappable([MYModel class]);
+OHMSetMapping([MYModel class], <span class="st">@&quot;least_favorite_color&quot;</span> : <span class="st">@&quot;leastFavoriteColor&quot;</span>, <span class="st">@&quot;favorite_color&quot;</span> : <span class="st">@&quot;favoriteColor&quot;</span>)
+OHMValueAdapterBlock colorFromNumberArray = ^(NSArray *numberArray) {
+    <span class="kw">return</span> [UIColor colorWithRed:[numberArray[<span class="dv">0</span>] integerValue]/<span class="fl">255.0</span>
+                           green:[numberArray[<span class="dv">1</span>] integerValue]/<span class="fl">255.0</span>
+                            blue:[numberArray[<span class="dv">2</span>] integerValue]/<span class="fl">255.0</span>
+                           alpha:<span class="dv">1</span>];
+};
+OHMSetAdapter([MYModel class], @{<span class="st">@&quot;favoriteColor&quot;</span>: colorFromNumberArray, <span class="st">@&quot;leastFavoriteColor&quot;</span>: colorFromNumberArray});</code></pre></div>
+<p>Note that the key for the adapter is the key on the model object, not on the response. And adapters are added for a property, not a type. If the above example had multiple properties that were colors, you would have to set an adapter block for each property. It would be smart to reuse adapter blocks in your code.</p>
+<p>The <code>OHMValueAdapterBlock</code> type is a block that takes an <code>id</code> and returns an <code>id</code>. <em>i.e</em> <code>typedef id(^OHMValueAdapterBlock)(id);</code></p>
+<h2 id="using-it-in-a-project">Using it in a project</h2>
+<p>Use <a href="http://www.cocoapods.org">CocoaPods</a>, add OHMKit to your <code>PodFile</code>, and run <code>$ pod install</code></p>
+<div class="sourceCode"><pre class="sourceCode ruby"><code class="sourceCode ruby">pod <span class="st">&#39;OHMKit&#39;</span></code></pre></div>
+<h2 id="how">How?</h2>
+<p>OHMKit is a <a href="http://en.wikipedia.org/wiki/Mixin">mixin</a> that makes it easy to keep any direct knowledge of the idiosyncrasies of the service you're consuming tucked away in a single place.</p>
+<p>It leverages the power of Key Value Coding (<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/KeyValueCoding.html">KVC</a>) that's built right in to Cocoa. It safely wraps <code>-setValue:forKey:</code> and <code>-setValue:forUndefinedKey:</code> to make calls to <code>setValuesForKeysWithDictionary:</code> extremely powerful.</p>
+<h2 id="contributing">Contributing</h2>
+<p>Bug fixes, pull requests, enhancement requests and feedback are welcome.</p>
+<p>If you plan on contributing code, please notice that OHMKit has tests. If you're fixing a bug, please include a test that exposes the bug and therefore guards against a regression.</p>
+<h2 id="todo">TODO</h2>
+<h3 id="undefined-keys">Undefined Keys</h3>
+<p>The behavior of undefined keys should be configurable at 3 levels:</p>
+<ol>
+<li>Raise, because I should know about everything.</li>
+<li>Drop unrecognized keys. We don't need them, but we shouldn't crash.</li>
+<li>Add keys to a dictionary so that serialization/deserialization can be symmetric</li>
+</ol>
+<p>Option 2 is currently the only behavior, and I'm inclined to leave is as the default behavior.</p>
+<h3 id="nscoding">NSCoding</h3>
+<p>It might be nice if we built a way to make a class <code>NSCoding</code> compatible if it's not already. I like <a href="https://github.com/github/Mantle">Mantle</a>, but I don't want to be told what my super class should be.</p>
+<h3 id="nsvaluetransformer">NSValueTransformer</h3>
+<p>Adapter blocks versus <code>NSValueTransformer</code>s. There's no reason why both can't co-exist.</p>
+<h1 id="license">License</h1>
+<p>Copyright (c) 2013-2015 Fabian Canas. All rights reserved.</p>
+<p>This code is distributed under the terms and conditions of the MIT license.</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy<br />
+of this software and associated documentation files (the &quot;Software&quot;), to deal<br />
+in the Software without restriction, including without limitation the rights<br />
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell<br />
+copies of the Software, and to permit persons to whom the Software is<br />
+furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in<br />
+all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR<br />
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,<br />
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE<br />
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER<br />
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,<br />
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN<br />
+THE SOFTWARE.</p>
+</article>
+</main>
+</body>
+</html>
