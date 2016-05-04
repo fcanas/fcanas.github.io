@@ -1,26 +1,4 @@
-<html>
-<head><title>Duplicate Windows in Mac OS X</title>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="/writ.min.css">
-<link rel="stylesheet" href="/code.css">
-</head>
+% Duplicate Windows in Mac OS X
+% April 15, 2010
 
-<body>
-  <header>
-    <h1>fcanas</h1>
-    <nav>
-    <ul style="list-style-type:none">
-      <li><a href='/'>about</a></li>
-      <li><a href='/blog/'>blog</a></li>
-      <li><a href='/software/'>software</a></li>
-      |
-      <li><a href='https://www.github.com/fcanas'>GitHub</a></li>
-      <li><a href='https://www.twitter.com/fcanas'>Twitter</a></li>
-    </ul>
-    </nav>
-  </header>
-  <main>
-<article>
-<h1>Duplicate Windows in Mac OS X</h1>
 <p>Allow me to introduce a project I’ve had lying around for some months that I’ve found extremely useful thus far: <a href="http://www.fabiancanas.com/Projects/DuplicateWindows/">Duplicate Windows</a>. It allows you to create a visual copy of any window on Mac OS X, and keep the new window updated on-the-fly.</p><p>The program came about when I was teaching a statistics lab twice a week in Fall 2009. The first portion of every lab, I performed various sorts of demonstrations using the statistical software, <a href="http://www.r-project.org/">R</a>. As is usual in such cases, I stood up front facing the class, with the projection screen behind me. The perfect scenario to mirror the display on my laptop and the projector.</p><p>But then, I wanted to have some personal notes in-front of me to present the material in the way I had carefully prepared, and I also wanted to have a small bank of pre-typed commands to copy and paste into the R console to speed up the lecture portion of the lab. I didn’t want these resources projected in-front of the entire class… the perfect scenario to set my laptop in extended desktop mode.</p><p>One morning, I decided I needed the best of both worlds. I wrote a dead-simple program that continuously takes a screenshot of a window you select, and renders it onto another window, thereby visually duplicating the original window. So now I can have the R console open on my laptop, with my notes beside it, and just duplicate the R window onto the projector, with the displays set to extended desktop mode.</p><p><a href="http://www.fabiancanas.com/Projects/DuplicateWindows/">Duplicate Windows</a> has proven useful in a variety of other circumstances, but still stands in my mind as an excellent presentation tool to have at your disposal. If you’ve ever wished you could “mirror” only a single window, now you can (as long as you’re running Mac OS X, Snow Leopard). See <a href="http://www.fabiancanas.com/Projects/DuplicateWindows/#video">a video</a> of the software in action.</p>
