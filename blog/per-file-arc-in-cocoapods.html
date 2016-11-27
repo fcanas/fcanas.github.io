@@ -1,0 +1,89 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="author" content="2013-05-04">
+  <title>Per File ARC in CocoaPods</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+  <link rel="stylesheet" href="/writ.min.css">
+</head>
+<body>
+<header>
+<h1>fabián cañas</h1>
+<nav>
+<ul>
+  <li><a href='/'>about</a></li>
+  <li><a href='/blog/'>writing</a></li>
+  <li><a href='/software/'>software</a></li>
+  |
+  <li><a href='https://www.github.com/fcanas'>GitHub</a></li>
+  <li><a href='https://www.twitter.com/fcanas'>Twitter</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<h1>Per File ARC in CocoaPods</h1>
+<p>tl;dr</p>
+<div class="sourceCode"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span class="dt">Pod</span>::<span class="dt">Spec</span>.new <span class="kw">do</span> |s|
+    s.name = <span class="st">&#39;MyPod&#39;</span>
+    ...
+    non_arc_files = <span class="st">&#39;Classes/FirstNonARCClass.m&#39;</span>,
+    <span class="st">&#39;Classes/SecondNonARCClass.m&#39;</span>,
+    <span class="st">&#39;Classes/ThirdNonARCClass.m&#39;</span>
+    s.requires_arc = <span class="dv">true</span>
+    s.source_files = <span class="st">&#39;Classes/*.{h,m}&#39;</span>
+    s.exclude_files = non_arc_files
+    s.subspec <span class="st">&#39;no-arc&#39;</span> <span class="kw">do</span> |sna|
+        sna.requires_arc = <span class="dv">false</span>
+        sna.source_files = non_arc_files
+    <span class="kw">end</span>
+<span class="kw">end</span></code></pre></div>
+<h2 id="arc">ARC</h2>
+<p>Automatic reference counting (ARC) is a good thing. It's a great compile-time technology that makes it easier, in most cases, to not accidentally introduce trivial memory leaks in modern Objective-C apps.</p>
+<p>But sometimes, you have older code with traditional memory management; it's not really worth converting to ARC if it's correct, and possibly finely tuned. And sometimes ARC introduces <a href="http://www.learn-cocos2d.com/2013/03/confirmed-arc-slow/">a little unnecessary overhead</a> that can balloon out of control when handling large numbers of objects. There are also good reasons to put Objective-C objects into structs or other odd places that ARC prohibits or makes difficult (Objective-C++ anyone?).</p>
+<p>That said, ARC is almost always a good idea. And so disabling ARC should be the exception, not the rule.</p>
+<h2 id="cocoapods">CocoaPods</h2>
+<p><a href="http://cocoapods.org/">CocoaPods</a> is an excellent dependency management system for Objective-C projects. Dependencies are distributed as 'Pods' which are described in podpecs. A podspec is a kind of build description, that specifies where the source is to be found, dependencies it has, and how it should be configured and compiled.</p>
+<p>CocoaPods lets you specify ARC on a spec or subspec basis, but doing so on a per-file basis is not planned for the spec DSL. <a href="https://github.com/CocoaPods/CocoaPods/issues/589#issuecomment-9350801">The suggested way of doing this</a> is a little unsatisfactory because it has you listing each file to exclude twice. Luckily we're working with ruby and we can just extract the list of files to exclude into a list we can use to exclude from the sources and include in a non-ARC subspec.</p>
+</article>
+</main>
+</body>
+</html>
