@@ -1,0 +1,477 @@
+<html>
+
+<head><title>Making a Numeric Type in Swift</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/writ.min.css">
+<link rel="stylesheet" href="/code.css">
+</head>
+
+<body>
+  <header>
+    <h1>fabián cañas</h1>
+    <nav>
+    <ul>
+      <li><a href='/'>about</a></li>
+      <li><a href='/blog/'>writing</a></li>
+      <li><a href='/software/'>software</a></li>
+      |
+      <li><a href='https://www.github.com/fcanas'>GitHub</a></li>
+      <li><a href='https://www.twitter.com/fcanas'>Twitter</a></li>
+    </ul>
+    </nav>
+  </header>
+  <main>
+<article>
+  <h1>Making a Numeric Type in Swift</h1>
+  <date>2015-05-21</date>
+<p>Programmers invariably work with numbers that represent values with intrinsic types, or units. Types can be conceptual representations of real world modeling such as distance, mass, time. Those conceptual types can be formalized into units, such as meters, grams, seconds. </p>
+
+<p>Naturally we want to be able to manipulate these numbers with types. I want to take the distance from my apartment to my favorite coffee shop, and the distance from the coffee shop to my office, add them together and know the distance of my commute. I may want to add the time for each of those trips to find the total time. But if I were to add a distance to a time, the result is meaningless. We are going to explore how Swift can help us avoid committing such an error.</p>
+
+<p>tl;dr here's the <a href="https://gist.github.com/fcanas/6f02fc92e3ae0b2f9ce7">gist</a>. But the journey really is worthwhile. Please read on.</p>
+
+<p>If you've worked with Cocoa, you may have encountered types like <code>NSTimeInterval</code> and <code>CLLocationDistance</code>. Hopefully you've favored using them over naked numeric types for your properties. Not only do they allow for easier interoperation with system frameworks, they also provide a conventional basis for understanding what your values represent.</p>
+
+<div class="highlight highlight-objc"><pre><span class="pl-c">// according to convention, you know this is in seconds</span>
+@property (nonatomic, assign) <span class="pl-s3">NSTimeInterval</span> elapsedTime;
+<span class="pl-c">// hours? minutes? jiffy?</span>
+@property (nonatomic, assign) <span class="pl-st">double</span> mysteryTime;
+
+<span class="pl-c">// according to convention, you know this is in meters</span>
+@property (nonatomic, assign) <span class="pl-s3">CLLocationDistance</span> totalDistance;
+<span class="pl-c">// meters? fathoms? potrzebies?</span>
+@property (nonatomic, assign) <span class="pl-st">double</span> secretDistance;</pre></div>
+
+<p>Unfortunately, there's nothing preventing you from committing type atrocities:</p>
+
+<div class="highlight highlight-objc"><pre>unknowableWhatever = elapsedTime + totalDistance;</pre></div>
+
+<p>Swift can rescue us with types! Right? Unfortunately, it is perfectly valid to arbitrarily combine those various types in a Swift program. </p>
+
+<div class="highlight highlight-swift"><pre><span class="pl-st">var</span> elapsedTime <span class="pl-s3">:NSTimeInterval</span> <span class="pl-k">=</span> <span class="pl-c1">12</span>
+<span class="pl-st">var</span> mysteryTime :<span class="pl-s3">Double</span> <span class="pl-k">=</span> <span class="pl-c1">24</span>
+<span class="pl-st">var</span> totalDistance <span class="pl-s3">:CLLocationDistance</span> <span class="pl-k">=</span> <span class="pl-c1">917</span>
+<span class="pl-st">var</span> secretDistance :<span class="pl-s3">Double</span> <span class="pl-k">=</span> <span class="pl-c1">1</span><span class="pl-k">.</span><span class="pl-c1">726</span>
+
+<span class="pl-st">let</span> sadness <span class="pl-k">=</span> elapsedTime <span class="pl-k">+</span> totalDistance</pre></div>
+
+<p>But wait! I thought Swift was supposed to prevent this sort of thing! That's what types are all about!</p>
+
+<p>In Swift, types such as <code>NSTimeInterval</code> and <code>CLLocationDistance</code> are "type aliases". That is, they say they are one thing but it is a new name for what they actually are. They are a <code>Double</code> in everything but name. Swift is designed to closely interoperate with C, and Apple's frameworks (and most any other non-trivial C code) makes extensive use of <code>typedef</code>. <code>typedef</code> is critically important in writing portable C code, as well as enabling language features like structs as types. Further, some of those types are truly intended to be mixed, such as <code>CLLocationDistance</code> and <code>CLLocationAccuracy</code>. And while we are exploring an avenue for a unit-safe numeric type, we will see later that strictly enforced boundaries between arithmetic types can be sometimes undesirable. </p>
+
+<p>Swift's <code>typealias</code> seems to be, in part, a concession to C's <code>typedef</code>, though it is also used in the construction of complex type relationships with generics.</p>
+
+<p>That said, it is entirely possible for the work contained in the entire rest of this article to be obviated by a simple new Swift language feature to strengthen the power of <code>typealias</code></p>
+
+<div class="highlight highlight-swift"><pre><span class="pl-c">// This is not real Swift, nor do I have any reason to believe it ever will be.</span>
+<span class="pl-c">// But I could imagine this meaning that Distance is to behave exactly like a Double,</span>
+<span class="pl-c">// yet also remain a strictly different type.</span>
+strict <span class="pl-st">typealias</span> <span class="pl-s3">Distance</span> <span class="pl-k">=</span> <span class="pl-s3">Double</span> </pre></div>
+
+<h2 id="structsfortypesafety">Structs for Type Safety</h2>
+
+<p>Structs, whether in C or Swift, can provide us with the type safety we need. We can define a <code>Distance</code> struct like so</p>
+
+<div class="highlight highlight-swift"><pre><span class="pl-c">/// Type used to represent distance in meters</span>
+<span class="pl-st">struct</span> <span class="pl-s3">Distance</span> {
+    <span class="pl-st">var</span> value :<span class="pl-s3">Double</span>
+}</pre></div>
+
+<p>Now we can't arbitrarily add distances and time intervals. But we can't add distances to distances either. We can create functions to do that (again, this works in C as well with appropriate syntactical changes)</p>
+
+<div class="highlight highlight-swift"><pre><span class="pl-st">func</span> <span class="pl-en">add</span>(a: <span class="pl-s3">Distance</span>, b: <span class="pl-s3">Distance</span>) <span class="pl-k">-&gt;</span> <span class="pl-s3">Distance</span> {
+    <span class="pl-k">return</span> <span class="pl-s3">Distance</span>(value: a<span class="pl-k">.</span>value <span class="pl-k">+</span> b<span class="pl-k">.</span>value)
+}</pre></div>
+
+<p>But where Swift really begins to shine is in <a href="http://nshipster.com/swift-operators/">overloading operators</a> with our own functions. We can define <code>+</code> as a function that operates on a pair of <code>Distance</code>, and proceed to to freely add distances as though they were numbers. We could implement function after function until we have all the operators we might need, <code>==,&lt;=,&gt;=,!=,+,-,*,/,++,--</code> and so on. But we can save ourselves some work and integrate very closely with how Swift is built by taking a principled approach to our new numeric type.</p>
+
+<h2 id="moreprincipledwithprotocols">More Principled with Protocols</h2>
+
+<p>Many of Swift's fundamental language features are expressible in Swift itself. Swift's collection protocols allow us to write first-class collections, a process that has been outlined in <a href="http://nshipster.com/swift-collection-protocols/">NSHipster</a>. There are protocols that can help us on the way to creating first-class numbers. </p>
+
+<p>Swift <a href="https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/Protocols.html">protocols</a> are much like Objective-C protocols. They represent a sort of contract -- a class or struct can adopt the protocol if and only if it fulfills all the requirements of the protocol. The protocol's requirements look a lot like a struct or a class except they lack implementation of functions. By adopting protocols and fulfilling their requirements, we can leverage functionality built right into Swift that sits on top of those protocols.</p>
+
+<h2 id="comparisons">Comparisons</h2>
+
+<p>Comparisons start with the <code>Equatable</code> protocol. <code>Equatable</code> only defines one required function, <code>==</code>, and the documentation states </p>
+
+<blockquote>
+<p>When adopting <code>Equatable</code>, only the <code>==</code> operator is required to be implemented.  The standard library provides an implementation for <code>!=</code>.</p>
+</blockquote>
+
+<p>We can grow our definition of Distance as follows with <code>==</code> implemented and <code>!=</code> provided by the standard library. Note that if we implement <code>==</code> but do not conform to <code>Equatable</code>, <code>!=</code> will not be available.</p>
+
+<div class="highlight highlight-swift"><pre><span class="pl-st">struct</span> <span class="pl-s3">Distance</span>: Equatable {
+    <span class="pl-st">var</span> value :<span class="pl-s3">Double</span>
+}
+
+<span class="pl-st">func</span> <span class="pl-en">==</span>(lhs: <span class="pl-s3">Distance</span>, rhs: <span class="pl-s3">Distance</span>) <span class="pl-k">-&gt;</span> <span class="pl-s3">Bool</span> {
+    <span class="pl-k">return</span> lhs<span class="pl-k">.</span>value <span class="pl-k">==</span> rhs<span class="pl-k">.</span>value
+}</pre></div>
+
+<p>Next up the protocol hierarchy is <code>Comparable</code>, which itself conforms to <code>Equatable</code>.</p>
+
+<blockquote>
+<p>A type conforming to <code>Comparable</code> need only supply the <code>&lt;</code> and <code>==</code> operators; default implementations of <code>&lt;=</code>, <code>&gt;</code>, <code>&gt;=</code>, and <code>!=</code> are supplied by the standard library::</p>
+</blockquote>
+
+<p>We can implement <code>&lt;</code>, drop <code>Equatable</code> in favor of <code>Comparable</code> and end up with</p>
+
+<div class="highlight highlight-swift"><pre><span class="pl-st">struct</span> <span class="pl-s3">Distance</span>: Comparable {
+    <span class="pl-st">var</span> value :<span class="pl-s3">Double</span>
+}
+
+<span class="pl-st">func</span> <span class="pl-en">==</span>(lhs: <span class="pl-s3">Distance</span>, rhs: <span class="pl-s3">Distance</span>) <span class="pl-k">-&gt;</span> <span class="pl-s3">Bool</span> {
+    <span class="pl-k">return</span> lhs<span class="pl-k">.</span>value <span class="pl-k">==</span> rhs<span class="pl-k">.</span>value
+}
+
+<span class="pl-st">func</span> <span class="pl-en">&lt;</span>(lhs: <span class="pl-s3">Distance</span>, rhs: <span class="pl-s3">Distance</span>) <span class="pl-k">-&gt;</span> <span class="pl-s3">Bool</span> {
+    <span class="pl-k">return</span> lhs<span class="pl-k">.</span>value <span class="pl-k">&lt;</span> rhs<span class="pl-k">.</span>value
+}</pre></div>
+
+<h2 id="literalconvertibles">Literal Convertibles</h2>
+
+<p>A <em>literal</em>, in Swift and other languages, is a value that appears to be baked in to the source code. In the following code, the characters "1" and "2" together (and "1", "2", "." and "0") are a numeric literal representing the number 12. </p>
+
+<div class="highlight highlight-swift"><pre><span class="pl-st">let</span> w         <span class="pl-k">=</span> <span class="pl-c1">12</span>
+<span class="pl-st">let</span> x :<span class="pl-s3">Double</span> <span class="pl-k">=</span> <span class="pl-c1">12</span>
+<span class="pl-st">let</span> y :<span class="pl-s3">Int</span>    <span class="pl-k">=</span> <span class="pl-c1">12</span>
+<span class="pl-st">let</span> z         <span class="pl-k">=</span> <span class="pl-c1">12.0</span>
+</pre></div>
+
+<p>When compiled, type constraints are applied to determine what type literals should be. If they are not of a specific type, they end up as <code>IntegerLiteralType</code> or <code>FloatLiteralType</code>, which in turn are <code>typealias</code>es for <code>Int</code> and <code>Double</code></p>
+
+<p>Swift exposes the mechanisms underlying literals to developers. With Literal Convertibles, we can create constructs that feel first-class, much in the same way as collection protocols and operator overloading. NSHipster has a nice <a href="http://nshipster.com/swift-literal-convertible/">overview</a> of the available literal convertibles and some of their uses. Here, we will examine the <code>IntegerLiteralConvertible</code> and <code>FloatLiteralConvertible</code> types which were not covered in their article but are critical to implementing our own numeric type.</p>
+
+<p>With what we've built so far, to create a <code>Distance</code>, we must use an initializer:</p>
+
+<div class="highlight highlight-swift"><pre><span class="pl-st">let</span> twelve <span class="pl-k">=</span> <span class="pl-s3">Distance</span>(value: <span class="pl-c1">12</span>)
+<span class="pl-st">let</span> eleven <span class="pl-k">=</span> <span class="pl-s3">Distance</span>(value: <span class="pl-c1">11</span>)
+<span class="pl-st">let</span> ten <span class="pl-s3">:Distance</span> <span class="pl-k">=</span> <span class="pl-c1">10</span>     <span class="pl-c">// This will not compile because '10'</span>
+                           <span class="pl-c">// isn't a Distance, it's a literal</span></pre></div>
+
+<p>What we would like to do is the following:</p>
+
+<div class="highlight highlight-swift"><pre><span class="pl-st">let</span> twelve <span class="pl-s3">:Distance</span> <span class="pl-k">=</span> <span class="pl-c1">12</span>
+<span class="pl-st">let</span> eleven <span class="pl-s3">:Distance</span> <span class="pl-k">=</span> <span class="pl-c1">11</span></pre></div>
+
+<p>To avoid overloading the default initializer in <code>Comparable</code>, we will implement <code>IntegerLiteralConvertible</code> in an extension as follows, and thereby gain the ability to assign integer literals directly into <code>Distance</code> typed containers.</p>
+
+<div class="highlight highlight-swift"><pre><span class="pl-st">extension</span> <span class="pl-s3">Distance</span> :IntegerLiteralConvertible {
+    <span class="pl-st">init</span>(integerLiteral value: IntegerLiteralType) {
+        <span class="pl-k">self</span><span class="pl-k">.</span><span class="pl-st">init</span>(value: <span class="pl-s3">Double</span>(value))
+    }
+}</pre></div>
+
+<p>With integer literal convertibles, we still cannot assign floating point literals (<em>e.g.</em> <code>1.75</code>) directly. That has its own protocol that is much the same as its integer counterpart. In our present case considering distances represented as a <code>Double</code> under the hood, we will implement <code>FloatLiteralConvertible</code>. It is not so difficult to imagine purely integral types for which the protocol should not be implemented.</p>
+
+<div class="highlight highlight-swift"><pre><span class="pl-st">extension</span> <span class="pl-s3">Distance</span> :FloatLiteralConvertible {
+    <span class="pl-st">init</span>(floatLiteral value: FloatLiteralType) {
+        <span class="pl-k">self</span><span class="pl-k">.</span><span class="pl-st">init</span>(value: <span class="pl-s3">Double</span>(value))
+    }
+}</pre></div>
+
+<p>Unfortunately at this point, we begin to run out of runway with literal convertible types.</p>
+
+<div class="highlight highlight-swift"><pre><span class="pl-st">let</span> one <span class="pl-s3">:Distance</span>  <span class="pl-k">=</span> <span class="pl-c1">1</span>          <span class="pl-c">// Ok</span>
+<span class="pl-st">let</span> two <span class="pl-s3">:Distance</span>  <span class="pl-k">=</span> <span class="pl-c1">2</span><span class="pl-k">.</span><span class="pl-c1">0</span>        <span class="pl-c">// Ok</span>
+
+<span class="pl-st">let</span> six            <span class="pl-k">=</span> two <span class="pl-k">+</span> <span class="pl-c1">4</span>    <span class="pl-c">// 'Int' is not convertible to 'Distance'</span>
+<span class="pl-st">let</span> five <span class="pl-s3">:Distance</span> <span class="pl-k">=</span> <span class="pl-c1">3</span> <span class="pl-k">+</span> <span class="pl-c1">2</span>      <span class="pl-c">// 'Int' is not convertible to 'Distance'</span>
+<span class="pl-st">let</span> four           <span class="pl-k">=</span> <span class="pl-c1">2</span><span class="pl-k">.</span><span class="pl-c1">0</span> <span class="pl-k">+</span> two  <span class="pl-c">// 'Double' is not convertible to 'Distance'</span>
+</pre></div>
+
+<h2 id="arithmetic">Arithmetic</h2>
+
+<p>We can start enabling arithmetic with the <code>SignedNumberType</code> protocol. <code>SignedNumberType</code> conforms to <code>IntegerLiteralConvertible</code>, so we can <em>replace</em> our integer literal extension's protocol and implement two new required functions: negation and subtraction</p>
+
+<div class="highlight highlight-swift"><pre><span class="pl-c">// Replace `Distance :IntegerLiteralConvertible` from before with a new extension signature</span>
+<span class="pl-st">extension</span> <span class="pl-s3">Distance</span> :SignedNumberType {
+    <span class="pl-st">init</span>(integerLiteral value: IntegerLiteralType) {
+        <span class="pl-k">self</span><span class="pl-k">.</span><span class="pl-st">init</span>(value: <span class="pl-s3">Double</span>(value))
+    }
+}
+
+<span class="pl-c">// Subtraction</span>
+<span class="pl-st">func</span> <span class="pl-en">-</span>(lhs: <span class="pl-s3">Distance</span>, rhs: <span class="pl-s3">Distance</span>) <span class="pl-k">-&gt;</span> <span class="pl-s3">Distance</span> {
+    <span class="pl-k">return</span> <span class="pl-s3">Distance</span>(value:lhs<span class="pl-k">.</span>value <span class="pl-k">-</span> rhs<span class="pl-k">.</span>value)
+}
+
+<span class="pl-c">// Negation (notice the `prefix` keyword)</span>
+<span class="pl-k">prefix</span> <span class="pl-st">func</span> <span class="pl-en">-</span>(x: <span class="pl-s3">Distance</span>) <span class="pl-k">-&gt;</span> <span class="pl-s3">Distance</span> {
+    <span class="pl-k">return</span> <span class="pl-s3">Distance</span>(value:<span class="pl-k">-</span>x<span class="pl-k">.</span>value)
+}</pre></div>
+
+<p>We now gain the ability to create <code>Distance</code>s from arithmetically combined integer literals -- as long as they're combined with subtraction. We also get <code>abs</code> for free at this point even though we don't implement <code>AbsoluteValuable</code></p>
+
+<div class="highlight highlight-swift"><pre><span class="pl-st">let</span> four <span class="pl-s3">:Distance</span> <span class="pl-k">=</span> <span class="pl-c1">5</span> <span class="pl-k">-</span> <span class="pl-c1">1</span>      <span class="pl-c">// Ok</span>
+<span class="pl-st">let</span> five <span class="pl-s3">:Distance</span> <span class="pl-k">=</span> <span class="pl-c1">7</span> <span class="pl-k">-</span> two    <span class="pl-c">// Ok</span>
+<span class="pl-st">let</span> negativeSix <span class="pl-s3">:Distance</span> <span class="pl-k">=</span> <span class="pl-c1">-6</span>
+<span class="pl-st">let</span> six <span class="pl-k">=</span> abs(negativeSix)      <span class="pl-c">// 6</span></pre></div>
+
+<h3 id="tointegerornottointeger">To Integer or Not to Integer?</h3>
+
+<p>We now have a choice before us. There are four remaining basic operators to implement. <code>+,*,/,%</code>. For <code>Double</code> and other floating point types, Swift seems to declare these operations in a free-standing form with no associated protocol. However integers all conform to <code>IntegerType</code>, which includes an <code>IntegerArithmeticType</code>. The fundamental arithmetic operations are supported by a small family of functions, which if implemented would give us those operators:</p>
+
+<div class="highlight highlight-swift"><pre><span class="pl-k">static</span> <span class="pl-st">func</span> <span class="pl-en">addWithOverflow</span>(lhs: <span class="pl-k">Self</span>, _ rhs: <span class="pl-k">Self</span>) <span class="pl-k">-&gt;</span> (Self, overflow: <span class="pl-s3">Bool</span>)
+<span class="pl-k">static</span> <span class="pl-st">func</span> <span class="pl-en">subtractWithOverflow</span>(lhs: <span class="pl-k">Self</span>, _ rhs: <span class="pl-k">Self</span>) <span class="pl-k">-&gt;</span> (Self, overflow: <span class="pl-s3">Bool</span>)
+<span class="pl-k">static</span> <span class="pl-st">func</span> <span class="pl-en">multiplyWithOverflow</span>(lhs: <span class="pl-k">Self</span>, _ rhs: <span class="pl-k">Self</span>) <span class="pl-k">-&gt;</span> (Self, overflow: <span class="pl-s3">Bool</span>)
+<span class="pl-k">static</span> <span class="pl-st">func</span> <span class="pl-en">divideWithOverflow</span>(lhs: <span class="pl-k">Self</span>, _ rhs: <span class="pl-k">Self</span>) <span class="pl-k">-&gt;</span> (Self, overflow: <span class="pl-s3">Bool</span>)
+<span class="pl-k">static</span> <span class="pl-st">func</span> <span class="pl-en">remainderWithOverflow</span>(lhs: <span class="pl-k">Self</span>, _ rhs: <span class="pl-k">Self</span>) <span class="pl-k">-&gt;</span> (Self, overflow: <span class="pl-s3">Bool</span>)</pre></div>
+
+<p>But for <code>IntegerType</code>, things expand quickly aside from <code>IntegerArithmeticType</code>. There are seemingly unrelated protocols such as <code>RandomAccessIndexType</code>, which includes <code>BidirectionalIndexType</code> and <code>_RandomAccessIndexType</code>, which in turn pull in many, many protocols enabling the type to be used for things like indexing, ranges, incrementing. All this amounts to <a href="http://swiftdoc.org/protocol/IntegerType/hierarchy/">11 separate protocols</a> (or 19 if you count the <code>_</code>-prefixed protocols) that you must implement to fulfill the requirements of being an integer in Swift. This is not counting whether you decide to go down the <code>SignedIntegerType</code> or <code>UnsignedIntegerType</code> paths.</p>
+
+<p>We are not implementing an integer. So we will not conform the the <code>IntegerType</code> in any form. There is no floating point corresponding protocol for arithmetic, so we will just implement a couple of arithmetic functions.</p>
+
+<div class="highlight highlight-swift"><pre><span class="pl-st">func</span> <span class="pl-en">+</span>(lhs: <span class="pl-s3">Distance</span>, rhs: <span class="pl-s3">Distance</span>) <span class="pl-k">-&gt;</span> <span class="pl-s3">Distance</span> {
+    <span class="pl-k">return</span> <span class="pl-s3">Distance</span>(value:lhs<span class="pl-k">.</span>value <span class="pl-k">+</span> rhs<span class="pl-k">.</span>value)
+}
+
+<span class="pl-st">func</span> <span class="pl-en">%</span>(lhs: <span class="pl-s3">Distance</span>, rhs: <span class="pl-s3">Distance</span>) <span class="pl-k">-&gt;</span> <span class="pl-s3">Distance</span> {
+    <span class="pl-k">return</span> <span class="pl-s3">Distance</span>(value:lhs<span class="pl-k">.</span>value <span class="pl-k">%</span> rhs<span class="pl-k">.</span>value)
+}</pre></div>
+
+<p>And now we can do basically what we want.</p>
+
+<div class="highlight highlight-swift"><pre><span class="pl-st">let</span> one <span class="pl-s3">:Distance</span> <span class="pl-k">=</span> <span class="pl-c1">1</span>
+<span class="pl-st">let</span> two <span class="pl-s3">:Distance</span> <span class="pl-k">=</span> <span class="pl-c1">2</span><span class="pl-k">.</span><span class="pl-c1">0</span>
+<span class="pl-st">let</span> three <span class="pl-k">=</span> two <span class="pl-k">+</span> <span class="pl-c1">1</span>
+
+<span class="pl-st">let</span> negativeSeven <span class="pl-s3">:Distance</span> <span class="pl-k">=</span> <span class="pl-c1">-7</span>
+<span class="pl-st">let</span> seven <span class="pl-k">=</span> abs(negativeSeven)
+
+<span class="pl-st">let</span> six <span class="pl-k">=</span> three <span class="pl-k">+</span> three
+<span class="pl-st">let</span> five <span class="pl-k">=</span> six <span class="pl-k">-</span> <span class="pl-c1">1</span>
+<span class="pl-st">let</span> four <span class="pl-k">=</span> <span class="pl-c1">5</span> <span class="pl-k">-</span> one
+
+<span class="pl-st">let</span> eight <span class="pl-k">=</span> <span class="pl-c1">4</span> <span class="pl-k">+</span> four
+<span class="pl-st">let</span> nine <span class="pl-k">=</span> <span class="pl-c1">10</span> <span class="pl-k">-</span> one</pre></div>
+
+<h3 id="multiplication">Multiplication</h3>
+
+<p>Be warned: if you are planning on creating your own numeric type for any kind of real-world application: the type of <code>Distance * Distance</code> is not <code>Distance</code> but <code>Distance</code><sup>2</sup> or <code>Area</code>. The combination of types as units is not something that the Swift type system can likely dynamically account for. For certain units, <code>Area</code> being a likely candidate, it may be worthwhile to implement a more elaborate system to account for common use cases:</p>
+
+<div class="highlight highlight-swift"><pre><span class="pl-st">func</span> <span class="pl-en">*</span>(lhs: <span class="pl-s3">Distance</span>, rhs: <span class="pl-s3">Distance</span>) <span class="pl-k">-&gt;</span> <span class="pl-s3">Area</span> {
+    <span class="pl-k">return</span> <span class="pl-s3">Area</span>(value:lhs<span class="pl-k">.</span>value <span class="pl-k">*</span> rhs<span class="pl-k">.</span>value)
+}
+
+<span class="pl-st">func</span> <span class="pl-en">/</span>(lhs: <span class="pl-s3">Area</span>, rhs: <span class="pl-s3">Distance</span>) <span class="pl-k">-&gt;</span> <span class="pl-s3">Distance</span> {
+    <span class="pl-k">return</span> <span class="pl-s3">Distance</span>(value:lhs<span class="pl-k">.</span>value <span class="pl-k">/</span> rhs<span class="pl-k">.</span>value)
+}</pre></div>
+
+<p>This approach will only take you so far. So be warned that due to the nature of multiplication, implementing <code>*</code> and <code>/</code> on a type that needs to behave like a unit is likely a bad idea. It would be better to implement your domain-specific elaborate operations directly on the underlying <code>Double</code> within a carefully constructed type-safe function.</p>
+
+<p>Additionally, when constructing a numeric type to account for units, if an integer representation seems like a good way to go, consider that conforming to the various integer protocols forces you to implement potentially dangerous multiplication and division functions.</p>
+
+<p>So multiplication and division will be left out of our <code>Distance</code> unit for now.</p>
+
+<h2 id="bookkeeping">Bookkeeping</h2>
+
+<p>Among the protocols we skipped over when deciding to not implement an IntegerType are <code>Printable</code> and <code>Hashable</code>. These are good protocols to conform to whenever possible. <code>Printable</code> lets the object play nicely with string interpolation, can help with debugging, and makes the new type behave more like a built-in number. <code>Hashable</code> is another protocol implemented by the native numeric types. Implementing a hash value is a good idea for creating value types. It can act as a shortcut to determining the uniqueness of values without doing a direct comparison. It also enables the types use in hash-map based data structures such as <code>Set</code> and <code>Dictionary</code>.</p>
+
+<div class="highlight highlight-swift"><pre><span class="pl-st">extension</span> <span class="pl-s3">Distance</span> :Printable {
+    <span class="pl-st">var</span> description: <span class="pl-s3">String</span> { <span class="pl-k">get</span> {
+            <span class="pl-k">return</span> value<span class="pl-k">.</span>description
+        }
+    }
+}
+
+<span class="pl-st">extension</span> <span class="pl-s3">Distance</span> :Hashable {
+    <span class="pl-st">var</span> hashValue: <span class="pl-s3">Int</span> { <span class="pl-k">get</span> {
+            <span class="pl-k">return</span> <span class="pl-k">~</span><span class="pl-s3">Int</span>(value<span class="pl-k">.</span>_toBitPattern())
+        }
+    }
+}</pre></div>
+
+<h2 id="done">Done!</h2>
+
+<p>Putting it all together we now have a <code>Distance</code> unit with some lovely arithmetic properties. But what if we want to make another unit, say, a <code>TimeInterval</code>? This is a lot of boilerplate to copy.</p>
+
+<div class="highlight highlight-swift"><pre><span class="pl-st">struct</span> <span class="pl-s3">Distance</span>: Comparable {
+    <span class="pl-st">var</span> value :<span class="pl-s3">Double</span>
+}
+
+<span class="pl-st">extension</span> <span class="pl-s3">Distance</span> :FloatLiteralConvertible {
+    <span class="pl-st">init</span>(floatLiteral value: FloatLiteralType) {
+        <span class="pl-k">self</span><span class="pl-k">.</span><span class="pl-st">init</span>(value: <span class="pl-s3">Double</span>(value))
+    }
+}
+
+<span class="pl-st">extension</span> <span class="pl-s3">Distance</span> :SignedNumberType {
+    <span class="pl-st">init</span>(integerLiteral value: IntegerLiteralType) {
+        <span class="pl-k">self</span><span class="pl-k">.</span><span class="pl-st">init</span>(value: <span class="pl-s3">Double</span>(value))
+    }
+}
+
+<span class="pl-st">extension</span> <span class="pl-s3">Distance</span> :Printable {
+    <span class="pl-st">var</span> description: <span class="pl-s3">String</span> { <span class="pl-k">get</span> {
+            <span class="pl-k">return</span> value<span class="pl-k">.</span>description
+        }
+    }
+}
+
+<span class="pl-st">extension</span> <span class="pl-s3">Distance</span> :Hashable {
+    <span class="pl-st">var</span> hashValue: <span class="pl-s3">Int</span> { <span class="pl-k">get</span> {
+            <span class="pl-k">return</span> <span class="pl-k">~</span><span class="pl-s3">Int</span>(value<span class="pl-k">.</span>_toBitPattern())
+        }
+    }
+}
+
+<span class="pl-st">func</span> <span class="pl-en">==</span>(lhs: <span class="pl-s3">Distance</span>, rhs: <span class="pl-s3">Distance</span>) <span class="pl-k">-&gt;</span> <span class="pl-s3">Bool</span> {
+    <span class="pl-k">return</span> lhs<span class="pl-k">.</span>value <span class="pl-k">==</span> rhs<span class="pl-k">.</span>value
+}
+
+<span class="pl-st">func</span> <span class="pl-en">&lt;</span>(lhs: <span class="pl-s3">Distance</span>, rhs: <span class="pl-s3">Distance</span>) <span class="pl-k">-&gt;</span> <span class="pl-s3">Bool</span> {
+    <span class="pl-k">return</span> lhs<span class="pl-k">.</span>value <span class="pl-k">&lt;</span> rhs<span class="pl-k">.</span>value
+}
+
+<span class="pl-st">func</span> <span class="pl-en">-</span>(lhs: <span class="pl-s3">Distance</span>, rhs: <span class="pl-s3">Distance</span>) <span class="pl-k">-&gt;</span> <span class="pl-s3">Distance</span> {
+    <span class="pl-k">return</span> <span class="pl-s3">Distance</span>(value:lhs<span class="pl-k">.</span>value <span class="pl-k">-</span> rhs<span class="pl-k">.</span>value)
+}
+
+<span class="pl-k">prefix</span> <span class="pl-st">func</span> <span class="pl-en">-</span>(x: <span class="pl-s3">Distance</span>) <span class="pl-k">-&gt;</span> <span class="pl-s3">Distance</span> {
+    <span class="pl-k">return</span> <span class="pl-s3">Distance</span>(value:<span class="pl-k">-</span>x<span class="pl-k">.</span>value)
+}
+
+<span class="pl-st">func</span> <span class="pl-en">+</span>(lhs: <span class="pl-s3">Distance</span>, rhs: <span class="pl-s3">Distance</span>) <span class="pl-k">-&gt;</span> <span class="pl-s3">Distance</span> {
+    <span class="pl-k">return</span> <span class="pl-s3">Distance</span>(value:lhs<span class="pl-k">.</span>value <span class="pl-k">+</span> rhs<span class="pl-k">.</span>value)
+}
+
+<span class="pl-st">func</span> <span class="pl-en">%</span>(lhs: <span class="pl-s3">Distance</span>, rhs: <span class="pl-s3">Distance</span>) <span class="pl-k">-&gt;</span> <span class="pl-s3">Distance</span> {
+    <span class="pl-k">return</span> <span class="pl-s3">Distance</span>(value:lhs<span class="pl-k">.</span>value <span class="pl-k">%</span> rhs<span class="pl-k">.</span>value)
+}</pre></div>
+
+<h2 id="dontrepeatyourselfgenerics">Don't Repeat Yourself: Generics</h2>
+
+<p>This is programming. Once we get it working, we're just getting started. Time to refactor!</p>
+
+<p>All of the arithmetic functions we provided an implementation for are dependent on two things: the <code>Distance</code> type, and the fact that the <code>value</code> property within that type contains a type that already has the desired operations defined on it. With Swift's generics, we can take advantage of this arrangement and create a protocol to reduce the amount of work we have to do to make a new type.</p>
+
+<p>With that in mind, we can create a new <code>NumericType</code> protocol that looks like just the parts of <code>Distance</code> that we want to abstract. We want a <code>value</code> property, and we want all the protocols we explored above.</p>
+
+<div class="highlight highlight-swift"><pre>public <span class="pl-st">protocol</span> NumericType <span class="pl-k">:</span> Comparable, FloatLiteralConvertible, IntegerLiteralConvertible, SignedNumberType {
+    <span class="pl-st">var</span> value :<span class="pl-s3">Double</span> { <span class="pl-k">set</span> <span class="pl-k">get</span> }
+    <span class="pl-st">init</span>(_ value: <span class="pl-s3">Double</span>)
+}</pre></div>
+
+<p>Now we can write functions that operate on instances of that protocol. We may be tempted to write our first function to like so</p>
+
+<div class="highlight highlight-swift"><pre>public <span class="pl-st">func</span> <span class="pl-en">+</span> (lhs: NumericType, rhs: NumericType) <span class="pl-k">-&gt;</span> NumericType {
+    <span class="pl-k">return</span> NumericType(lhs<span class="pl-k">.</span>value <span class="pl-k">+</span> rhs<span class="pl-k">.</span>value)
+}</pre></div>
+
+<p>This is going to present a few problems. The first of which is that we can't make an instance of <code>NumericType</code>. It's a protocol, and we can't instantiate a protocol. While this isn't an insurmountable problem, it's not quite worth fixing because we have a more serious problem:</p>
+
+<p>The point of creating <code>NumericType</code> is so we can create instances such as <code>Distance</code> and <code>TimeInterval</code>. They will each conform to <code>NumericType</code> and therefore be perfectly valid arguments to <code>+</code>. So we would end up right back where we started:</p>
+
+<div class="highlight highlight-swift"><pre>public <span class="pl-st">struct</span> <span class="pl-s3">Distance</span> :NumericType {
+    <span class="pl-k">...</span>
+}
+
+public <span class="pl-st">struct</span> TimeInterval :NumericType {
+    <span class="pl-k">...</span>
+}
+
+public <span class="pl-st">func</span> <span class="pl-en">+</span> (lhs: NumericType, rhs: NumericType) <span class="pl-k">-&gt;</span> NumericType {
+    <span class="pl-k">return</span> NumericType(lhs<span class="pl-k">.</span>value <span class="pl-k">+</span> rhs<span class="pl-k">.</span>value) <span class="pl-c">// This won't even compile</span>
+}
+
+<span class="pl-st">let</span> time :TimeInterval <span class="pl-k">=</span> <span class="pl-c1">5</span>
+<span class="pl-st">let</span> <span class="pl-s3">Distance</span> <span class="pl-s3">:Distance</span> <span class="pl-k">=</span> <span class="pl-c1">12</span>
+<span class="pl-st">let</span> untypedChaos <span class="pl-k">=</span> time <span class="pl-k">+</span> <span class="pl-s3">Distance</span></pre></div>
+
+<p>Generics provide a way to write flexible and reusable code that can operate on a variety of types. But most importantly, and much more powerfully than protocols, generics are a way to <em>constrain</em> code to operate on types that match certain conditions. This is easiest to see by example.</p>
+
+<div class="highlight highlight-swift"><pre>public <span class="pl-st">func</span> <span class="pl-en">+</span> &lt;T :NumericType&gt; (lhs: T, rhs: T) <span class="pl-k">-&gt;</span> T {
+    <span class="pl-k">return</span> T(lhs<span class="pl-k">.</span>value <span class="pl-k">+</span> rhs<span class="pl-k">.</span>value)
+}</pre></div>
+
+<p>What this does is, between the <code>&lt; &gt;</code>, say that there is a type <code>T</code> that must be a <code>NumericType</code>. Then we go on to say that <code>+</code> accepts a pair of <code>T</code>, and returns a <code>T</code>. In the implementation we create a new <code>T</code>, which we can do because we've said we can in the protocol. Whenever this function is called, every <code>T</code> must correspond to just one type. So </p>
+
+<div class="highlight highlight-swift"><pre>public <span class="pl-st">struct</span> <span class="pl-s3">Distance</span> :NumericType {
+    <span class="pl-k">...</span>
+}
+
+public <span class="pl-st">struct</span> TimeInterval :NumericType {
+    <span class="pl-k">...</span>
+}
+
+public <span class="pl-st">func</span> <span class="pl-en">+</span> &lt;T :NumericType&gt; (lhs: T, rhs: T) <span class="pl-k">-&gt;</span> T {
+    <span class="pl-k">return</span> T(lhs<span class="pl-k">.</span>value <span class="pl-k">+</span> rhs<span class="pl-k">.</span>value)
+}
+
+<span class="pl-st">let</span> time :TimeInterval <span class="pl-k">=</span> <span class="pl-c1">5</span>
+<span class="pl-st">let</span> <span class="pl-s3">Distance</span> <span class="pl-s3">:Distance</span> <span class="pl-k">=</span> <span class="pl-c1">12</span>
+<span class="pl-st">let</span> untypedChaos <span class="pl-k">=</span> time <span class="pl-k">+</span> <span class="pl-s3">Distance</span> <span class="pl-c">// This won't compile. Chaos averted!</span></pre></div>
+
+<p>Let's follow this pattern to create a new fully-fleshed <code>NumericType</code> we can reuse.</p>
+
+<div class="highlight highlight-swift"><pre>public <span class="pl-st">protocol</span> NumericType <span class="pl-k">:</span> Comparable, FloatLiteralConvertible, IntegerLiteralConvertible, SignedNumberType {
+    <span class="pl-st">var</span> value :<span class="pl-s3">Double</span> { <span class="pl-k">set</span> <span class="pl-k">get</span> }
+    <span class="pl-st">init</span>(_ value: <span class="pl-s3">Double</span>)
+}
+
+public <span class="pl-st">func</span> <span class="pl-en">%</span> &lt;T :NumericType&gt; (lhs: T, rhs: T) <span class="pl-k">-&gt;</span> T {
+    <span class="pl-k">return</span> T(lhs<span class="pl-k">.</span>value <span class="pl-k">%</span> rhs<span class="pl-k">.</span>value)
+}
+
+public <span class="pl-st">func</span> <span class="pl-en">+</span> &lt;T :NumericType&gt; (lhs: T, rhs: T) <span class="pl-k">-&gt;</span> T {
+    <span class="pl-k">return</span> T(lhs<span class="pl-k">.</span>value <span class="pl-k">+</span> rhs<span class="pl-k">.</span>value)
+}
+
+public <span class="pl-st">func</span> <span class="pl-en">-</span> &lt;T :NumericType&gt; (lhs: T, rhs: T) <span class="pl-k">-&gt;</span> T {
+    <span class="pl-k">return</span> T(lhs<span class="pl-k">.</span>value <span class="pl-k">-</span> rhs<span class="pl-k">.</span>value)
+}
+
+public <span class="pl-st">func</span> <span class="pl-en">&lt;</span> &lt;T :NumericType&gt; (lhs: T, rhs: T) <span class="pl-k">-&gt;</span> <span class="pl-s3">Bool</span> {
+    <span class="pl-k">return</span> lhs<span class="pl-k">.</span>value <span class="pl-k">&lt;</span> rhs<span class="pl-k">.</span>value
+}
+
+public <span class="pl-st">func</span> <span class="pl-en">==</span> &lt;T :NumericType&gt; (lhs: T, rhs: T) <span class="pl-k">-&gt;</span> <span class="pl-s3">Bool</span> {
+    <span class="pl-k">return</span> lhs<span class="pl-k">.</span>value <span class="pl-k">==</span> rhs<span class="pl-k">.</span>value
+}
+
+public <span class="pl-k">prefix</span> <span class="pl-st">func</span> <span class="pl-en">-</span> &lt;T: NumericType&gt; (number: T) <span class="pl-k">-&gt;</span> T {
+    <span class="pl-k">return</span> T(<span class="pl-k">-</span>number<span class="pl-k">.</span>value)
+}
+
+public <span class="pl-st">func</span> <span class="pl-en">+=</span> &lt;T :NumericType&gt; (<span class="pl-k">inout</span> lhs: T, rhs: T) {
+    lhs<span class="pl-k">.</span>value <span class="pl-k">=</span> lhs<span class="pl-k">.</span>value <span class="pl-k">+</span> rhs<span class="pl-k">.</span>value
+}
+
+public <span class="pl-st">func</span> <span class="pl-en">-=</span> &lt;T :NumericType&gt; (<span class="pl-k">inout</span> lhs: T, rhs: T) {
+    lhs<span class="pl-k">.</span>value <span class="pl-k">=</span> lhs<span class="pl-k">.</span>value <span class="pl-k">-</span> rhs<span class="pl-k">.</span>value
+}</pre></div>
+
+<p>And we can now trim down our specific implementation of types and keep repeated down to more reasonable levels. Repeat this for any numeric types you want to make sure don't mix with incompatible numbers.</p>
+
+<div class="highlight highlight-swift"><pre>public <span class="pl-st">struct</span> <span class="pl-s3">Distance</span> :NumericType {
+    public <span class="pl-st">var</span> value :<span class="pl-s3">Double</span>
+    public <span class="pl-st">init</span>(_ value: <span class="pl-s3">Double</span>) {
+        <span class="pl-k">self</span><span class="pl-k">.</span>value <span class="pl-k">=</span> value
+    }
+}
+
+<span class="pl-st">extension</span> <span class="pl-s3">Distance</span> :IntegerLiteralConvertible {
+    public <span class="pl-st">init</span>(integerLiteral: IntegerLiteralType) {
+        <span class="pl-k">self</span><span class="pl-k">.</span><span class="pl-st">init</span>(<span class="pl-s3">Double</span>(integerLiteral))
+    }
+}
+
+<span class="pl-st">extension</span> <span class="pl-s3">Distance</span> :FloatLiteralConvertible {
+    public <span class="pl-st">init</span>(floatLiteral: FloatLiteralType) {
+        <span class="pl-k">self</span><span class="pl-k">.</span><span class="pl-st">init</span>(<span class="pl-s3">Double</span>(floatLiteral))
+    }
+}</pre></div>
+
+<p>It is through the protocols we adopted and generics on the implementations that the Swift standard library is able to provide <code>!=</code>, <code>&gt;</code> and all the other functions we didn't have to write for types that didn't exist at the time of writing. Not only have we used these language features, we also followed the same pattern to create a powerful new protocol that save us and others time in the future.</p>
+
+<p>By defining types (and protocols) around capabilities, and writing functions that target those capabilities, we end up with cleaner and remarkably reusable code when compared to implementing functionality targeting a specific type. The bulk of our final implementation has nothing to do with distances, time intervals, apples, oranges, or anything else. It reads more like a set of statements of fact that any future programmer could adopt if they so chose. </p>
+
+<p>These kinds of patterns have always been possible. The only difference is that Swift very nicely lets us apply them in a way that using the resulting structures feels much more like writing native Swift.</p>
+
+</article>
+  </main>
+</body>
+</html>
