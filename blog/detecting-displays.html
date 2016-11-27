@@ -50,7 +50,7 @@
 
 @end</code></pre>
 <p>The heavy lifting gets done with the callback function ReconfigurationCallBack.</p>
-<pre class="objc"><code>void ReconfigurationCallBack (CGDirectDisplayID display, CGDisplayChangeSummaryFlags flags,void *userInfo){
+<pre class="objc"><code>void ReconfigurationCallBack (CGDirectDisplayID display, CGDisplayChangeSummaryFlags flags, void *userInfo){
     CGDisplayCount onlineDisplays;
     CGDisplayCount activeDisplays;
     CGDisplayCount maxDisplays = 3;
@@ -98,54 +98,53 @@
         NSReleaseAlertPanel(panel);
     }
 }</code></pre>
-<p>This function uses another function I wrote when working with Display services to decode the <code>CGErrors</code> that come up:</p>
-<p>```objc<br />
-NSString* CGErrorToString(CGError err){<br />
-switch (err) {<br />
-case kCGErrorSuccess:<br />
-return @&quot;The requested operation was completed successfully.&quot;;<br />
-break;<br />
-case kCGErrorFailure:<br />
-return @&quot;A general failure occurred.&quot;;<br />
-break;<br />
-case kCGErrorIllegalArgument:<br />
-return @&quot;One or more of the parameters passed to a function are invalid. Check for NULL pointers.&quot;;<br />
-break;<br />
-case kCGErrorInvalidConnection:<br />
-return @&quot;The parameter representing a connection to the window server is invalid.&quot;;<br />
-break;<br />
-case kCGErrorInvalidContext:<br />
-return @&quot;The CPSProcessSerNum or context identifier parameter is not valid.&quot;;<br />
-break;<br />
-case kCGErrorCannotComplete:<br />
-return @&quot;The requested operation is inappropriate for the parameters passed in, or the current system state.&quot;;<br />
-break;<br />
-case kCGErrorNameTooLong:<br />
-return @&quot;A parameter, typically a C string, is too long to be used without truncation.&quot;;<br />
-break;<br />
-case kCGErrorNotImplemented:<br />
-return @&quot;Return value from obsolete function stubs present for binary compatibility, but not normally called.&quot;;<br />
-break;<br />
-case kCGErrorRangeCheck:<br />
-return @&quot;A parameter passed in has a value that is inappropriate, or which does not map to a useful operation or value.&quot;;<br />
-break;<br />
-case kCGErrorTypeCheck:<br />
-return @&quot;A data type or token was encountered that did not match the expected type or token.&quot;;<br />
-break;<br />
-case kCGErrorNoCurrentPoint:<br />
-return @&quot;An operation relative to a known point or coordinate could not be done, as there is no known point.&quot;;<br />
-break;<br />
-case kCGErrorInvalidOperation:<br />
-return @&quot;The requested operation is not valid for the parameters passed in, or the current system state.&quot;;<br />
-break;<br />
-case kCGErrorNoneAvailable:<br />
-return @&quot;The requested operation could not be completed as the indicated resources were not found.&quot;;<br />
-break;<br />
-default:<br />
-return @&quot;An error occured but its code is unknown by Quartz Display Services as of v10.5.7&quot;;<br />
-break;<br />
-}<br />
-}</p>
+<p>This function uses another function I wrote when working with Display services to decode the <code>CGError</code>s that come up:</p>
+<pre class="objc"><code>NSString* CGErrorToString(CGError err){
+    switch (err) {
+        case kCGErrorSuccess:
+            return @&quot;The requested operation was completed successfully.&quot;;
+            break;
+        case kCGErrorFailure:
+            return @&quot;A general failure occurred.&quot;;
+            break;
+        case kCGErrorIllegalArgument:
+            return @&quot;One or more of the parameters passed to a function are invalid. Check for NULL pointers.&quot;;
+            break;
+        case kCGErrorInvalidConnection:
+            return @&quot;The parameter representing a connection to the window server is invalid.&quot;;
+            break;
+        case kCGErrorInvalidContext:
+            return @&quot;The CPSProcessSerNum or context identifier parameter is not valid.&quot;;
+            break;
+        case kCGErrorCannotComplete:
+            return @&quot;The requested operation is inappropriate for the parameters passed in, or the current system state.&quot;;
+            break;
+        case kCGErrorNameTooLong:
+            return @&quot;A parameter, typically a C string, is too long to be used without truncation.&quot;;
+            break;
+        case kCGErrorNotImplemented:
+            return @&quot;Return value from obsolete function stubs present for binary compatibility, but not normally called.&quot;;
+            break;
+        case kCGErrorRangeCheck:
+            return @&quot;A parameter passed in has a value that is inappropriate, or which does not map to a useful operation or value.&quot;;
+            break;
+        case kCGErrorTypeCheck:
+            return @&quot;A data type or token was encountered that did not match the expected type or token.&quot;;
+            break;
+        case kCGErrorNoCurrentPoint:
+            return @&quot;An operation relative to a known point or coordinate could not be done, as there is no known point.&quot;;
+            break;
+        case kCGErrorInvalidOperation:
+            return @&quot;The requested operation is not valid for the parameters passed in, or the current system state.&quot;;
+            break;
+        case kCGErrorNoneAvailable:
+            return @&quot;The requested operation could not be completed as the indicated resources were not found.&quot;;
+            break;
+        default:
+            return @&quot;An error occurred but its code is unknown by Quartz Display Services as of v10.5.7&quot;;
+            break;
+    }
+}</code></pre>
 <p>Whichever files these three code blocks end up in, they each need to have access to the Application Services framework, and so it must be added to the project and the appropriate header must be included</p>
 </article>
 </main>
