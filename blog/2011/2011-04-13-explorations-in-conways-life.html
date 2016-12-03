@@ -1,83 +1,122 @@
 <html>
-<head><title>Deleting Folders in TrustyBook</title>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="/writ.min.css">
-<link rel="stylesheet" href="/code.css">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="author" content="2011-04-13">
+  <title>Explorations in Conway's Life</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #0000ff; } /* Keyword */
+code > span.ch { color: #008080; } /* Char */
+code > span.st { color: #008080; } /* String */
+code > span.co { color: #008000; } /* Comment */
+code > span.ot { color: #ff4000; } /* Other */
+code > span.al { color: #ff0000; } /* Alert */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #008000; font-weight: bold; } /* Warning */
+code > span.cn { } /* Constant */
+code > span.sc { color: #008080; } /* SpecialChar */
+code > span.vs { color: #008080; } /* VerbatimString */
+code > span.ss { color: #008080; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { } /* Variable */
+code > span.cf { color: #0000ff; } /* ControlFlow */
+code > span.op { } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #ff4000; } /* Preprocessor */
+code > span.do { color: #008000; } /* Documentation */
+code > span.an { color: #008000; } /* Annotation */
+code > span.cv { color: #008000; } /* CommentVar */
+code > span.at { } /* Attribute */
+code > span.in { color: #008000; } /* Information */
+  </style>
+  <link rel="stylesheet" href="/writ.min.css">
 </head>
-
 <body>
-  <header>
-    <h1>fabián cañas</h1>
-    <nav>
-    <ul>
-      <li><a href='/'>about</a></li>
-      <li><a href='/blog/'>writing</a></li>
-      <li><a href='/software/'>software</a></li>
-      |
-      <li><a href='https://www.github.com/fcanas'>GitHub</a></li>
-      <li><a href='https://www.twitter.com/fcanas'>Twitter</a></li>
-    </ul>
-    </nav>
-  </header>
-  <main>
+<header>
+<h1>fabián cañas</h1>
+<nav>
+<ul>
+  <li><a href='/'>about</a></li>
+  <li><a href='/blog/'>writing</a></li>
+  <li><a href='/software/'>software</a></li>
+  |
+  <li><a href='https://www.github.com/fcanas'>GitHub</a></li>
+  <li><a href='https://www.twitter.com/fcanas'>Twitter</a></li>
+</ul>
+</nav>
+</header>
+<main>
 <article>
 <h1>Explorations in Conway's Life</h1>
-<date>2011-04-13</date>
-<p><a href="http://en.wikipedia.org/wiki/Conway">Conway’s Game of Life</a> is a set of rules for a a cellular automata, an infinite lattice of cells that are either alive or dead at any step in time. A few simple rules form the basis for an entire universe of possibilities.</p><p>From Wikipedia:</p><blockquote><ol><br /><li>Any live cell with fewer than two live neighbours dies, as if caused by under-population.</li><br /><li>Any live cell with two or three live neighbours lives on to the next generation.</li><br /><li>Any live cell with more than three live neighbours dies, as if by overcrowding.</li><br /><li>Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.</li><br /><br /> </ol></blockquote><p>I came back to it to explore its potential as a virtual world for virtual agents to develop knowledge representations. I made a simple implementation in <span>MATLAB</span> to calculate a single time step:</p>
-<pre>function grid = life(grid)
-% 	LIFE outputs the next step to a game of life
-% 		[GRID] = LIFE
-%
-% 	Outputs the next step of conway’s life
-%
+<p><a href="http://en.wikipedia.org/wiki/Conway">Conway's Game of Life</a> is a set of rules for a a cellular automata, an infinite lattice of cells that are either alive or dead at any step in time. A few simple rules form the basis for an entire universe of possibilities.</p>
+<p>From Wikipedia:<br />
+<blockquote></p>
+<ol>
+<li>Any live cell with fewer than two live neighbours dies, as if caused by under-population.</li>
+<li>Any live cell with two or three live neighbours lives on to the next generation.</li>
+<li>Any live cell with more than three live neighbours dies, as if by overcrowding.</li>
+<li>Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.<br />
+</blockquote></li>
+</ol>
+<p>I came back to it to explore its potential as a virtual world for virtual agents to develop knowledge representations. I made a simple implementation in MATLAB to calculate a single time step:</p>
+<div class="sourceCode"><pre class="sourceCode matlab"><code class="sourceCode matlab">function grid = life(grid)
+<span class="co">%   LIFE outputs the next step to a game of life</span>
+<span class="co">%       [GRID] = LIFE</span>
+<span class="co">%</span>
+<span class="co">%   Outputs the next step of conway&#39;s life</span>
+<span class="co">%</span>
 
-% Number of neighbors:
-neighbors = conv2(grid,[1 1 1; 1 0 1; 1 1 1],'same’);
+<span class="co">% Number of neighbors:</span>
+neighbors = conv2(grid,[<span class="fl">1</span> <span class="fl">1</span> <span class="fl">1</span>; <span class="fl">1</span> <span class="fl">0</span> <span class="fl">1</span>; <span class="fl">1</span> <span class="fl">1</span> <span class="fl">1</span>],<span class="st">&#39;same&#39;</span>);
 
-% Any live cell with fewer than two live neighbors dies, as if caused by under-population.
-grid(neighbors&lt;2) = 0;
+<span class="co">% Any live cell with fewer than two live neighbors dies, as if caused by under-population.</span>
+grid(neighbors&amp;lt;<span class="fl">2</span>) = <span class="fl">0</span>;
 
-% Any live cell with more than three live neighbors dies, as if by overcrowding.
-grid(neighbors&gt;3) = 0;
+<span class="co">% Any live cell with more than three live neighbors dies, as if by overcrowding.</span>
+grid(neighbors&gt;<span class="fl">3</span>) = <span class="fl">0</span>;
 
-% Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.
-grid(neighbors==3) = 1;
+<span class="co">% Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.</span>
+grid(neighbors==<span class="fl">3</span>) = <span class="fl">1</span>;
 
-% Any live cell with two or three live neighbors lives on to the next generation.
-% free
-end % function
-</pre>
-
+<span class="co">% Any live cell with two or three live neighbors lives on to the next generation.</span>
+<span class="co">% free</span>
+end <span class="co">% function</span></code></pre></div>
 <p>Below is a standard visualization of a form called “Diehard”, so named because it has a lifespan of 130 steps, remarkable for a pattern with just 7 live cells to start:</p>
-
-
-
-<p>The real fun starts when I take each time step from a run and layer it on top of the previous one, creating a three-dimensional representation of the beast.</p><p>If you want to play with the source, it’s shown below.</p><p>I use inject as a utility to paste from a library of patterns into the “world” :</p>
-<pre>
-function grid = inject(grid,pattern,x,y)
-  % 	INJECT inject pattern into grid at position x, y
-  % 		[GRID] =
-  %
-  % 	inject pattern into grid at position x, y
-  %
-  % 	Created by Fabian Canas on 2011-04-12.
-  % 	Copyright © Fabian Canas. All rights reserved.
+<blockquote>
+<p>missing</p>
+</blockquote>
+<p>The real fun starts when I take each time step from a run and layer it on top of the previous one, creating a three-dimensional representation of the beast.</p>
+<div class="video-wrapper"><div class="video cover" data-thumb="https://i.vimeocdn.com/video/144204536.jpg?mw=600&amp;mh=1578&amp;q=70" data-thumb-width="600" style="background-image: none;"><div class="telecine" style="transform: scale(1.0001408450704226);"><video preload="" src="https://06-lvl3-pdl.vimeocdn.com/01/4464/0/22320277/46472404.mp4?expires=1480787262&amp;token=0ce29e8223c4917030654" loop=""></video></div></div></div>
+<p>If you want to play with the source, it's shown below.</p>
+<p>I use inject as a utility to paste from a library of patterns into the “world” :</p>
+<div class="sourceCode"><pre class="sourceCode matlab"><code class="sourceCode matlab">function grid = inject(grid,pattern,x,y)
+  <span class="co">%     INJECT inject pattern into grid at position x, y</span>
+  <span class="co">%         [GRID] =</span>
+  <span class="co">%</span>
+  <span class="co">%     inject pattern into grid at position x, y</span>
+  <span class="co">%</span>
+  <span class="co">%     Created by Fabian Canas on 2011-04-12.</span>
+  <span class="co">%     Copyright © Fabian Canas. All rights reserved.</span>
 
   [w,h] = size(pattern);
-  grid(x:(x+w-1),y:(y+h-1))=pattern;
-end % function
-</pre>
-
-<p>And here’s the script that generates the animation above:</p>
-<pre>
-diehard = [ ...
-  0 0 0 0 0 0 1 0; ...
-  1 1 0 0 0 0 0 0; ...
-  0 1 0 0 0 1 1 1; ...
+  grid(x:(x+w-<span class="fl">1</span>),y:(y+h-<span class="fl">1</span>))=pattern;
+end <span class="co">% function</span></code></pre></div>
+<p>And here's the script that generates the animation above:</p>
+<div class="sourceCode"><pre class="sourceCode matlab"><code class="sourceCode matlab">diehard = [ ...
+  <span class="fl">0</span> <span class="fl">0</span> <span class="fl">0</span> <span class="fl">0</span> <span class="fl">0</span> <span class="fl">0</span> <span class="fl">1</span> <span class="fl">0</span>; ...
+  <span class="fl">1</span> <span class="fl">1</span> <span class="fl">0</span> <span class="fl">0</span> <span class="fl">0</span> <span class="fl">0</span> <span class="fl">0</span> <span class="fl">0</span>; ...
+  <span class="fl">0</span> <span class="fl">1</span> <span class="fl">0</span> <span class="fl">0</span> <span class="fl">0</span> <span class="fl">1</span> <span class="fl">1</span> <span class="fl">1</span>; ...
 ];
-g = zeros(30);
-g = inject(g,diehard,15,15);
+g = zeros(<span class="fl">30</span>);
+g = inject(g,diehard,<span class="fl">15</span>,<span class="fl">15</span>);
 
 fg = g;
 figure
@@ -87,7 +126,7 @@ while (true)
     break;
   end
   g = gp;
-  fg = cat(3,fg,g);
+  fg = cat(<span class="fl">3</span>,fg,g);
 end
 
 h = patch(isosurface(fg));
@@ -95,33 +134,26 @@ h = patch(isosurface(fg));
 axis equal
 axis off
 
-light('Position’,[-2,2,20])
+light(<span class="st">&#39;Position&#39;</span>,[-<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">20</span>])
 lighting phong
-material([0.4,0.6,0.5,30])
-set(h,'EdgeAlpha’,0)
-set(h,'FaceColor’,[0.2 0.5 0.1],...
-      'BackFaceLighting’,'lit’)
+material([<span class="fl">0.4</span>,<span class="fl">0.6</span>,<span class="fl">0.5</span>,<span class="fl">30</span>])
+set(h,<span class="st">&#39;EdgeAlpha&#39;</span>,<span class="fl">0</span>)
+set(h,<span class="st">&#39;FaceColor&#39;</span>,[<span class="fl">0.2</span> <span class="fl">0.5</span> <span class="fl">0.1</span>],...
+      <span class="st">&#39;BackFaceLighting&#39;</span>,<span class="st">&#39;lit&#39;</span>)
 drawnow
-set(gcf, 'Position’, [552 -17 200 801])
-for i=0:179
-  view([i 0])
-  print(gcf, '-dtiff’, '-r100’, sprintf('image_%04d’, i));
+set(gcf, <span class="st">&#39;Position&#39;</span>, [<span class="fl">552</span> -<span class="fl">17</span> <span class="fl">200</span> <span class="fl">801</span>])
+for i=<span class="fl">0</span>:<span class="fl">179</span>
+  view([i <span class="fl">0</span>])
+  print(gcf, <span class="st">&#39;-dtiff&#39;</span>, <span class="st">&#39;-r100&#39;</span>, sprintf(<span class="st">&#39;image_%04d&#39;</span>, i));
   drawnow
-end<
-</pre>
+end</code></pre></div>
+<p>Incidentally, I also worked out a few compact versions of Life in MATLB. The shortest of the two weights in at 85 characters, but runs indefinitely. The second outputs only nine steps to the console, which is about as long a run as you're likely to get given a random 9×9 grid:</p>
+<div class="sourceCode"><pre class="sourceCode matlab"><code class="sourceCode matlab">g=rand(<span class="fl">9</span>)&gt;<span class="fl">.5</span>;p=ones(<span class="fl">3</span>);p(<span class="fl">5</span>)=<span class="fl">0</span>;while(<span class="fl">1</span>)n=conv2(double(g),p,<span class="st">&#39;same&#39;</span>);g=(n==<span class="fl">3</span>|g&amp;n==<span class="fl">2</span>),end
 
-<p>Incidentally, I also worked out a few compact versions of Life in <span>MATLB</span>. The shortest of the two weights in at 85 characters, but runs indefinitely. The second outputs only nine steps to the console, which is about as long a run as you’re likely to get given a random 9×9 grid:</p>
-
-<pre>
-g=rand(9)&gt;.5;p=ones(3);p(5)=0;while(1)n=conv2(double(g),p,'same’);g=(n==3|g&amp;n==2),end
-</pre>
-<pre>
-g=rand(9)&gt;.5;p=ones(3);p(5)=0;for(i=[1:9])n=conv2(double(g),p,'same');g=(n==3|g&amp;n==2),end
-</pre>
-
-<p>The longer of the three is more fun and actually draws the grid to a window. It’s still lightweight at 105 characters. It too runs until you kill it:</p>
-
-<pre>
-g=rand(25)&gt;.5;p=ones(3);p(5)=0;while(1)n=conv2(double(g),p,'same');g=(n==3|g&amp;n==2);imagesc(g);drawnow;end
-</pre>
-</article></main></body></html>
+g=rand(<span class="fl">9</span>)&gt;<span class="fl">.5</span>;p=ones(<span class="fl">3</span>);p(<span class="fl">5</span>)=<span class="fl">0</span>;for(i=[<span class="fl">1</span>:<span class="fl">9</span>])n=conv2(double(g),p,<span class="st">&#39;same&#39;</span>);g=(n==<span class="fl">3</span>|g&amp;n==<span class="fl">2</span>),end</code></pre></div>
+<p>The longer of the three is more fun and actually draws the grid to a window. It's still lightweight at 105 characters. It too runs until you kill it:</p>
+<div class="sourceCode"><pre class="sourceCode matlab"><code class="sourceCode matlab">g=rand(<span class="fl">25</span>)&gt;<span class="fl">.5</span>;p=ones(<span class="fl">3</span>);p(<span class="fl">5</span>)=<span class="fl">0</span>;while(<span class="fl">1</span>)n=conv2(double(g),p,<span class="st">&#39;same&#39;</span>);g=(n==<span class="fl">3</span>|g&amp;n==<span class="fl">2</span>);imagesc(g);drawnow;end</code></pre></div>
+</article>
+</main>
+</body>
+</html>
