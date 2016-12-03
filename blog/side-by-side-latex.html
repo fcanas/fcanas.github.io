@@ -12,35 +12,30 @@ table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
 table.sourceCode { width: 100%; line-height: 100%; }
 td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
 td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
+code > span.kw { color: #0000ff; } /* Keyword */
+code > span.ch { color: #008080; } /* Char */
+code > span.st { color: #008080; } /* String */
+code > span.co { color: #008000; } /* Comment */
+code > span.ot { color: #ff4000; } /* Other */
+code > span.al { color: #ff0000; } /* Alert */
 code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.wa { color: #008000; font-weight: bold; } /* Warning */
+code > span.cn { } /* Constant */
+code > span.sc { color: #008080; } /* SpecialChar */
+code > span.vs { color: #008080; } /* VerbatimString */
+code > span.ss { color: #008080; } /* SpecialString */
 code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
+code > span.va { } /* Variable */
+code > span.cf { color: #0000ff; } /* ControlFlow */
+code > span.op { } /* Operator */
 code > span.bu { } /* BuiltIn */
 code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code > span.pp { color: #ff4000; } /* Preprocessor */
+code > span.do { color: #008000; } /* Documentation */
+code > span.an { color: #008000; } /* Annotation */
+code > span.cv { color: #008000; } /* CommentVar */
+code > span.at { } /* Attribute */
+code > span.in { color: #008000; } /* Information */
   </style>
   <link rel="stylesheet" href="/writ.min.css">
 </head>
@@ -62,21 +57,21 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <article>
 <h1>Side by Side Figures in LaTeX</h1>
 <p>In another note to myself, here I describe how to put two figures side by side in LaTeX with the minipage environment. I know there are many other ways to do it, including the subfigure package, but I prefer minipage because each subfigure gets its own caption, labeling works like I want it to, and most of all the markup is easy to understand and extend. That is, it’s easy to see how you can put three or four figures together, and I prefer that to other alternatives with an opaque command.</p>
-<div class="sourceCode"><pre class="sourceCode latex"><code class="sourceCode latex">\begin{figure}[htbp]
-  \begin{minipage}[b]{0.5\linewidth}
-    \centering
-    \includegraphics[width=\linewidth]{figure01.eps}
-    \caption{The caption for figure 1}
-    \label{fig:chapter001_dist_001}
-  \end{minipage}
-  \hspace{0.5cm}
-  \begin{minipage}[b]{0.5\linewidth}
-    \centering
-    \includegraphics[width=\linewidth]{figure02.eps}
-    \caption{The caption for figure 2.}
-    \label{fig:chapter001_reward_001}
-  \end{minipage}
-\end{figure}</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode latex"><code class="sourceCode latex"><span class="kw">\begin</span>{<span class="ex">figure</span>}[htbp]
+  <span class="kw">\begin</span>{<span class="ex">minipage</span>}[b]{0.5<span class="fu">\linewidth</span>}
+    <span class="fu">\centering</span>
+    <span class="bu">\includegraphics</span>[width=<span class="fu">\linewidth</span>]{<span class="ex">figure01.eps</span>}
+    <span class="fu">\caption</span>{The caption for figure 1}
+    <span class="kw">\label</span>{<span class="ex">fig:chapter001_dist_001</span>}
+  <span class="kw">\end</span>{<span class="ex">minipage</span>}
+  <span class="fu">\hspace</span>{0.5cm}
+  <span class="kw">\begin</span>{<span class="ex">minipage</span>}[b]{0.5<span class="fu">\linewidth</span>}
+    <span class="fu">\centering</span>
+    <span class="bu">\includegraphics</span>[width=<span class="fu">\linewidth</span>]{<span class="ex">figure02.eps</span>}
+    <span class="fu">\caption</span>{The caption for figure 2.}
+    <span class="kw">\label</span>{<span class="ex">fig:chapter001_reward_001</span>}
+  <span class="kw">\end</span>{<span class="ex">minipage</span>}
+<span class="kw">\end</span>{<span class="ex">figure</span>}</code></pre></div>
 </article>
 </main>
 </body>

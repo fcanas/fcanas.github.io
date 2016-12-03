@@ -1,38 +1,99 @@
----
-layout: page
-title: Music Stand
-categories: []
-tags: []
-status: publish
-type: page
-published: true
-meta: {}
----
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Music Stand</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #0000ff; } /* Keyword */
+code > span.ch { color: #008080; } /* Char */
+code > span.st { color: #008080; } /* String */
+code > span.co { color: #008000; } /* Comment */
+code > span.ot { color: #ff4000; } /* Other */
+code > span.al { color: #ff0000; } /* Alert */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #008000; font-weight: bold; } /* Warning */
+code > span.cn { } /* Constant */
+code > span.sc { color: #008080; } /* SpecialChar */
+code > span.vs { color: #008080; } /* VerbatimString */
+code > span.ss { color: #008080; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { } /* Variable */
+code > span.cf { color: #0000ff; } /* ControlFlow */
+code > span.op { } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #ff4000; } /* Preprocessor */
+code > span.do { color: #008000; } /* Documentation */
+code > span.an { color: #008000; } /* Annotation */
+code > span.cv { color: #008000; } /* CommentVar */
+code > span.at { } /* Attribute */
+code > span.in { color: #008000; } /* Information */
+  </style>
+  <link rel="stylesheet" href="/writ.min.css">
+</head>
+<body>
+<header>
+<h1>fabián cañas</h1>
+<nav>
+<ul>
+  <li><a href='/'>about</a></li>
+  <li><a href='/blog/'>writing</a></li>
+  <li><a href='/software/'>software</a></li>
+  |
+  <li><a href='https://www.github.com/fcanas'>GitHub</a></li>
+  <li><a href='https://www.twitter.com/fcanas'>Twitter</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
 <h1>Music Stand</h1>
-  
-      <img src="http://static1.squarespace.com/static/53e976eae4b0162bed56938c/t/54037975e4b0e522f5dcc642/1409513845924/?format=original" alt=""/>
-  
-
-<ul><li><a href="https://github.com/fcanas/MusicStand/releases/download/v1.0/MusicStand.zip">Download 3:4 Aspect Ratio</a></li><li><a href="https://github.com/fcanas/MusicStand/releases/download/v1.0/MusicStand_wide_screen.zip">Download Widescreen</a></li></ul><p>A digital music stand. The idea is to have my computer onstage with a screen mounted up about where a music stand should be. I can select songs and page through them with a foot controller or keyboard. It also has a built-in clock, useful for making sure your set runs on schedule.</p><h2 id="gettingsongsin">Getting Songs In</h2><p>XML. In the same directory as the OnStageReader file, you should put a file called songs.xml structured as follows:</p><p><code></code></p><code>
-
-<pre>&lt;data&gt;
-   &lt;entry&gt;
-      &lt;title&gt;Song Title Goes Here&lt;/title&gt;
-      &lt;page&gt;
-         &lt;line&gt;C#m_____________E&lt;/line&gt;
-         &lt;line&gt;Some lyrics and chords like so.&lt;/line&gt;
-      &lt;/page&gt;
-   &lt;/entry&gt;
-   &lt;entry&gt;
-      &lt;title&gt;Another song&lt;/title&gt;
-      &lt;page&gt;
-         &lt;line&gt;Whatever you want.&lt;/line&gt;
-      &lt;/page&gt;
-      &lt;page&gt;
-         &lt;line&gt;Whatever else.&lt;/line&gt;
-      &lt;/page&gt;
-   &lt;/entry&gt;
-&lt;/data&gt;
-</pre>
-
-</code><p><code></code></p><p>The music stand program parses the XML file and everything just works. Currently multiple tabs and spaces are reduced to a single space, so I use underscores to appropriately space out chords. You are responsible for making sure lines don’t run off the screen, both off the side and off the bottom. In the future, I may implement auto line wrapping, but I prefer manual page generation. The whole point is that you get the information you need on stage, whether chords, notes or lyrics. To do that right, you ought to have complete control over formatting.</p><h2 id="stateoftheproject">State of the Project</h2><p>Right now, I have a fully functional prototype. My biggest reservation in calling it done is that it runs hosted inside two other applications: Quartz Composer (which comes with Apple’s Developer Tools), and Pd (Miller Puckette’s PureData), both of which are free. With some work I can actually get this up and running as its own program and robustly accepting different types of control input. Only then will it be v1.0.</p><p>Next on the list of features is proper song management system. I want to be able to make a song library, and then make set lists like making a playlist in iTunes. This is definitely getting thrown into the mix when I make the program stand-alone.</p><p>Also, there is no reason why I couldn’t have this program display a real music staff, not just chords or tabs. These would be saved as vector graphics and either included straight in the xml or referenced from it. This feature will likely come much later as I only usually need lyrics and chords as a reminder of what notes to play.</p><h2 id="runningtheprogram">Running the Program</h2><p>It works on Macs running OS 10.5. Quartz Composer has come with the Apple Developer Tools since OS 10.4, but this particular patch uses some new features in QC version 3.0. Pd is not necessary to get the patch working, but is necessary fi you want to use any MIDI signals other than notes to control the screen. I use a small Pd patch to route commands from a MIDI foot-controller to Quartz Composer.</p><p>If you don’t have Quartz Composer, your system will try and open the patch in Quicktime. Quicktime doesn’t allow access to the songs.xml file, so this will not work. Download the developer tools from Apple or convince (or pay) me to get a more complete program up and running.</p><h3 id="update">Update:</h3><p>I've done a quick modernization of the main patch to work well on a wide-screen computer and working cleanly under Snow Leopard. </p><h3 id="update2">Update 2:</h3><p>This modernization has held strong, and is still working fine seven years later.</p>
+<p><img src="music-stand.png" alt=""/></p>
+<ul>
+<li><a href="https://github.com/fcanas/MusicStand/releases/download/v1.0/MusicStand.zip">Download 3:4 Aspect Ratio</a></li>
+<li><a href="https://github.com/fcanas/MusicStand/releases/download/v1.0/MusicStand_wide_screen.zip">Download Widescreen</a></li>
+</ul>
+<p>A digital music stand. The idea is to have my computer onstage with a screen mounted up about where a music stand should be. I can select songs and page through them with a foot controller or keyboard. It also has a built-in clock, useful for making sure your set runs on schedule.</p>
+<h2 id="getting-songs-in">Getting Songs In</h2>
+<p>XML. In the same directory as the OnStageReader file, you should put a file called songs.xml structured as follows:</p>
+<div class="sourceCode"><pre class="sourceCode xml"><code class="sourceCode xml"><span class="dv">&amp;lt;</span>data<span class="dv">&amp;gt;</span>
+   <span class="dv">&amp;lt;</span>entry<span class="dv">&amp;gt;</span>
+      <span class="dv">&amp;lt;</span>title<span class="dv">&amp;gt;</span>Song Title Goes Here<span class="dv">&amp;lt;</span>/title<span class="dv">&amp;gt;</span>
+      <span class="dv">&amp;lt;</span>page<span class="dv">&amp;gt;</span>
+         <span class="dv">&amp;lt;</span>line<span class="dv">&amp;gt;</span>C#m_____________E<span class="dv">&amp;lt;</span>/line<span class="dv">&amp;gt;</span>
+         <span class="dv">&amp;lt;</span>line<span class="dv">&amp;gt;</span>Some lyrics and chords like so.<span class="dv">&amp;lt;</span>/line<span class="dv">&amp;gt;</span>
+      <span class="dv">&amp;lt;</span>/page<span class="dv">&amp;gt;</span>
+   <span class="dv">&amp;lt;</span>/entry<span class="dv">&amp;gt;</span>
+   <span class="dv">&amp;lt;</span>entry<span class="dv">&amp;gt;</span>
+      <span class="dv">&amp;lt;</span>title<span class="dv">&amp;gt;</span>Another song<span class="dv">&amp;lt;</span>/title<span class="dv">&amp;gt;</span>
+      <span class="dv">&amp;lt;</span>page<span class="dv">&amp;gt;</span>
+         <span class="dv">&amp;lt;</span>line<span class="dv">&amp;gt;</span>Whatever you want.<span class="dv">&amp;lt;</span>/line<span class="dv">&amp;gt;</span>
+      <span class="dv">&amp;lt;</span>/page<span class="dv">&amp;gt;</span>
+      <span class="dv">&amp;lt;</span>page<span class="dv">&amp;gt;</span>
+         <span class="dv">&amp;lt;</span>line<span class="dv">&amp;gt;</span>Whatever else.<span class="dv">&amp;lt;</span>/line<span class="dv">&amp;gt;</span>
+      <span class="dv">&amp;lt;</span>/page<span class="dv">&amp;gt;</span>
+   <span class="dv">&amp;lt;</span>/entry<span class="dv">&amp;gt;</span>
+<span class="dv">&amp;lt;</span>/data<span class="dv">&amp;gt;</span></code></pre></div>
+<p>The music stand program parses the XML file and everything just works. Currently multiple tabs and spaces are reduced to a single space, so I use underscores to appropriately space out chords. You are responsible for making sure lines don’t run off the screen, both off the side and off the bottom. In the future, I may implement auto line wrapping, but I prefer manual page generation. The whole point is that you get the information you need on stage, whether chords, notes or lyrics. To do that right, you ought to have complete control over formatting.</p>
+<h2 id="state-of-the-project">State of the Project</h2>
+<p>Right now, I have a fully functional prototype. My biggest reservation in calling it done is that it runs hosted inside two other applications: Quartz Composer (which comes with Apple’s Developer Tools), and Pd (Miller Puckette’s PureData), both of which are free. With some work I can actually get this up and running as its own program and robustly accepting different types of control input. Only then will it be v1.0.</p>
+<p>Next on the list of features is proper song management system. I want to be able to make a song library, and then make set lists like making a playlist in iTunes. This is definitely getting thrown into the mix when I make the program stand-alone.</p>
+<p>Also, there is no reason why I couldn’t have this program display a real music staff, not just chords or tabs. These would be saved as vector graphics and either included straight in the xml or referenced from it. This feature will likely come much later as I only usually need lyrics and chords as a reminder of what notes to play.</p>
+<h2 id="running-the-program">Running the Program</h2>
+<p>It works on Macs running OS 10.5. Quartz Composer has come with the Apple Developer Tools since OS 10.4, but this particular patch uses some new features in QC version 3.0. Pd is not necessary to get the patch working, but is necessary fi you want to use any MIDI signals other than notes to control the screen. I use a small Pd patch to route commands from a MIDI foot-controller to Quartz Composer.</p>
+<p>If you don’t have Quartz Composer, your system will try and open the patch in Quicktime. Quicktime doesn’t allow access to the songs.xml file, so this will not work. Download the developer tools from Apple or convince (or pay) me to get a more complete program up and running.</p>
+<h3 id="update">Update:</h3>
+<p>I've done a quick modernization of the main patch to work well on a wide-screen computer and working cleanly under Snow Leopard.</p>
+<h3 id="update-2">Update 2:</h3>
+<p>This modernization has held strong, and is still working fine seven years later.</p>
+</article>
+</main>
+</body>
+</html>

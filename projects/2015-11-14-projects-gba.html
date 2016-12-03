@@ -1,32 +1,72 @@
----
-layout: page
-title: GBA printf
-categories: []
-tags: []
-status: publish
-type: page
-published: true
-meta: {}
----
-<h1 id="gbaprintf">GBA printf</h1>
-
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>GBA printf</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #0000ff; } /* Keyword */
+code > span.ch { color: #008080; } /* Char */
+code > span.st { color: #008080; } /* String */
+code > span.co { color: #008000; } /* Comment */
+code > span.ot { color: #ff4000; } /* Other */
+code > span.al { color: #ff0000; } /* Alert */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #008000; font-weight: bold; } /* Warning */
+code > span.cn { } /* Constant */
+code > span.sc { color: #008080; } /* SpecialChar */
+code > span.vs { color: #008080; } /* VerbatimString */
+code > span.ss { color: #008080; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { } /* Variable */
+code > span.cf { color: #0000ff; } /* ControlFlow */
+code > span.op { } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #ff4000; } /* Preprocessor */
+code > span.do { color: #008000; } /* Documentation */
+code > span.an { color: #008000; } /* Annotation */
+code > span.cv { color: #008000; } /* CommentVar */
+code > span.at { } /* Attribute */
+code > span.in { color: #008000; } /* Information */
+  </style>
+  <link rel="stylesheet" href="/writ.min.css">
+</head>
+<body>
+<header>
+<h1>fabián cañas</h1>
+<nav>
+<ul>
+  <li><a href='/'>about</a></li>
+  <li><a href='/blog/'>writing</a></li>
+  <li><a href='/software/'>software</a></li>
+  |
+  <li><a href='https://www.github.com/fcanas'>GitHub</a></li>
+  <li><a href='https://www.twitter.com/fcanas'>Twitter</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<h1>GBA printf</h1>
 <p>It takes up one scrolling background, some background memory space, and a tiny amount of background palette space. If you're mindful of its small memory footprint and background requirements it should be compatible with just about any project, especially during development phases.</p>
-
 <p>It may be useful to know that I use devKitArm and its arm-eabi-gcc. I could not get consistent or appropriate behavior from the <code>varargs()</code> macros, so I relied on the consistent size size of the call stack to pull out the variable-length argument list. Other compilers may break that code. However that hack is clearly labeled in the source code so you can tweak it to accommodate for any differences in the stack layout.</p>
-
 <p>To use it, you call an initialization function, then you can print formatted strings just like with printf. It can print all standard (not extended) ASCII characters. It can format numbers in octal, decimal, and hexadecimal. The screen automatically scrolls down. There is no scrolling up.</p>
+<div class="sourceCode"><pre class="sourceCode c"><code class="sourceCode c"><span class="pp">#include &#39;gba.h&#39;</span>
+<span class="pp">#include &#39;printf.h&#39;</span>
 
-<pre>
-#include 'gba.h'
-#include 'printf.h'
-
-int main(){
-   initTextBG(8,0,0);
-   print_f('This prints 5: %d',5);
-}
-</pre>
-  
-      <img src="http://static1.squarespace.com/static/53e976eae4b0162bed56938c/t/54037aade4b0ebc5a8dd0946/1409514157378/?format=original" alt=""/>
-  
-
- 
+<span class="dt">int</span> main(){
+   initTextBG(<span class="dv">8</span>,<span class="dv">0</span>,<span class="dv">0</span>);
+   print_f(&#39;This prints <span class="dv">5</span>: %d&#39;,<span class="dv">5</span>);
+}</code></pre></div>
+<p><img src="gba-print.png" alt=""/></p>
+</article>
+</main>
+</body>
+</html>
