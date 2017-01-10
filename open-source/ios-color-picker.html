@@ -4,7 +4,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>iOS Color Picker</title>
   <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #0000ff; } /* Keyword */
+code > span.ch { color: #008080; } /* Char */
+code > span.st { color: #008080; } /* String */
+code > span.co { color: #008000; } /* Comment */
+code > span.ot { color: #ff4000; } /* Other */
+code > span.al { color: #ff0000; } /* Alert */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #008000; font-weight: bold; } /* Warning */
+code > span.cn { } /* Constant */
+code > span.sc { color: #008080; } /* SpecialChar */
+code > span.vs { color: #008080; } /* VerbatimString */
+code > span.ss { color: #008080; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { } /* Variable */
+code > span.cf { color: #0000ff; } /* ControlFlow */
+code > span.op { } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #ff4000; } /* Preprocessor */
+code > span.do { color: #008000; } /* Documentation */
+code > span.an { color: #008000; } /* Annotation */
+code > span.cv { color: #008000; } /* CommentVar */
+code > span.at { } /* Attribute */
+code > span.in { color: #008000; } /* Information */
+  </style>
   <link rel="stylesheet" href="/writ.min.css">
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@fcanas" />
+  <meta name="twitter:title" content="iOS Color Picker" />
+  <meta name="twitter:description" content="A reusable color picker component for iOS. Works for iPhone, iPad, in modal sheets, popovers... just about anywhere." />
+  <meta name="og:title" content="iOS Color Picker" />
+  <meta name="og:type" content="website" />
+  <meta name="og:description" content="A reusable color picker component for iOS. Works for iPhone, iPad, in modal sheets, popovers... just about anywhere." />
 </head>
 <body>
 <header>
@@ -23,35 +62,32 @@
 <main>
 <article>
 <h1>iOS Color Picker</h1>
-<p><a href="https://github.com/fcanas/ios-color-picker" target="_blank" class="social-github"></a></p>
 <p>A reusable color picker component for iOS. Works for iPhone, iPad, in modal sheets, popovers... just about anywhere.</p>
 <h1 id="using-ios-color-picker">Using iOS-Color-Picker</h1>
 <h2 id="installation">Installation</h2>
 <p>The easiest way to use iOS-Color-Picker is with <a href="http://cocoapods.org">CocoaPods</a>. Add the following line to your <code>Podfile</code>.</p>
-<pre>pod 'iOS-Color-Picker'
-</pre>
+<div class="sourceCode"><pre class="sourceCode ruby"><code class="sourceCode ruby">pod <span class="st">&#39;iOS-Color-Picker&#39;</span></code></pre></div>
 <h2 id="using-a-color-picker-from-a-view-controller">Using a Color Picker from a View Controller</h2>
 <p>Suppose you have a view controller with a <code>color</code> property you'd like to let the user pick. Make your view controller implement the <code>FCColorPickerViewControllerDelegate</code> protocol. Handle the color picked and the cancelled methods, and make a method that triggers showing the view controller.</p>
-<pre>-(IBAction)chooseColor:(id)sender {
+<div class="sourceCode"><pre class="sourceCode objectivec"><code class="sourceCode objectivec">-(IBAction)chooseColor:(id)sender {
   FCColorPickerViewController *colorPicker = [FCColorPickerViewController colorPicker];
-  colorPicker.color = self.color;
-  colorPicker.delegate = self;
+  colorPicker.color = <span class="kw">self</span>.color;
+  colorPicker.delegate = <span class="kw">self</span>;
 
   [colorPicker setModalPresentationStyle:UIModalPresentationFormSheet];
-  [self presentViewController:colorPicker animated:YES completion:nil];
+  [<span class="kw">self</span> presentViewController:colorPicker animated:YES completion:nil];
 }
 
-#pragma mark - FCColorPickerViewControllerDelegate Methods
+<span class="pp">#pragma mark - FCColorPickerViewControllerDelegate Methods</span>
 
--(void)colorPickerViewController:(FCColorPickerViewController *)colorPicker didSelectColor:(UIColor *)color {
-  self.color = color;
-  [self dismissViewControllerAnimated:YES completion:nil];
+-(<span class="dt">void</span>)colorPickerViewController:(FCColorPickerViewController *)colorPicker didSelectColor:(UIColor *)color {
+  <span class="kw">self</span>.color = color;
+  [<span class="kw">self</span> dismissViewControllerAnimated:YES completion:nil];
 }
 
--(void)colorPickerViewControllerDidCancel:(FCColorPickerViewController *)colorPicker {
-  [self dismissViewControllerAnimated:YES completion:nil];
-}
-</pre>
+-(<span class="dt">void</span>)colorPickerViewControllerDidCancel:(FCColorPickerViewController *)colorPicker {
+  [<span class="kw">self</span> dismissViewControllerAnimated:YES completion:nil];
+}</code></pre></div>
 <h1 id="example-project">Example Project</h1>
 <p><a href="https://github.com/fcanas/ios-color-picker-example">iOS Color Picker Example</a></p>
 </article>
