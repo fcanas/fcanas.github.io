@@ -1,0 +1,54 @@
+==================================================================
+https://keybase.io/fcanas
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://fabiancanas.com
+  * I am fcanas (https://keybase.io/fcanas) on keybase.
+  * I have a public key ASCBytAojkyvwtk_Hy6vT3CmhNkm6GD2EtU9bDPyDJ47sAo
+
+To do so, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "eldest_kid": "0101dcbbaaf2333602e0efbe92ab81ddd02f650f8d04ec16ae853f36c6debcceca640a",
+            "host": "keybase.io",
+            "kid": "012081cad0288e4cafc2d93f1f2eaf4f70a684d926e860f612d53d6c33f20c9e3bb00a",
+            "uid": "10bf6b39ebbd2790ff66bcbece8dcc00",
+            "username": "fcanas"
+        },
+        "service": {
+            "hostname": "fabiancanas.com",
+            "protocol": "https:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "client": {
+        "name": "keybase.io go client",
+        "version": "1.0.18"
+    },
+    "ctime": 1488420957,
+    "expire_in": 504576000,
+    "merkle_root": {
+        "ctime": 1488420943,
+        "hash": "1e19b5bbd2776722ddcc70c68735ce7bb11d7de00a0ef1772aabbbcd16564c02cdd4da61362bf8223ea45f5098c4aaa7dafa9722ea68363433b186deb1d997ac",
+        "seqno": 933588
+    },
+    "prev": "e5340b6d071901b5d8c472acc35b4e280d1b82f4e2567765e3cb46b921af3dc1",
+    "seqno": 9,
+    "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEggcrQKI5Mr8LZPx8ur09wpoTZJuhg9hLVPWwz8gyeO7AKp3BheWxvYWTFAvV7ImJvZHkiOnsia2V5Ijp7ImVsZGVzdF9raWQiOiIwMTAxZGNiYmFhZjIzMzM2MDJlMGVmYmU5MmFiODFkZGQwMmY2NTBmOGQwNGVjMTZhZTg1M2YzNmM2ZGViY2NlY2E2NDBhIiwiaG9zdCI6ImtleWJhc2UuaW8iLCJraWQiOiIwMTIwODFjYWQwMjg4ZTRjYWZjMmQ5M2YxZjJlYWY0ZjcwYTY4NGQ5MjZlODYwZjYxMmQ1M2Q2YzMzZjIwYzllM2JiMDBhIiwidWlkIjoiMTBiZjZiMzllYmJkMjc5MGZmNjZiY2JlY2U4ZGNjMDAiLCJ1c2VybmFtZSI6ImZjYW5hcyJ9LCJzZXJ2aWNlIjp7Imhvc3RuYW1lIjoiZmFiaWFuY2FuYXMuY29tIiwicHJvdG9jb2wiOiJodHRwczoifSwidHlwZSI6IndlYl9zZXJ2aWNlX2JpbmRpbmciLCJ2ZXJzaW9uIjoxfSwiY2xpZW50Ijp7Im5hbWUiOiJrZXliYXNlLmlvIGdvIGNsaWVudCIsInZlcnNpb24iOiIxLjAuMTgifSwiY3RpbWUiOjE0ODg0MjA5NTcsImV4cGlyZV9pbiI6NTA0NTc2MDAwLCJtZXJrbGVfcm9vdCI6eyJjdGltZSI6MTQ4ODQyMDk0MywiaGFzaCI6IjFlMTliNWJiZDI3NzY3MjJkZGNjNzBjNjg3MzVjZTdiYjExZDdkZTAwYTBlZjE3NzJhYWJiYmNkMTY1NjRjMDJjZGQ0ZGE2MTM2MmJmODIyM2VhNDVmNTA5OGM0YWFhN2RhZmE5NzIyZWE2ODM2MzQzM2IxODZkZWIxZDk5N2FjIiwic2Vxbm8iOjkzMzU4OH0sInByZXYiOiJlNTM0MGI2ZDA3MTkwMWI1ZDhjNDcyYWNjMzViNGUyODBkMWI4MmY0ZTI1Njc3NjVlM2NiNDZiOTIxYWYzZGMxIiwic2Vxbm8iOjksInRhZyI6InNpZ25hdHVyZSJ9o3NpZ8RAsnRlmGisgfUkkfoGo4/anW6R/bwc7uEtlDwN/nZdaJoZnm/UOWIp+2aWhGADrkkHdPFDaOko7PHyCYJcb7iZBqhzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEICVDf+xZ+JGKZJfmH71O+vTfluPJC1mDT6B6NCCc9dm+o3RhZ80CAqd2ZXJzaW9uAQ==
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/fcanas
+
+==================================================================
