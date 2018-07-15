@@ -5,36 +5,64 @@
   <title>iOS Color Picker</title>
   <style type="text/css">code{white-space: pre;}</style>
   <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #0000ff; } /* Keyword */
-code > span.ch { color: #008080; } /* Char */
-code > span.st { color: #008080; } /* String */
-code > span.co { color: #008000; } /* Comment */
-code > span.ot { color: #ff4000; } /* Other */
-code > span.al { color: #ff0000; } /* Alert */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #008000; font-weight: bold; } /* Warning */
-code > span.cn { } /* Constant */
-code > span.sc { color: #008080; } /* SpecialChar */
-code > span.vs { color: #008080; } /* VerbatimString */
-code > span.ss { color: #008080; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { } /* Variable */
-code > span.cf { color: #0000ff; } /* ControlFlow */
-code > span.op { } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #ff4000; } /* Preprocessor */
-code > span.do { color: #008000; } /* Documentation */
-code > span.an { color: #008000; } /* Annotation */
-code > span.cv { color: #008000; } /* CommentVar */
-code > span.at { } /* Attribute */
-code > span.in { color: #008000; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
   </style>
   <link rel="stylesheet" href="/writ.min.css">
   <meta name="twitter:card" content="summary" />
@@ -62,32 +90,32 @@ code > span.in { color: #008000; } /* Information */
 <article>
 <h1>iOS Color Picker</h1>
 <p>A reusable color picker component for iOS. Works for iPhone, iPad, in modal sheets, popovers... just about anywhere.</p>
-<h1 id="using-ios-color-picker">Using iOS-Color-Picker</h1>
-<h2 id="installation">Installation</h2>
+<h1>Using iOS-Color-Picker</h1>
+<h2>Installation</h2>
 <p>The easiest way to use iOS-Color-Picker is with <a href="http://cocoapods.org">CocoaPods</a>. Add the following line to your <code>Podfile</code>.</p>
-<div class="sourceCode"><pre class="sourceCode ruby"><code class="sourceCode ruby">pod <span class="st">&#39;iOS-Color-Picker&#39;</span></code></pre></div>
-<h2 id="using-a-color-picker-from-a-view-controller">Using a Color Picker from a View Controller</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode ruby"><code class="sourceCode ruby"><a class="sourceLine" id="cb1-1" data-line-number="1">pod <span class="st">&#39;iOS-Color-Picker&#39;</span></a></code></pre></div>
+<h2>Using a Color Picker from a View Controller</h2>
 <p>Suppose you have a view controller with a <code>color</code> property you'd like to let the user pick. Make your view controller implement the <code>FCColorPickerViewControllerDelegate</code> protocol. Handle the color picked and the cancelled methods, and make a method that triggers showing the view controller.</p>
-<div class="sourceCode"><pre class="sourceCode objectivec"><code class="sourceCode objectivec">-(IBAction)chooseColor:(id)sender {
-  FCColorPickerViewController *colorPicker = [FCColorPickerViewController colorPicker];
-  colorPicker.color = <span class="kw">self</span>.color;
-  colorPicker.delegate = <span class="kw">self</span>;
-
-  [colorPicker setModalPresentationStyle:UIModalPresentationFormSheet];
-  [<span class="kw">self</span> presentViewController:colorPicker animated:YES completion:nil];
-}
-
-<span class="pp">#pragma mark - FCColorPickerViewControllerDelegate Methods</span>
-
--(<span class="dt">void</span>)colorPickerViewController:(FCColorPickerViewController *)colorPicker didSelectColor:(UIColor *)color {
-  <span class="kw">self</span>.color = color;
-  [<span class="kw">self</span> dismissViewControllerAnimated:YES completion:nil];
-}
-
--(<span class="dt">void</span>)colorPickerViewControllerDidCancel:(FCColorPickerViewController *)colorPicker {
-  [<span class="kw">self</span> dismissViewControllerAnimated:YES completion:nil];
-}</code></pre></div>
-<h1 id="example-project">Example Project</h1>
+<div class="sourceCode" id="cb2"><pre class="sourceCode objectivec"><code class="sourceCode objectivec"><a class="sourceLine" id="cb2-1" data-line-number="1">-(IBAction)chooseColor:(id)sender {</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">  FCColorPickerViewController *colorPicker = [FCColorPickerViewController colorPicker];</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">  colorPicker.color = <span class="kw">self</span>.color;</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">  colorPicker.delegate = <span class="kw">self</span>;</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6">  [colorPicker setModalPresentationStyle:UIModalPresentationFormSheet];</a>
+<a class="sourceLine" id="cb2-7" data-line-number="7">  [<span class="kw">self</span> presentViewController:colorPicker animated:YES completion:nil];</a>
+<a class="sourceLine" id="cb2-8" data-line-number="8">}</a>
+<a class="sourceLine" id="cb2-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="pp">#pragma mark - FCColorPickerViewControllerDelegate Methods</span></a>
+<a class="sourceLine" id="cb2-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb2-12" data-line-number="12">-(<span class="dt">void</span>)colorPickerViewController:(FCColorPickerViewController *)colorPicker didSelectColor:(UIColor *)color {</a>
+<a class="sourceLine" id="cb2-13" data-line-number="13">  <span class="kw">self</span>.color = color;</a>
+<a class="sourceLine" id="cb2-14" data-line-number="14">  [<span class="kw">self</span> dismissViewControllerAnimated:YES completion:nil];</a>
+<a class="sourceLine" id="cb2-15" data-line-number="15">}</a>
+<a class="sourceLine" id="cb2-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb2-17" data-line-number="17">-(<span class="dt">void</span>)colorPickerViewControllerDidCancel:(FCColorPickerViewController *)colorPicker {</a>
+<a class="sourceLine" id="cb2-18" data-line-number="18">  [<span class="kw">self</span> dismissViewControllerAnimated:YES completion:nil];</a>
+<a class="sourceLine" id="cb2-19" data-line-number="19">}</a></code></pre></div>
+<h1>Example Project</h1>
 <p><a href="https://github.com/fcanas/ios-color-picker-example">iOS Color Picker Example</a></p>
 </article>
 </main>

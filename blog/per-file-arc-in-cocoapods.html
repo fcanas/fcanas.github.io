@@ -6,36 +6,64 @@
   <title>Per File ARC in CocoaPods</title>
   <style type="text/css">code{white-space: pre;}</style>
   <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #0000ff; } /* Keyword */
-code > span.ch { color: #008080; } /* Char */
-code > span.st { color: #008080; } /* String */
-code > span.co { color: #008000; } /* Comment */
-code > span.ot { color: #ff4000; } /* Other */
-code > span.al { color: #ff0000; } /* Alert */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #008000; font-weight: bold; } /* Warning */
-code > span.cn { } /* Constant */
-code > span.sc { color: #008080; } /* SpecialChar */
-code > span.vs { color: #008080; } /* VerbatimString */
-code > span.ss { color: #008080; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { } /* Variable */
-code > span.cf { color: #0000ff; } /* ControlFlow */
-code > span.op { } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #ff4000; } /* Preprocessor */
-code > span.do { color: #008000; } /* Documentation */
-code > span.an { color: #008000; } /* Annotation */
-code > span.cv { color: #008000; } /* CommentVar */
-code > span.at { } /* Attribute */
-code > span.in { color: #008000; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
   </style>
   <link rel="stylesheet" href="/writ.min.css">
 </head>
@@ -57,25 +85,25 @@ code > span.in { color: #008000; } /* Information */
 <article>
 <h1>Per File ARC in CocoaPods</h1>
 <p>tl;dr</p>
-<div class="sourceCode"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span class="dt">Pod</span>::<span class="dt">Spec</span>.new <span class="kw">do</span> |s|
-    s.name = <span class="st">&#39;MyPod&#39;</span>
-    ...
-    non_arc_files = <span class="st">&#39;Classes/FirstNonARCClass.m&#39;</span>,
-    <span class="st">&#39;Classes/SecondNonARCClass.m&#39;</span>,
-    <span class="st">&#39;Classes/ThirdNonARCClass.m&#39;</span>
-    s.requires_arc = <span class="dv">true</span>
-    s.source_files = <span class="st">&#39;Classes/*.{h,m}&#39;</span>
-    s.exclude_files = non_arc_files
-    s.subspec <span class="st">&#39;no-arc&#39;</span> <span class="kw">do</span> |sna|
-        sna.requires_arc = <span class="dv">false</span>
-        sna.source_files = non_arc_files
-    <span class="kw">end</span>
-<span class="kw">end</span></code></pre></div>
-<h2 id="arc">ARC</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode ruby"><code class="sourceCode ruby"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="dt">Pod</span>::<span class="dt">Spec</span>.new <span class="kw">do</span> |s|</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">    s.name = <span class="st">&#39;MyPod&#39;</span></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">    ...</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">    non_arc_files = <span class="st">&#39;Classes/FirstNonARCClass.m&#39;</span>,</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">    <span class="st">&#39;Classes/SecondNonARCClass.m&#39;</span>,</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">    <span class="st">&#39;Classes/ThirdNonARCClass.m&#39;</span></a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">    s.requires_arc = <span class="dv">true</span></a>
+<a class="sourceLine" id="cb1-8" data-line-number="8">    s.source_files = <span class="st">&#39;Classes/*.{h,m}&#39;</span></a>
+<a class="sourceLine" id="cb1-9" data-line-number="9">    s.exclude_files = non_arc_files</a>
+<a class="sourceLine" id="cb1-10" data-line-number="10">    s.subspec <span class="st">&#39;no-arc&#39;</span> <span class="kw">do</span> |sna|</a>
+<a class="sourceLine" id="cb1-11" data-line-number="11">        sna.requires_arc = <span class="dv">false</span></a>
+<a class="sourceLine" id="cb1-12" data-line-number="12">        sna.source_files = non_arc_files</a>
+<a class="sourceLine" id="cb1-13" data-line-number="13">    <span class="kw">end</span></a>
+<a class="sourceLine" id="cb1-14" data-line-number="14"><span class="kw">end</span></a></code></pre></div>
+<h2>ARC</h2>
 <p>Automatic reference counting (ARC) is a good thing. It's a great compile-time technology that makes it easier, in most cases, to not accidentally introduce trivial memory leaks in modern Objective-C apps.</p>
 <p>But sometimes, you have older code with traditional memory management; it's not really worth converting to ARC if it's correct, and possibly finely tuned. And sometimes ARC introduces <a href="http://www.learn-cocos2d.com/2013/03/confirmed-arc-slow/">a little unnecessary overhead</a> that can balloon out of control when handling large numbers of objects. There are also good reasons to put Objective-C objects into structs or other odd places that ARC prohibits or makes difficult (Objective-C++ anyone?).</p>
 <p>That said, ARC is almost always a good idea. And so disabling ARC should be the exception, not the rule.</p>
-<h2 id="cocoapods">CocoaPods</h2>
+<h2>CocoaPods</h2>
 <p><a href="http://cocoapods.org/">CocoaPods</a> is an excellent dependency management system for Objective-C projects. Dependencies are distributed as 'Pods' which are described in podpecs. A podspec is a kind of build description, that specifies where the source is to be found, dependencies it has, and how it should be configured and compiled.</p>
 <p>CocoaPods lets you specify ARC on a spec or subspec basis, but doing so on a per-file basis is not planned for the spec DSL. <a href="https://github.com/CocoaPods/CocoaPods/issues/589#issuecomment-9350801">The suggested way of doing this</a> is a little unsatisfactory because it has you listing each file to exclude twice. Luckily we're working with ruby and we can just extract the list of files to exclude into a list we can use to exclude from the sources and include in a non-ARC subspec.</p>
 </article>

@@ -61,19 +61,19 @@ NSMutableArray *mArray = [NSMutableArray safe_cast:array];
 </pre>
 <p>SafeCast has quite a few methods like this, covering <code>NSArray</code>, <code>NSSet</code>, <code>NSDictionary</code>, and <code>NSOrderedSet</code>.</p>
 <p>I doubt it would be a good idea to give coverage to collections like <code>NSMapTable</code> or <code>NSHashTable</code>, so that's not planned.</p>
-<h2 id="a-whole-library-for-that">A Whole Library for <em>that</em>?</h2>
+<h2>A Whole Library for <em>that</em>?</h2>
 <p>Well, first of all, it's <em>really</em> small. The documentation in the headers is <em>much</em> bigger than the code. And it's tested. You may not need it. But it has a lot of things going for it.</p>
-<h3 id="easy-to-integrate">Easy to integrate</h3>
+<h3>Easy to integrate</h3>
 <p>SafeCast is available as a <a href="http://guides.cocoapods.org/using/getting-started.html">CocoaPod</a>.</p>
 <pre>
 pod 'SafeCast'
 </pre>
-<h3 id="be-concice-and-direct-with-your-intent">Be concice and direct with your intent</h3>
+<h3>Be concice and direct with your intent</h3>
 <p>It definitely takes fewer lines of code. In my opinion it's easier to read and think about than the more verbose, way of doing it safely. It keeps your type-safety checks up front and at a high level.</p>
-<h3 id="be-safe">Be Safe</h3>
+<h3>Be Safe</h3>
 <p>Maybe you know what you're doing. But do you always do the right thing? How many people are in your code base? And how well do they all know Objective-C's C underbelly? More and more developers are coming in having worked with higher-level or dynamic languages, and may not realize what's safe and what's not.</p>
 <p>SafeCast wants to make it easier to safely cast ... to cast only when it's safe to do so.</p>
-<h2 id="status">Status</h2>
+<h2>Status</h2>
 <p>Please send feedback, pull-requests, and coffee.</p>
 </article>
 </main>

@@ -2,40 +2,69 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <meta name="author" content="2013-02-20">
+  <meta name="author" content="">
+  <meta name="dcterms.date" content="2013-02-20">
   <title>CocoaPods and GYP</title>
   <style type="text/css">code{white-space: pre;}</style>
   <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #0000ff; } /* Keyword */
-code > span.ch { color: #008080; } /* Char */
-code > span.st { color: #008080; } /* String */
-code > span.co { color: #008000; } /* Comment */
-code > span.ot { color: #ff4000; } /* Other */
-code > span.al { color: #ff0000; } /* Alert */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #008000; font-weight: bold; } /* Warning */
-code > span.cn { } /* Constant */
-code > span.sc { color: #008080; } /* SpecialChar */
-code > span.vs { color: #008080; } /* VerbatimString */
-code > span.ss { color: #008080; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { } /* Variable */
-code > span.cf { color: #0000ff; } /* ControlFlow */
-code > span.op { } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #ff4000; } /* Preprocessor */
-code > span.do { color: #008000; } /* Documentation */
-code > span.an { color: #008000; } /* Annotation */
-code > span.cv { color: #008000; } /* CommentVar */
-code > span.at { } /* Attribute */
-code > span.in { color: #008000; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
   </style>
   <link rel="stylesheet" href="/writ.min.css">
 </head>
@@ -56,65 +85,62 @@ code > span.in { color: #008000; } /* Information */
 <main>
 <article>
 <h1>CocoaPods and GYP</h1>
-<h2 id="cocoapods">CocoaPods</h2>
+<date>2013-02-20</date>
+<h2>CocoaPods</h2>
 <p><a href="https://cocoapods.org">CocoaPods</a> is an excellent dependency management system for Objective-C projects. Dependencies are distributed as 'Pods’ which are almost exactly like <a href="http://rubygems.org/">gems</a>. A podspec is a kind of build description, that specifies where the source is to be found, dependencies it has, and how it should be configured and compiled. The best part is that they’re extremely legible.</p>
 <p>This is a great improvement over the typical git submodule, or linked Xcode project for each dependency. To use CocoaPods, you specify your application’s dependencies in a Podfile. This is typically a concise list of the pods required to build the application. CocoaPods generates a Pods project with a single target consisting of a single static library custom-built for your app to contain all the dependencies in one place. The Pods project that gets put into a workspace along with your project, so that everything plays nice with Xcode as both and IDE and as a build system. The Pods project doesn’t get checked in to your repository because it can be completely regenerated from your Podfile.</p>
 <p>CocoaPods turns out to be a partial build system that takes some of the bite out of Xcode. With respect to dependencies, Xcode is now a mere IDE — it’s no longer the keeper of build configurations. But you still need a project to describe an build an application. I want to cut Xcode out of everything that’s not building and day-to-day code writing. I want to write iOS apps and not check in Xcode project files.</p>
-<h2 id="gyp">GYP</h2>
+<h2>GYP</h2>
 <p><a href="http://code.google.com/p/gyp/">GYP</a> is a meta build specification that creates build specifications for real build systems. In simpler words, you use GYP to describe a build in a generic way in JSON, and GYP builds an Xcode project for you. I could probably extend CocoaPods to do this, and keep one format for specifying builds of dependencies and targets. But GYP already exists. GYP was built and maintained by Google for the Chromium project.</p>
 <p>Gathering tidbits from the web, here’s what I’ve been able to put together.</p>
 <p>pulse_poll.gyp</p>
-<div class="sourceCode"><pre class="sourceCode json"><code class="sourceCode json"><span class="fu">{</span>
-    <span class="dt">&quot;targets&quot;</span><span class="fu">:</span> <span class="ot">[</span>
-        <span class="fu">{</span>
-            <span class="dt">&quot;target_name&quot;</span><span class="fu">:</span> <span class="st">&quot;PulsePoll&quot;</span><span class="fu">,</span>
-            <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;executable&quot;</span><span class="fu">,</span>
-            <span class="dt">&quot;mac_bundle&quot;</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span>
-            <span class="dt">&quot;include_dirs&quot;</span> <span class="fu">:</span> <span class="ot">[</span>
-                <span class="st">&quot;substructure&quot;</span><span class="ot">,</span>
-            <span class="ot">]</span><span class="fu">,</span>
-            <span class="dt">&quot;sources&quot;</span><span class="fu">:</span> <span class="ot">[</span>
-                <span class="st">&quot;src/substructure/main.m&quot;</span><span class="ot">,</span>
-                <span class="st">&quot;src/substructure/PPAppDelegate.h&quot;</span><span class="ot">,</span>
-                <span class="st">&quot;src/substructure/PPAppDelegate.m&quot;</span><span class="ot">,</span>
-                <span class="st">&quot;src/substructure/PulsePoll-Info.plist&quot;</span><span class="ot">,</span>
-            <span class="ot">]</span><span class="fu">,</span>
-            <span class="dt">&quot;link_settings&quot;</span><span class="fu">:</span> <span class="fu">{</span>
-                <span class="dt">&quot;libraries&quot;</span><span class="fu">:</span> <span class="ot">[</span>
-                    <span class="st">&quot;UIKit.framework&quot;</span><span class="ot">,</span>
-                    <span class="st">&quot;Foundation.framework&quot;</span><span class="ot">,</span>
-                    <span class="st">&quot;CoreGraphics.framework&quot;</span><span class="ot">,</span>
-                <span class="ot">]</span><span class="fu">,</span>
-            <span class="fu">},</span>
-            <span class="dt">&quot;xcode_settings&quot;</span> <span class="fu">:</span> <span class="fu">{</span>
-                <span class="dt">&quot;INFOPLIST_FILE&quot;</span> <span class="fu">:</span> <span class="st">&quot;src/substructure/PulsePoll-Info.plist&quot;</span><span class="fu">,</span>
-                <span class="dt">&quot;SDKROOT&quot;</span><span class="fu">:</span> <span class="st">&quot;iphoneos&quot;</span><span class="fu">,</span>
-                <span class="dt">&quot;TARGETED_DEVICE_FAMILY&quot;</span><span class="fu">:</span> <span class="st">&quot;1,2&quot;</span><span class="fu">,</span>
-                <span class="dt">&quot;CODE_SIGN_IDENTITY&quot;</span><span class="fu">:</span> <span class="st">&quot;iPhone Developer&quot;</span><span class="fu">,</span>
-                <span class="dt">&quot;IPHONEOS_DEPLOYMENT_TARGET&quot;</span><span class="fu">:</span> <span class="st">&quot;5.0&quot;</span><span class="fu">,</span>
-                <span class="dt">&quot;ARCHS&quot;</span><span class="fu">:</span> <span class="st">&quot;$(ARCHS_UNIVERSAL_IPHONE_OS)&quot;</span><span class="fu">,</span>
-                <span class="dt">&quot;HEADER_SEARCH_PATHS&quot;</span><span class="fu">:</span> <span class="st">&quot;$(inherited)&quot;</span><span class="fu">,</span>
-                <span class="dt">&quot;CLANG_ENABLE_OBJC_ARC&quot;</span><span class="fu">:</span> <span class="st">&quot;YES&quot;</span><span class="fu">,</span>
-            <span class="fu">},</span>
-        <span class="fu">}</span><span class="ot">,</span>
-    <span class="ot">]</span>
-<span class="fu">}</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode json"><code class="sourceCode json"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="fu">{</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">    <span class="dt">&quot;targets&quot;</span><span class="fu">:</span> <span class="ot">[</span></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">        <span class="fu">{</span></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">            <span class="dt">&quot;target_name&quot;</span><span class="fu">:</span> <span class="st">&quot;PulsePoll&quot;</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">            <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;executable&quot;</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">            <span class="dt">&quot;mac_bundle&quot;</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">            <span class="dt">&quot;include_dirs&quot;</span> <span class="fu">:</span> <span class="ot">[</span></a>
+<a class="sourceLine" id="cb1-8" data-line-number="8">                <span class="st">&quot;substructure&quot;</span><span class="ot">,</span></a>
+<a class="sourceLine" id="cb1-9" data-line-number="9">            <span class="ot">]</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb1-10" data-line-number="10">            <span class="dt">&quot;sources&quot;</span><span class="fu">:</span> <span class="ot">[</span></a>
+<a class="sourceLine" id="cb1-11" data-line-number="11">                <span class="st">&quot;src/substructure/main.m&quot;</span><span class="ot">,</span></a>
+<a class="sourceLine" id="cb1-12" data-line-number="12">                <span class="st">&quot;src/substructure/PPAppDelegate.h&quot;</span><span class="ot">,</span></a>
+<a class="sourceLine" id="cb1-13" data-line-number="13">                <span class="st">&quot;src/substructure/PPAppDelegate.m&quot;</span><span class="ot">,</span></a>
+<a class="sourceLine" id="cb1-14" data-line-number="14">                <span class="st">&quot;src/substructure/PulsePoll-Info.plist&quot;</span><span class="ot">,</span></a>
+<a class="sourceLine" id="cb1-15" data-line-number="15">            <span class="ot">]</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb1-16" data-line-number="16">            <span class="dt">&quot;link_settings&quot;</span><span class="fu">:</span> <span class="fu">{</span></a>
+<a class="sourceLine" id="cb1-17" data-line-number="17">                <span class="dt">&quot;libraries&quot;</span><span class="fu">:</span> <span class="ot">[</span></a>
+<a class="sourceLine" id="cb1-18" data-line-number="18">                    <span class="st">&quot;UIKit.framework&quot;</span><span class="ot">,</span></a>
+<a class="sourceLine" id="cb1-19" data-line-number="19">                    <span class="st">&quot;Foundation.framework&quot;</span><span class="ot">,</span></a>
+<a class="sourceLine" id="cb1-20" data-line-number="20">                    <span class="st">&quot;CoreGraphics.framework&quot;</span><span class="ot">,</span></a>
+<a class="sourceLine" id="cb1-21" data-line-number="21">                <span class="ot">]</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb1-22" data-line-number="22">            <span class="fu">},</span></a>
+<a class="sourceLine" id="cb1-23" data-line-number="23">            <span class="dt">&quot;xcode_settings&quot;</span> <span class="fu">:</span> <span class="fu">{</span></a>
+<a class="sourceLine" id="cb1-24" data-line-number="24">                <span class="dt">&quot;INFOPLIST_FILE&quot;</span> <span class="fu">:</span> <span class="st">&quot;src/substructure/PulsePoll-Info.plist&quot;</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb1-25" data-line-number="25">                <span class="dt">&quot;SDKROOT&quot;</span><span class="fu">:</span> <span class="st">&quot;iphoneos&quot;</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb1-26" data-line-number="26">                <span class="dt">&quot;TARGETED_DEVICE_FAMILY&quot;</span><span class="fu">:</span> <span class="st">&quot;1,2&quot;</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb1-27" data-line-number="27">                <span class="dt">&quot;CODE_SIGN_IDENTITY&quot;</span><span class="fu">:</span> <span class="st">&quot;iPhone Developer&quot;</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb1-28" data-line-number="28">                <span class="dt">&quot;IPHONEOS_DEPLOYMENT_TARGET&quot;</span><span class="fu">:</span> <span class="st">&quot;5.0&quot;</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb1-29" data-line-number="29">                <span class="dt">&quot;ARCHS&quot;</span><span class="fu">:</span> <span class="st">&quot;$(ARCHS_UNIVERSAL_IPHONE_OS)&quot;</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb1-30" data-line-number="30">                <span class="dt">&quot;HEADER_SEARCH_PATHS&quot;</span><span class="fu">:</span> <span class="st">&quot;$(inherited)&quot;</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb1-31" data-line-number="31">                <span class="dt">&quot;CLANG_ENABLE_OBJC_ARC&quot;</span><span class="fu">:</span> <span class="st">&quot;YES&quot;</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb1-32" data-line-number="32">            <span class="fu">},</span></a>
+<a class="sourceLine" id="cb1-33" data-line-number="33">        <span class="fu">}</span><span class="ot">,</span></a>
+<a class="sourceLine" id="cb1-34" data-line-number="34">    <span class="ot">]</span></a>
+<a class="sourceLine" id="cb1-35" data-line-number="35"><span class="fu">}</span></a></code></pre></div>
 <p>The four source files are the minimum requirements to build and launch a conventional iOS app. main is the code entry point (your projects have one whether you’re aware of it or not), and HSAppDelegate fulfills a role familiar to any iOS developer. The plist is a standard one that you can lift from the Xcode app template, or any existing app. Xcode will not be happy without one, and you won’t be able to have a valid executable bundle without one either.</p>
 <p>CocoaPods and Caveats</p>
 <p>To integrate with CocoaPods, I only had to make one otherwise unnecessary change, and that is to specify the deployment target in the project’s Podfile. The reason appears to be that GYP does not set its one and only target as the default target. This apparently confuses CocoaPods into thinking that the deployment target is iOS 4.3, and will then complain loudly if you include any pods that don’t work on that system.</p>
 <p>There was trouble around the frameworks. <a href="http://code.google.com/p/gyp/wiki/GypUserDocumentation">GYP’s documentation</a> suggests using <code>$(SDKROOT)</code> as a prefix for importing libraries. But this left the project unable to run on the simulator, though it would run on devices. This is clearly due to settings <code>SDKROOT</code> to <code>iphoneos</code>, but I couldn’t see how to avoid that. Including frameworks as listed above shows them in red when see them in the project, but it builds and runs in both the simulator and on devices.</p>
 <p>GYP doesn’t support generating groups of source files in Xcode projects. It imposes its own structure separating out source files from Frameworks, build files, and Products.</p>
-<h2 id="thoughts">Thoughts</h2>
+<h2>Thoughts</h2>
 <p>I think the purpose of a source repository is to represent the knowledge required to build a product. For a CocoaPod, its podspec together with its source code and documentation serves that purpose beautifully. For a while, I will try and use GYP to capture the same</p>
 <p>I’m a little concerned with pinning the build description of an application to a technology that only exists to serve the Chromium project and that I have little interest in modifying and maintaining. But in the mean time, I’m satisfied with GYP because it’s a build specification I can read. It also lets me continue using Xcode as an IDE. But seeing just <a href="http://src.chromium.org/svn/trunk/src/build/common.gypi">how large</a> GYP files can get for a complex project makes me not want to really recommend GYP for any serious work. GYP really seems to shine if you’re building a truly cross-platform project (It can generate Visual Studio projects as well as Xcode, ninja, and probably others).</p>
 <p>I would like to see CocoaPods, or a tool more closely aligned with CocoaPods, become capable of specifying Xcode projects and targets. The foundations are there in CocoaPods and <a href="https://github.com/CocoaPods/Xcodeproj">Xcodeproj</a>. I might try and work that out some time.</p>
 <div class="none"></div>
-<h3 id="useful-links">Useful links</h3>
-<p><a href="http://code.google.com/p/gyp/wiki/GypLanguageSpecification">GYP Language Specification</a><br />
-<a href="http://code.google.com/p/gyp/wiki/GypUserDocumentation">GYP User Documentation</a><br />
-<a href="https://code.google.com/p/skia/source/browse/trunk/gyp/SimpleiOSApp.gyp?r=5702">The Skia project’s GYP file for iOS</a><br />
-<a href="http://groups.google.com/group/gyp-developer/browse_thread/thread/f683ae11a54301b1/8be8243080675559?lnk=gst&amp;q=iphone#8be8243080675559">A useful post on GYP’s Google Group</a><br />
-<a href="http://src.chromium.org/svn/trunk/src/build/common.gypi">A big chunk of Chromium’s GYP</a></p>
+<h3>Useful links</h3>
+<p><a href="http://code.google.com/p/gyp/wiki/GypLanguageSpecification">GYP Language Specification</a> <a href="http://code.google.com/p/gyp/wiki/GypUserDocumentation">GYP User Documentation</a> <a href="https://code.google.com/p/skia/source/browse/trunk/gyp/SimpleiOSApp.gyp?r=5702">The Skia project’s GYP file for iOS</a> <a href="http://groups.google.com/group/gyp-developer/browse_thread/thread/f683ae11a54301b1/8be8243080675559?lnk=gst&amp;q=iphone#8be8243080675559">A useful post on GYP’s Google Group</a> <a href="http://src.chromium.org/svn/trunk/src/build/common.gypi">A big chunk of Chromium’s GYP</a></p>
 </article>
 </main>
 </body>
