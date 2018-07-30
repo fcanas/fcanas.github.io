@@ -34,6 +34,13 @@ body {
   color: #222;
 }
 
+@media (prefers-dark-interface) {
+  html {
+    color: #fff;
+    background-color: #24292e;
+  }
+}
+
 * { line-height: 1.5em; }
 
 /* Wrapped headings should be slightly tighter */
@@ -134,6 +141,14 @@ pre {
 
   overflow-x: auto;
 }
+
+@media (prefers-dark-interface) {
+  pre {
+    color: #fff;
+    background-color: #444;
+  }
+}
+
 pre code {
   padding: 0;
   border: none;
