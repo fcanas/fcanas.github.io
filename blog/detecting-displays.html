@@ -2,13 +2,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <meta name="author" content="2009-06-23">
+  <meta name="author" content="">
+  <meta name="dcterms.date" content="2009-06-23">
   <title>Detecting Displays</title>
   <style type="text/css">code{white-space: pre;}</style>
   <style type="text/css">
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; position: absolute; }
+a.sourceLine:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -21,13 +22,11 @@ code.sourceCode { white-space: pre-wrap; }
 a.sourceLine { text-indent: -1em; padding-left: 1em; }
 }
 pre.numberSource a.sourceLine
-  { position: relative; }
-pre.numberSource a.sourceLine:empty
-  { position: absolute; }
+  { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
   { content: attr(data-line-number);
-    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all;
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -84,6 +83,7 @@ code span.wa { color: #008000; font-weight: bold; } /* Warning */
 <main>
 <article>
 <h1>Detecting Displays</h1>
+<date>2009-06-23</date>
 <p>In the process of making <a href="/open-source/mirror-displays/">Mirror Displays</a> I learned more or less what Quartz Display Services in Mac OS X has to offer. It more or less lets to get and set all size, position, color, gamma, mirroring settings for attached monitors. It lets you fade the monitors in and out, and lets your app monopolize output to any monitors. An important element to the Display Services though, is that you can register to be notified of any changes to the displays.</p>
 <p>I’m writing this particular post because I know that Java has some <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4417795">problems</a> when it comes to dynamically detecting multiple monitors when you go and connect and disconnect them. Though I certainly hope Sun eventually fixes the problem, this sounded like the sort of thing that unfortunately needs to be solved on the native platform. I haven’t done any programming in Windows or Linux in a long time, but I hope I can help those using Mac OS X by showing you a barebones program that just sits and listens for display changes. I’m not going to make it talk to Java, but you make a little client-server setup, or maybe you could use the <a href="http://developer.apple.com/documentation/Cocoa/Conceptual/ScriptingBridgeConcepts/Introduction/Introduction.html">Scripting Bridge</a> that’s available with Leopard if you want to get fancy.</p>
 <p>First, the design for the app is not particularly important. I chose one of the easier paths, but probably not the sleekest. I made a new Cocoa application, defined a new Cocoa object named Detector, and put an instance of it in the application’s nib file so it one would get initialized as soon as the app started running. All the object does is register a function callback for notifications when it’s loaded, and stop the function from being called when the object is deallocated (the program exits). As I said, this was just what I decided to do to get the thing up and running as fast as possible. It’s only important to mention so the code actually makes sense.</p>

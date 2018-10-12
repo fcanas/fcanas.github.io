@@ -2,13 +2,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <meta name="author" content="2010-06-28">
+  <meta name="author" content="">
+  <meta name="dcterms.date" content="2010-06-28">
   <title>Side by Side Figures in LaTeX</title>
   <style type="text/css">code{white-space: pre;}</style>
   <style type="text/css">
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; position: absolute; }
+a.sourceLine:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -21,13 +22,11 @@ code.sourceCode { white-space: pre-wrap; }
 a.sourceLine { text-indent: -1em; padding-left: 1em; }
 }
 pre.numberSource a.sourceLine
-  { position: relative; }
-pre.numberSource a.sourceLine:empty
-  { position: absolute; }
+  { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
   { content: attr(data-line-number);
-    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all;
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -84,6 +83,7 @@ code span.wa { color: #008000; font-weight: bold; } /* Warning */
 <main>
 <article>
 <h1>Side by Side Figures in LaTeX</h1>
+<date>2010-06-28</date>
 <p>In another note to myself, here I describe how to put two figures side by side in LaTeX with the minipage environment. I know there are many other ways to do it, including the subfigure package, but I prefer minipage because each subfigure gets its own caption, labeling works like I want it to, and most of all the markup is easy to understand and extend. That is, it’s easy to see how you can put three or four figures together, and I prefer that to other alternatives with an opaque command.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode latex"><code class="sourceCode latex"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">\begin</span>{<span class="ex">figure</span>}[htbp]</a>
 <a class="sourceLine" id="cb1-2" data-line-number="2">  <span class="kw">\begin</span>{<span class="ex">minipage</span>}[b]{0.5<span class="fu">\linewidth</span>}</a>

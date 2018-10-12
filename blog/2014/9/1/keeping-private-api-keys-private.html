@@ -28,7 +28,7 @@
 <date>2014-09-01</date>
 <p>I <a href="https://github.com/fcanas/DropPin/tree/c0126916482866c335f85bef87d28ca7124ee6d4">used to</a> keep sensitive iOS project information in a <code>.gitignore</code>d plist like <a href="http://blog.lazerwalker.com/blog/2014/05/14/handling-private-api-keys-in-open-source-ios-apps/">Mike Walker</a>. Now I keep secrets in a few different <code>.gitignore</code>d xcconfig files. It turns out that xcconfig files let me flexibly configure build targets for different environments. I now use this approach in closed-source projects as well.</p>
 <h2>xcconfig</h2>
-<p>An open source iOS app I have in progress shows how I do it now: <a href="https://github.com/fcanas/HabitForming" class="uri">https://github.com/fcanas/HabitForming</a>.</p>
+<p>An open source iOS app I have in progress shows how I do it now: <a href="https://github.com/fcanas/HabitForming">https://github.com/fcanas/HabitForming</a>.</p>
 <p>There is a <code>Keys.example.xcconfig</code> in the repository. The README has instructions to copy its contents into <code>Keys.xcconfig</code> and replace the IDs and keys with appropriate values. The real key files are in the repository's <code>.gitignore</code> file.</p>
 <pre><code>PARSE_APPLICATION_ID = YOUR_ID_HERE
 PARSE_CLIENT_KEY = YOUR_KEY_HERE
