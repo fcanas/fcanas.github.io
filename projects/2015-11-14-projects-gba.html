@@ -22,7 +22,7 @@ a.sourceLine { text-indent: -1em; padding-left: 1em; }
 pre.numberSource a.sourceLine
   { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+  { content: attr(title);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
     border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
@@ -84,13 +84,13 @@ code span.wa { color: #008000; font-weight: bold; } /* Warning */
 <p>It takes up one scrolling background, some background memory space, and a tiny amount of background palette space. If you're mindful of its small memory footprint and background requirements it should be compatible with just about any project, especially during development phases.</p>
 <p>It may be useful to know that I use devKitArm and its arm-eabi-gcc. I could not get consistent or appropriate behavior from the <code>varargs()</code> macros, so I relied on the consistent size size of the call stack to pull out the variable-length argument list. Other compilers may break that code. However that hack is clearly labeled in the source code so you can tweak it to accommodate for any differences in the stack layout.</p>
 <p>To use it, you call an initialization function, then you can print formatted strings just like with printf. It can print all standard (not extended) ASCII characters. It can format numbers in octal, decimal, and hexadecimal. The screen automatically scrolls down. There is no scrolling up.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="pp">#include &#39;gba.h&#39;</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="pp">#include &#39;printf.h&#39;</span></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="dt">int</span> main(){</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">   initTextBG(<span class="dv">8</span>,<span class="dv">0</span>,<span class="dv">0</span>);</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6">   print_f(&#39;This prints <span class="dv">5</span>: %d&#39;,<span class="dv">5</span>);</a>
-<a class="sourceLine" id="cb1-7" data-line-number="7">}</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><a class="sourceLine" id="cb1-1" title="1"><span class="pp">#include &#39;gba.h&#39;</span></a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="pp">#include &#39;printf.h&#39;</span></a>
+<a class="sourceLine" id="cb1-3" title="3"></a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="dt">int</span> main(){</a>
+<a class="sourceLine" id="cb1-5" title="5">   initTextBG(<span class="dv">8</span>,<span class="dv">0</span>,<span class="dv">0</span>);</a>
+<a class="sourceLine" id="cb1-6" title="6">   print_f(&#39;This prints <span class="dv">5</span>: %d&#39;,<span class="dv">5</span>);</a>
+<a class="sourceLine" id="cb1-7" title="7">}</a></code></pre></div>
 <p><img src="gba-print.png" alt=""/></p>
 </article>
 </main>

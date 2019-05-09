@@ -23,17 +23,17 @@
 <main>
 <article>
 <h1>Mirror Displays</h1>
-<h2>Download</h2>
+<h2 id="download">Download</h2>
 <ul>
 <li><a href="https://github.com/fcanas/mirror-displays/releases/download/v1.2/MirrorDisplays.zip">Mirror Displays App</a></li>
 <li><a href="https://github.com/fcanas/mirror-displays/releases/download/v1.2/mirror.zip">Command Line</a></li>
 </ul>
 <p>It takes too many steps in Mac OS X to switch between mirrored and extended desktop mode on external displays. Open System Preferences, go to the display pane, go to the Arrangement tab, and toggle the Mirror Displays checkbox. It’s a dance seen all too often before presentations when PowerPoint or Keynote are showing the presentation on the laptop screen instead of the projector.</p>
 <p>Apple used to have the courtesy to give laptops a dedicated key to toggle display mirroring. That has been replaced with the under-documented Command-F1 in newer Apple laptops, but leaves Desktop machines and hacked laptops in the cold. And there’s still no easy way to change the mirroring settings from the command line, or any way at all if you can’t see what’s on the screen.</p>
-<h2>The App</h2>
+<h2 id="the-app">The App</h2>
 <p>MirrorDisplays a simple application that toggles between mirrored and extended desktop modes. It's the easiest way to turn on, or turn off display mirroring. You can put it in your dock for an easy-access switch, or activate it with Quicksilver, Quick Search Box, Alfred, or Spotlight. When you run it, it will bounce in the dock once or twice and change the display mirroring settings. There is no user interface and only makes the change in settings if an external monitor is attached.</p>
 <p>The app does not fix or enable mirroring on a hacked computer where a secondary display only works in one mode or the other. It also does not magically make an external monitor work if the computer doesn’t recognize it when it’s plugged in. You can use it to switch from your broken mirrored mode to the functional extended mode.</p>
-<h2>The Command line Tool</h2>
+<h2 id="the-command-line-tool">The Command line Tool</h2>
 <p>The command line tool is good for giving shell-scripts the power to control display mirroring and opens up the possibility of controlling mirroring remotely over ssh.</p>
 <p>It can toggle mirroring, turn mirroring on or off regardless of what the current state of mirroring is, report the current mirroring status without changing anything, and configure unconventional mirroring configurations where some screens are mirrored and others are not.</p>
 <pre><code>usage: mirror [option]    Only the first option passed will be applied
@@ -43,7 +43,7 @@
   -off          Turn Mirroring Off
   -q            Query the Mirroring state and write &quot;on&quot; or &quot;off&quot; to stdout
   -l A B        Makes display at index B mirror the display at index A</code></pre>
-<h3>Note to Hackintosh Users</h3>
+<h3 id="note-to-hackintosh-users">Note to Hackintosh Users</h3>
 <p>This is program is essential if you find the screen contents corrupt as soon as you connect more than one external display. Mirror Displays will not enable mirroring if mirroring is broken on your computer. What it will do is allow you to easily toggle out of mirrored mode and into extended desktop mode without needing to see what you’re doing.</p>
 </article>
 </main>

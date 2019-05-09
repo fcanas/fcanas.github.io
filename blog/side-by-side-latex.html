@@ -24,7 +24,7 @@ a.sourceLine { text-indent: -1em; padding-left: 1em; }
 pre.numberSource a.sourceLine
   { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+  { content: attr(title);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
     border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
@@ -85,21 +85,21 @@ code span.wa { color: #008000; font-weight: bold; } /* Warning */
 <h1>Side by Side Figures in LaTeX</h1>
 <date>2010-06-28</date>
 <p>In another note to myself, here I describe how to put two figures side by side in LaTeX with the minipage environment. I know there are many other ways to do it, including the subfigure package, but I prefer minipage because each subfigure gets its own caption, labeling works like I want it to, and most of all the markup is easy to understand and extend. That is, it’s easy to see how you can put three or four figures together, and I prefer that to other alternatives with an opaque command.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode latex"><code class="sourceCode latex"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">\begin</span>{<span class="ex">figure</span>}[htbp]</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">  <span class="kw">\begin</span>{<span class="ex">minipage</span>}[b]{0.5<span class="fu">\linewidth</span>}</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">    <span class="fu">\centering</span></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">    <span class="bu">\includegraphics</span>[width=<span class="fu">\linewidth</span>]{<span class="ex">figure01.eps</span>}</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">    <span class="fu">\caption</span>{The caption for figure 1}</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6">    <span class="kw">\label</span>{<span class="ex">fig:chapter001_dist_001</span>}</a>
-<a class="sourceLine" id="cb1-7" data-line-number="7">  <span class="kw">\end</span>{<span class="ex">minipage</span>}</a>
-<a class="sourceLine" id="cb1-8" data-line-number="8">  <span class="fu">\hspace</span>{0.5cm}</a>
-<a class="sourceLine" id="cb1-9" data-line-number="9">  <span class="kw">\begin</span>{<span class="ex">minipage</span>}[b]{0.5<span class="fu">\linewidth</span>}</a>
-<a class="sourceLine" id="cb1-10" data-line-number="10">    <span class="fu">\centering</span></a>
-<a class="sourceLine" id="cb1-11" data-line-number="11">    <span class="bu">\includegraphics</span>[width=<span class="fu">\linewidth</span>]{<span class="ex">figure02.eps</span>}</a>
-<a class="sourceLine" id="cb1-12" data-line-number="12">    <span class="fu">\caption</span>{The caption for figure 2.}</a>
-<a class="sourceLine" id="cb1-13" data-line-number="13">    <span class="kw">\label</span>{<span class="ex">fig:chapter001_reward_001</span>}</a>
-<a class="sourceLine" id="cb1-14" data-line-number="14">  <span class="kw">\end</span>{<span class="ex">minipage</span>}</a>
-<a class="sourceLine" id="cb1-15" data-line-number="15"><span class="kw">\end</span>{<span class="ex">figure</span>}</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode latex"><code class="sourceCode latex"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">\begin</span>{<span class="ex">figure</span>}[htbp]</a>
+<a class="sourceLine" id="cb1-2" title="2">  <span class="kw">\begin</span>{<span class="ex">minipage</span>}[b]{0.5<span class="fu">\linewidth</span>}</a>
+<a class="sourceLine" id="cb1-3" title="3">    <span class="fu">\centering</span></a>
+<a class="sourceLine" id="cb1-4" title="4">    <span class="bu">\includegraphics</span>[width=<span class="fu">\linewidth</span>]{<span class="ex">figure01.eps</span>}</a>
+<a class="sourceLine" id="cb1-5" title="5">    <span class="fu">\caption</span>{The caption for figure 1}</a>
+<a class="sourceLine" id="cb1-6" title="6">    <span class="kw">\label</span>{<span class="ex">fig:chapter001_dist_001</span>}</a>
+<a class="sourceLine" id="cb1-7" title="7">  <span class="kw">\end</span>{<span class="ex">minipage</span>}</a>
+<a class="sourceLine" id="cb1-8" title="8">  <span class="fu">\hspace</span>{0.5cm}</a>
+<a class="sourceLine" id="cb1-9" title="9">  <span class="kw">\begin</span>{<span class="ex">minipage</span>}[b]{0.5<span class="fu">\linewidth</span>}</a>
+<a class="sourceLine" id="cb1-10" title="10">    <span class="fu">\centering</span></a>
+<a class="sourceLine" id="cb1-11" title="11">    <span class="bu">\includegraphics</span>[width=<span class="fu">\linewidth</span>]{<span class="ex">figure02.eps</span>}</a>
+<a class="sourceLine" id="cb1-12" title="12">    <span class="fu">\caption</span>{The caption for figure 2.}</a>
+<a class="sourceLine" id="cb1-13" title="13">    <span class="kw">\label</span>{<span class="ex">fig:chapter001_reward_001</span>}</a>
+<a class="sourceLine" id="cb1-14" title="14">  <span class="kw">\end</span>{<span class="ex">minipage</span>}</a>
+<a class="sourceLine" id="cb1-15" title="15"><span class="kw">\end</span>{<span class="ex">figure</span>}</a></code></pre></div>
 </article>
 </main>
 </body>

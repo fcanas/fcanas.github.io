@@ -22,7 +22,7 @@ a.sourceLine { text-indent: -1em; padding-left: 1em; }
 pre.numberSource a.sourceLine
   { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+  { content: attr(title);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
     border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
@@ -88,32 +88,32 @@ code span.wa { color: #008000; font-weight: bold; } /* Warning */
 <article>
 <h1>iOS Color Picker</h1>
 <p>A reusable color picker component for iOS. Works for iPhone, iPad, in modal sheets, popovers... just about anywhere.</p>
-<h1>Using iOS-Color-Picker</h1>
-<h2>Installation</h2>
+<h1 id="using-ios-color-picker">Using iOS-Color-Picker</h1>
+<h2 id="installation">Installation</h2>
 <p>The easiest way to use iOS-Color-Picker is with <a href="http://cocoapods.org">CocoaPods</a>. Add the following line to your <code>Podfile</code>.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode ruby"><code class="sourceCode ruby"><a class="sourceLine" id="cb1-1" data-line-number="1">pod <span class="st">&#39;iOS-Color-Picker&#39;</span></a></code></pre></div>
-<h2>Using a Color Picker from a View Controller</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode ruby"><code class="sourceCode ruby"><a class="sourceLine" id="cb1-1" title="1">pod <span class="st">&#39;iOS-Color-Picker&#39;</span></a></code></pre></div>
+<h2 id="using-a-color-picker-from-a-view-controller">Using a Color Picker from a View Controller</h2>
 <p>Suppose you have a view controller with a <code>color</code> property you'd like to let the user pick. Make your view controller implement the <code>FCColorPickerViewControllerDelegate</code> protocol. Handle the color picked and the cancelled methods, and make a method that triggers showing the view controller.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode objectivec"><code class="sourceCode objectivec"><a class="sourceLine" id="cb2-1" data-line-number="1">-(IBAction)chooseColor:(id)sender {</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">  FCColorPickerViewController *colorPicker = [FCColorPickerViewController colorPicker];</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">  colorPicker.color = <span class="kw">self</span>.color;</a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">  colorPicker.delegate = <span class="kw">self</span>;</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">  [colorPicker setModalPresentationStyle:UIModalPresentationFormSheet];</a>
-<a class="sourceLine" id="cb2-7" data-line-number="7">  [<span class="kw">self</span> presentViewController:colorPicker animated:YES completion:nil];</a>
-<a class="sourceLine" id="cb2-8" data-line-number="8">}</a>
-<a class="sourceLine" id="cb2-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="pp">#pragma mark - FCColorPickerViewControllerDelegate Methods</span></a>
-<a class="sourceLine" id="cb2-11" data-line-number="11"></a>
-<a class="sourceLine" id="cb2-12" data-line-number="12">-(<span class="dt">void</span>)colorPickerViewController:(FCColorPickerViewController *)colorPicker didSelectColor:(UIColor *)color {</a>
-<a class="sourceLine" id="cb2-13" data-line-number="13">  <span class="kw">self</span>.color = color;</a>
-<a class="sourceLine" id="cb2-14" data-line-number="14">  [<span class="kw">self</span> dismissViewControllerAnimated:YES completion:nil];</a>
-<a class="sourceLine" id="cb2-15" data-line-number="15">}</a>
-<a class="sourceLine" id="cb2-16" data-line-number="16"></a>
-<a class="sourceLine" id="cb2-17" data-line-number="17">-(<span class="dt">void</span>)colorPickerViewControllerDidCancel:(FCColorPickerViewController *)colorPicker {</a>
-<a class="sourceLine" id="cb2-18" data-line-number="18">  [<span class="kw">self</span> dismissViewControllerAnimated:YES completion:nil];</a>
-<a class="sourceLine" id="cb2-19" data-line-number="19">}</a></code></pre></div>
-<h1>Example Project</h1>
+<div class="sourceCode" id="cb2"><pre class="sourceCode objectivec"><code class="sourceCode objectivec"><a class="sourceLine" id="cb2-1" title="1">-(IBAction)chooseColor:(id)sender {</a>
+<a class="sourceLine" id="cb2-2" title="2">  FCColorPickerViewController *colorPicker = [FCColorPickerViewController colorPicker];</a>
+<a class="sourceLine" id="cb2-3" title="3">  colorPicker.color = <span class="kw">self</span>.color;</a>
+<a class="sourceLine" id="cb2-4" title="4">  colorPicker.delegate = <span class="kw">self</span>;</a>
+<a class="sourceLine" id="cb2-5" title="5"></a>
+<a class="sourceLine" id="cb2-6" title="6">  [colorPicker setModalPresentationStyle:UIModalPresentationFormSheet];</a>
+<a class="sourceLine" id="cb2-7" title="7">  [<span class="kw">self</span> presentViewController:colorPicker animated:YES completion:nil];</a>
+<a class="sourceLine" id="cb2-8" title="8">}</a>
+<a class="sourceLine" id="cb2-9" title="9"></a>
+<a class="sourceLine" id="cb2-10" title="10"><span class="pp">#pragma mark - FCColorPickerViewControllerDelegate Methods</span></a>
+<a class="sourceLine" id="cb2-11" title="11"></a>
+<a class="sourceLine" id="cb2-12" title="12">-(<span class="dt">void</span>)colorPickerViewController:(FCColorPickerViewController *)colorPicker didSelectColor:(UIColor *)color {</a>
+<a class="sourceLine" id="cb2-13" title="13">  <span class="kw">self</span>.color = color;</a>
+<a class="sourceLine" id="cb2-14" title="14">  [<span class="kw">self</span> dismissViewControllerAnimated:YES completion:nil];</a>
+<a class="sourceLine" id="cb2-15" title="15">}</a>
+<a class="sourceLine" id="cb2-16" title="16"></a>
+<a class="sourceLine" id="cb2-17" title="17">-(<span class="dt">void</span>)colorPickerViewControllerDidCancel:(FCColorPickerViewController *)colorPicker {</a>
+<a class="sourceLine" id="cb2-18" title="18">  [<span class="kw">self</span> dismissViewControllerAnimated:YES completion:nil];</a>
+<a class="sourceLine" id="cb2-19" title="19">}</a></code></pre></div>
+<h1 id="example-project">Example Project</h1>
 <p><a href="https://github.com/fcanas/ios-color-picker-example">iOS Color Picker Example</a></p>
 </article>
 </main>

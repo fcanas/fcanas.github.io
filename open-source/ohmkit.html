@@ -22,7 +22,7 @@ a.sourceLine { text-indent: -1em; padding-left: 1em; }
 pre.numberSource a.sourceLine
   { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+  { content: attr(title);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
     border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
@@ -92,136 +92,136 @@ code span.wa { color: #008000; font-weight: bold; } /* Warning */
 <p>OHMKit makes it easy to hydrate Objective-C model objects from web services or local files. It works especially well with JSON. It's a lot like <a href="https://github.com/Mantle/Mantle">Mantle</a> and <a href="https://github.com/icanzilb/JSONModel">JSONModel</a> except that OHMKit doesn't require your models to inherit from a base class, making it more suitable for use with <a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CoreData/cdProgrammingGuide.html">Core Data</a>, <a href="https://parse.com/">Parse</a>, <a href="http://realm.io/">Realm</a>, or other libraries that <em>do</em> require you to inherit from a base class.</p>
 <p>OHMKit is a system for declaratively expressing how to translate data from JSON or plist to native Objective-C model objects. OHMKit does it without requiring your model to inherit from a base class, so it works with NSObjects, NSManagedObjects, or anything else that fits with your class hierarchy. And you can specify custom mappings anywhere you want, not just in the model. So you can keep the details of mapping a service to you models out of your model code and in your service code where it may be more appropriate.</p>
 <p>Fit this JSON</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode json"><code class="sourceCode json"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="fu">{</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">  <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;Fabian&quot;</span><span class="fu">,</span></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">  <span class="dt">&quot;favorite_word&quot;</span><span class="fu">:</span>  <span class="st">&quot;absurd&quot;</span><span class="fu">,</span></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">  <span class="dt">&quot;favorite_number&quot;</span><span class="fu">:</span> <span class="dv">47</span></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="fu">}</span></a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode json"><code class="sourceCode json"><a class="sourceLine" id="cb1-1" title="1"><span class="fu">{</span></a>
+<a class="sourceLine" id="cb1-2" title="2">  <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;Fabian&quot;</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb1-3" title="3">  <span class="dt">&quot;favorite_word&quot;</span><span class="fu">:</span>  <span class="st">&quot;absurd&quot;</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb1-4" title="4">  <span class="dt">&quot;favorite_number&quot;</span><span class="fu">:</span> <span class="dv">47</span></a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="fu">}</span></a></code></pre></div>
 <p>into this object</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode objectivec"><code class="sourceCode objectivec"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">@interface</span> MYModel : NSObject</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">@property (nonatomic, strong) NSString *name;</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">@property (nonatomic, strong) NSString *favoriteWord;</a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">@property (nonatomic, assign) NSInteger favoriteNumber;</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="kw">@end</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode objectivec"><code class="sourceCode objectivec"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">@interface</span> MYModel : NSObject</a>
+<a class="sourceLine" id="cb2-2" title="2">@property (nonatomic, strong) NSString *name;</a>
+<a class="sourceLine" id="cb2-3" title="3">@property (nonatomic, strong) NSString *favoriteWord;</a>
+<a class="sourceLine" id="cb2-4" title="4">@property (nonatomic, assign) NSInteger favoriteNumber;</a>
+<a class="sourceLine" id="cb2-5" title="5"><span class="kw">@end</span></a></code></pre></div>
 <p>Map <code>user_name</code> from your web service to <code>userName</code> in your Objective-C models. Map a dictionary of numbers to a <code>UIColor</code>. Or hydrate a whole hierarchical JSON response, including arrays, dictionaries, and arbitrarily deep hierarchies of real Objective-C objects ... with a single line of code.</p>
-<h2>Why?</h2>
+<h2 id="why">Why?</h2>
 <p>OHMKit exists because <a href="https://github.com/RestKit/RestKit">RestKit</a> (which is awesome by the way), is sometimes too big, heavy, and indirect. Because <a href="https://github.com/Mantle/Mantle">Mantle</a> and <a href="https://github.com/icanzilb/JSONModel">JSONModel</a> require your models to inherit from a base class.</p>
 <p>Because sometimes, the web services your code consumes doesn't perfectly match your model objects.</p>
 <p>OHMKit is under 200 lines of well-tested code being leveraged in the app store now in apps used by millions of users.</p>
-<h3>What OHMKit is Not</h3>
+<h3 id="what-ohmkit-is-not">What OHMKit is Not</h3>
 <p>OHMKit doesn't know about networks. Use <a href="https://github.com/AFNetworking/AFNetworking">AFNetworking</a>.</p>
 <p>OHMKit doesn't know about routes. Use <a href="https://github.com/jverkoey/sockit">SOCKit</a>.</p>
 <p>OHMKit doesn't know about JSON. Use <a href="https://developer.apple.com/library/ios/documentation/foundation/reference/nsjsonserialization_class/Reference/Reference.html">NSJSONSerialization</a></p>
 <p>OHMKit doesn't know about CoreData. It will not manage graphs of entities for you quite like RestKit does. But OHMKit does not care about your model class' super class. So you can safely make subclasses of <code>NSManagedObject</code> mappable.</p>
-<h2>Usage</h2>
-<h3>Basic Mapping</h3>
+<h2 id="usage">Usage</h2>
+<h3 id="basic-mapping">Basic Mapping</h3>
 <p>Given a model</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode objectivec"><code class="sourceCode objectivec"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">@interface</span> MYModel : NSObject</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">@property (nonatomic, strong) NSString *name;</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">@property (nonatomic, strong) NSString *favoriteWord;</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">@property (nonatomic, assign) NSInteger favoriteNumber;</a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="kw">@end</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode objectivec"><code class="sourceCode objectivec"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">@interface</span> MYModel : NSObject</a>
+<a class="sourceLine" id="cb3-2" title="2">@property (nonatomic, strong) NSString *name;</a>
+<a class="sourceLine" id="cb3-3" title="3">@property (nonatomic, strong) NSString *favoriteWord;</a>
+<a class="sourceLine" id="cb3-4" title="4">@property (nonatomic, assign) NSInteger favoriteNumber;</a>
+<a class="sourceLine" id="cb3-5" title="5"><span class="kw">@end</span></a></code></pre></div>
 <p>Anywhere in you application, make the model mappable, and assign it a dictionary of mappings from the keys a service will provide to the keys your actual model object uses.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode objectivec"><code class="sourceCode objectivec"><a class="sourceLine" id="cb4-1" data-line-number="1">OHMMappable([MYModel class]);</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">OHMSetMapping([MYModel class], @{<span class="st">@&quot;favorite_word&quot;</span>  : <span class="st">@&quot;favoriteWord&quot;</span>,</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">                                 <span class="st">@&quot;favorite_number&quot;</span>: <span class="st">@&quot;favoriteNumber&quot;</span>);</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode objectivec"><code class="sourceCode objectivec"><a class="sourceLine" id="cb4-1" title="1">OHMMappable([MYModel class]);</a>
+<a class="sourceLine" id="cb4-2" title="2">OHMSetMapping([MYModel class], @{<span class="st">@&quot;favorite_word&quot;</span>  : <span class="st">@&quot;favoriteWord&quot;</span>,</a>
+<a class="sourceLine" id="cb4-3" title="3">                                 <span class="st">@&quot;favorite_number&quot;</span>: <span class="st">@&quot;favoriteNumber&quot;</span>);</a></code></pre></div>
 <p>And now <em>anywhere</em> in your application, objects of the class <code>MYModel</code> can be hydrated with a dictionary from a service whose keys will be translated by the mapping dictionary you provided.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode objectivec"><code class="sourceCode objectivec"><a class="sourceLine" id="cb5-1" data-line-number="1">MYModel *testModel = [[MYModel alloc] init];</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">[testModel setValuesForKeysWithDictionary:@{<span class="st">@&quot;name&quot;</span>           : <span class="st">@&quot;Fabian&quot;</span>,</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">                                            <span class="st">@&quot;favorite_word&quot;</span>  : <span class="st">@&quot;absurd&quot;</span>,</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">                                            <span class="st">@&quot;favorite_number&quot;</span>: @<span class="dv">47</span>];</a></code></pre></div>
-<h3>Recursive Mapping</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode objectivec"><code class="sourceCode objectivec"><a class="sourceLine" id="cb5-1" title="1">MYModel *testModel = [[MYModel alloc] init];</a>
+<a class="sourceLine" id="cb5-2" title="2"></a>
+<a class="sourceLine" id="cb5-3" title="3">[testModel setValuesForKeysWithDictionary:@{<span class="st">@&quot;name&quot;</span>           : <span class="st">@&quot;Fabian&quot;</span>,</a>
+<a class="sourceLine" id="cb5-4" title="4">                                            <span class="st">@&quot;favorite_word&quot;</span>  : <span class="st">@&quot;absurd&quot;</span>,</a>
+<a class="sourceLine" id="cb5-5" title="5">                                            <span class="st">@&quot;favorite_number&quot;</span>: @<span class="dv">47</span>];</a></code></pre></div>
+<h3 id="recursive-mapping">Recursive Mapping</h3>
 <p>Recursive mapping of mappable objects comes for free. If an object conforming to <code>&lt;OMMappable&gt;</code> has a property whose type also conforms to <code>&lt;OMMappable&gt;</code>, and the value for that key in the hydration dictionary is itself a dictionary, we'll instantiate a new model object and hydrate it.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode objectivec"><code class="sourceCode objectivec"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">@interface</span> MYClass : NSObject</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">@property (nonatomic, strong) NSString *name;</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="kw">@end</span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="kw">@interface</span> MYClass2 : NSObject</a>
-<a class="sourceLine" id="cb6-6" data-line-number="6">@property (nonatomic, strong) NSString *name;</a>
-<a class="sourceLine" id="cb6-7" data-line-number="7">@property (nonatomic, strong) NSString *favoriteWord;</a>
-<a class="sourceLine" id="cb6-8" data-line-number="8">@property (nonatomic, assign) NSInteger favoriteNumber;</a>
-<a class="sourceLine" id="cb6-9" data-line-number="9">@property (nonatomic, assign) MYClass *favoriteObject;</a>
-<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="kw">@end</span></a>
-<a class="sourceLine" id="cb6-11" data-line-number="11"></a>
-<a class="sourceLine" id="cb6-12" data-line-number="12">OHMMappable([MYClass class]);</a>
-<a class="sourceLine" id="cb6-13" data-line-number="13"></a>
-<a class="sourceLine" id="cb6-14" data-line-number="14">OHMMappable([MYClass2 class])</a>
-<a class="sourceLine" id="cb6-15" data-line-number="15">OHMSetMapping([MYClass2 class], @{<span class="st">@&quot;favorite_word&quot;</span>  : <span class="st">@&quot;favoriteWord&quot;</span>,</a>
-<a class="sourceLine" id="cb6-16" data-line-number="16">                                <span class="st">@&quot;favorite_number&quot;</span>: <span class="st">@&quot;favoriteNumber&quot;</span>,</a>
-<a class="sourceLine" id="cb6-17" data-line-number="17">                                <span class="st">@&quot;favorite_object&quot;</span> : <span class="st">@&quot;favoriteObject&quot;</span>});</a>
-<a class="sourceLine" id="cb6-18" data-line-number="18"></a>
-<a class="sourceLine" id="cb6-19" data-line-number="19">MYModel *testModel = [[MYClass2 alloc] init];</a>
-<a class="sourceLine" id="cb6-20" data-line-number="20"></a>
-<a class="sourceLine" id="cb6-21" data-line-number="21">NSDictionary *class2Response = @{<span class="st">@&quot;name&quot;</span>           : <span class="st">@&quot;Fabian&quot;</span>,</a>
-<a class="sourceLine" id="cb6-22" data-line-number="22">                                 <span class="st">@&quot;favorite_word&quot;</span>  : <span class="st">@&quot;absurd&quot;</span>,</a>
-<a class="sourceLine" id="cb6-23" data-line-number="23">                                 <span class="st">@&quot;favorite_number&quot;</span>: @<span class="dv">2</span>,</a>
-<a class="sourceLine" id="cb6-24" data-line-number="24">                                 <span class="st">@&quot;favorite_object&quot;</span>: @{<span class="st">@&quot;name&quot;</span> : <span class="st">@&quot;Rock&quot;</span>}};</a>
-<a class="sourceLine" id="cb6-25" data-line-number="25"></a>
-<a class="sourceLine" id="cb6-26" data-line-number="26">[testModel setValuesForKeysWithDictionary:class2Response];</a></code></pre></div>
-<p>Now, <code>testModel.favoriteObject</code> is an instance of <code>MYClass</code> hydrated with &quot;Rock&quot; as its name.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode objectivec"><code class="sourceCode objectivec"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">@interface</span> MYClass : NSObject</a>
+<a class="sourceLine" id="cb6-2" title="2">@property (nonatomic, strong) NSString *name;</a>
+<a class="sourceLine" id="cb6-3" title="3"><span class="kw">@end</span></a>
+<a class="sourceLine" id="cb6-4" title="4"></a>
+<a class="sourceLine" id="cb6-5" title="5"><span class="kw">@interface</span> MYClass2 : NSObject</a>
+<a class="sourceLine" id="cb6-6" title="6">@property (nonatomic, strong) NSString *name;</a>
+<a class="sourceLine" id="cb6-7" title="7">@property (nonatomic, strong) NSString *favoriteWord;</a>
+<a class="sourceLine" id="cb6-8" title="8">@property (nonatomic, assign) NSInteger favoriteNumber;</a>
+<a class="sourceLine" id="cb6-9" title="9">@property (nonatomic, assign) MYClass *favoriteObject;</a>
+<a class="sourceLine" id="cb6-10" title="10"><span class="kw">@end</span></a>
+<a class="sourceLine" id="cb6-11" title="11"></a>
+<a class="sourceLine" id="cb6-12" title="12">OHMMappable([MYClass class]);</a>
+<a class="sourceLine" id="cb6-13" title="13"></a>
+<a class="sourceLine" id="cb6-14" title="14">OHMMappable([MYClass2 class])</a>
+<a class="sourceLine" id="cb6-15" title="15">OHMSetMapping([MYClass2 class], @{<span class="st">@&quot;favorite_word&quot;</span>  : <span class="st">@&quot;favoriteWord&quot;</span>,</a>
+<a class="sourceLine" id="cb6-16" title="16">                                <span class="st">@&quot;favorite_number&quot;</span>: <span class="st">@&quot;favoriteNumber&quot;</span>,</a>
+<a class="sourceLine" id="cb6-17" title="17">                                <span class="st">@&quot;favorite_object&quot;</span> : <span class="st">@&quot;favoriteObject&quot;</span>});</a>
+<a class="sourceLine" id="cb6-18" title="18"></a>
+<a class="sourceLine" id="cb6-19" title="19">MYModel *testModel = [[MYClass2 alloc] init];</a>
+<a class="sourceLine" id="cb6-20" title="20"></a>
+<a class="sourceLine" id="cb6-21" title="21">NSDictionary *class2Response = @{<span class="st">@&quot;name&quot;</span>           : <span class="st">@&quot;Fabian&quot;</span>,</a>
+<a class="sourceLine" id="cb6-22" title="22">                                 <span class="st">@&quot;favorite_word&quot;</span>  : <span class="st">@&quot;absurd&quot;</span>,</a>
+<a class="sourceLine" id="cb6-23" title="23">                                 <span class="st">@&quot;favorite_number&quot;</span>: @<span class="dv">2</span>,</a>
+<a class="sourceLine" id="cb6-24" title="24">                                 <span class="st">@&quot;favorite_object&quot;</span>: @{<span class="st">@&quot;name&quot;</span> : <span class="st">@&quot;Rock&quot;</span>}};</a>
+<a class="sourceLine" id="cb6-25" title="25"></a>
+<a class="sourceLine" id="cb6-26" title="26">[testModel setValuesForKeysWithDictionary:class2Response];</a></code></pre></div>
+<p>Now, <code>testModel.favoriteObject</code> is an instance of <code>MYClass</code> hydrated with "Rock" as its name.</p>
 <p>Internally, the new model object is initialized with <code>[[ alloc] init]</code>, and then hydrated with <code>[ setValuesForKeysWithDictionary:dictionary]</code>. If you have a model that needs special consideration for initialization, use an adapter block.</p>
-<h3>Arrays</h3>
+<h3 id="arrays">Arrays</h3>
 <p>Arrays of dictionaries can be mapped to a class as well.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode objectivec"><code class="sourceCode objectivec"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">@interface</span> Person : NSObject</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">@property (nonatomic, copy) NSString *name;</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="kw">@end</span></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="kw">@interface</span> Roster : NSObject</a>
-<a class="sourceLine" id="cb7-6" data-line-number="6">@property (nonatomic, strong) NSArray *people;</a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="kw">@end</span></a>
-<a class="sourceLine" id="cb7-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb7-9" data-line-number="9">OHMMappable([Person class]);</a>
-<a class="sourceLine" id="cb7-10" data-line-number="10">OHMSetArrayClasses([Roster class], @{<span class="st">@&quot;people&quot;</span>:[Person class]});</a>
-<a class="sourceLine" id="cb7-11" data-line-number="11"></a>
-<a class="sourceLine" id="cb7-12" data-line-number="12">NSDictionary *response = @{@[@{<span class="st">@&quot;name&quot;</span>:<span class="st">@&quot;Bert&quot;</span>},</a>
-<a class="sourceLine" id="cb7-13" data-line-number="13">                             @{<span class="st">@&quot;name&quot;</span>:<span class="st">@&quot;Ernie&quot;</span>},</a>
-<a class="sourceLine" id="cb7-14" data-line-number="14">                             @{<span class="st">@&quot;name&quot;</span>:<span class="st">@&quot;Count&quot;</span>}];</a>
-<a class="sourceLine" id="cb7-15" data-line-number="15"></a>
-<a class="sourceLine" id="cb7-16" data-line-number="16">Roster *roster = [Roster new];</a>
-<a class="sourceLine" id="cb7-17" data-line-number="17">[roster setValuesForKeysWithDictionary:response];</a></code></pre></div>
-<h3>Blocks serve as adapters to handle special properties</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode objectivec"><code class="sourceCode objectivec"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">@interface</span> Person : NSObject</a>
+<a class="sourceLine" id="cb7-2" title="2">@property (nonatomic, copy) NSString *name;</a>
+<a class="sourceLine" id="cb7-3" title="3"><span class="kw">@end</span></a>
+<a class="sourceLine" id="cb7-4" title="4"></a>
+<a class="sourceLine" id="cb7-5" title="5"><span class="kw">@interface</span> Roster : NSObject</a>
+<a class="sourceLine" id="cb7-6" title="6">@property (nonatomic, strong) NSArray *people;</a>
+<a class="sourceLine" id="cb7-7" title="7"><span class="kw">@end</span></a>
+<a class="sourceLine" id="cb7-8" title="8"></a>
+<a class="sourceLine" id="cb7-9" title="9">OHMMappable([Person class]);</a>
+<a class="sourceLine" id="cb7-10" title="10">OHMSetArrayClasses([Roster class], @{<span class="st">@&quot;people&quot;</span>:[Person class]});</a>
+<a class="sourceLine" id="cb7-11" title="11"></a>
+<a class="sourceLine" id="cb7-12" title="12">NSDictionary *response = @{@[@{<span class="st">@&quot;name&quot;</span>:<span class="st">@&quot;Bert&quot;</span>},</a>
+<a class="sourceLine" id="cb7-13" title="13">                             @{<span class="st">@&quot;name&quot;</span>:<span class="st">@&quot;Ernie&quot;</span>},</a>
+<a class="sourceLine" id="cb7-14" title="14">                             @{<span class="st">@&quot;name&quot;</span>:<span class="st">@&quot;Count&quot;</span>}];</a>
+<a class="sourceLine" id="cb7-15" title="15"></a>
+<a class="sourceLine" id="cb7-16" title="16">Roster *roster = [Roster new];</a>
+<a class="sourceLine" id="cb7-17" title="17">[roster setValuesForKeysWithDictionary:response];</a></code></pre></div>
+<h3 id="blocks-serve-as-adapters-to-handle-special-properties">Blocks serve as adapters to handle special properties</h3>
 <p>Users can pass a dictionary of blocks for field requiring special handling. Say a service sends back a dictionary that looks something like this:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode json"><code class="sourceCode json"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="fu">{</span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">    <span class="dt">&quot;favorite_color&quot;</span><span class="fu">:</span> <span class="ot">[</span></a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">        <span class="dv">122</span><span class="ot">,</span></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4">        <span class="dv">50</span><span class="ot">,</span></a>
-<a class="sourceLine" id="cb8-5" data-line-number="5">        <span class="dv">80</span></a>
-<a class="sourceLine" id="cb8-6" data-line-number="6">    <span class="ot">]</span><span class="fu">,</span></a>
-<a class="sourceLine" id="cb8-7" data-line-number="7">    <span class="dt">&quot;least_favorite_color&quot;</span><span class="fu">:</span> <span class="ot">[</span></a>
-<a class="sourceLine" id="cb8-8" data-line-number="8">        <span class="dv">121</span><span class="ot">,</span></a>
-<a class="sourceLine" id="cb8-9" data-line-number="9">        <span class="dv">51</span><span class="ot">,</span></a>
-<a class="sourceLine" id="cb8-10" data-line-number="10">        <span class="dv">81</span></a>
-<a class="sourceLine" id="cb8-11" data-line-number="11">    <span class="ot">]</span></a>
-<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="fu">}</span></a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode json"><code class="sourceCode json"><a class="sourceLine" id="cb8-1" title="1"><span class="fu">{</span></a>
+<a class="sourceLine" id="cb8-2" title="2">    <span class="dt">&quot;favorite_color&quot;</span><span class="fu">:</span> <span class="ot">[</span></a>
+<a class="sourceLine" id="cb8-3" title="3">        <span class="dv">122</span><span class="ot">,</span></a>
+<a class="sourceLine" id="cb8-4" title="4">        <span class="dv">50</span><span class="ot">,</span></a>
+<a class="sourceLine" id="cb8-5" title="5">        <span class="dv">80</span></a>
+<a class="sourceLine" id="cb8-6" title="6">    <span class="ot">]</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb8-7" title="7">    <span class="dt">&quot;least_favorite_color&quot;</span><span class="fu">:</span> <span class="ot">[</span></a>
+<a class="sourceLine" id="cb8-8" title="8">        <span class="dv">121</span><span class="ot">,</span></a>
+<a class="sourceLine" id="cb8-9" title="9">        <span class="dv">51</span><span class="ot">,</span></a>
+<a class="sourceLine" id="cb8-10" title="10">        <span class="dv">81</span></a>
+<a class="sourceLine" id="cb8-11" title="11">    <span class="ot">]</span></a>
+<a class="sourceLine" id="cb8-12" title="12"><span class="fu">}</span></a></code></pre></div>
 <p>and we expect to map it to a model like this</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode objectivec"><code class="sourceCode objectivec"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">@interface</span> MYModel : NSObject</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">@property (nonatomic, strong) UIColor *favoriteColor;</a>
-<a class="sourceLine" id="cb9-3" data-line-number="3">@property (nonatomic, strong) UIColor *leastFavoriteColor;</a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="kw">@end</span></a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode objectivec"><code class="sourceCode objectivec"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">@interface</span> MYModel : NSObject</a>
+<a class="sourceLine" id="cb9-2" title="2">@property (nonatomic, strong) UIColor *favoriteColor;</a>
+<a class="sourceLine" id="cb9-3" title="3">@property (nonatomic, strong) UIColor *leastFavoriteColor;</a>
+<a class="sourceLine" id="cb9-4" title="4"><span class="kw">@end</span></a></code></pre></div>
 <p>You can adapt the response with an adapter block:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode objectivec"><code class="sourceCode objectivec"><a class="sourceLine" id="cb10-1" data-line-number="1">OHMMappable([MYModel class]);</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2">OHMSetMapping([MYModel class], <span class="st">@&quot;least_favorite_color&quot;</span> : <span class="st">@&quot;leastFavoriteColor&quot;</span>, <span class="st">@&quot;favorite_color&quot;</span> : <span class="st">@&quot;favoriteColor&quot;</span>)</a>
-<a class="sourceLine" id="cb10-3" data-line-number="3">OHMValueAdapterBlock colorFromNumberArray = ^(NSArray *numberArray) {</a>
-<a class="sourceLine" id="cb10-4" data-line-number="4">    <span class="kw">return</span> [UIColor colorWithRed:[numberArray[<span class="dv">0</span>] integerValue]/<span class="fl">255.0</span></a>
-<a class="sourceLine" id="cb10-5" data-line-number="5">                           green:[numberArray[<span class="dv">1</span>] integerValue]/<span class="fl">255.0</span></a>
-<a class="sourceLine" id="cb10-6" data-line-number="6">                            blue:[numberArray[<span class="dv">2</span>] integerValue]/<span class="fl">255.0</span></a>
-<a class="sourceLine" id="cb10-7" data-line-number="7">                           alpha:<span class="dv">1</span>];</a>
-<a class="sourceLine" id="cb10-8" data-line-number="8">};</a>
-<a class="sourceLine" id="cb10-9" data-line-number="9">OHMSetAdapter([MYModel class], @{<span class="st">@&quot;favoriteColor&quot;</span>: colorFromNumberArray, <span class="st">@&quot;leastFavoriteColor&quot;</span>: colorFromNumberArray});</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode objectivec"><code class="sourceCode objectivec"><a class="sourceLine" id="cb10-1" title="1">OHMMappable([MYModel class]);</a>
+<a class="sourceLine" id="cb10-2" title="2">OHMSetMapping([MYModel class], <span class="st">@&quot;least_favorite_color&quot;</span> : <span class="st">@&quot;leastFavoriteColor&quot;</span>, <span class="st">@&quot;favorite_color&quot;</span> : <span class="st">@&quot;favoriteColor&quot;</span>)</a>
+<a class="sourceLine" id="cb10-3" title="3">OHMValueAdapterBlock colorFromNumberArray = ^(NSArray *numberArray) {</a>
+<a class="sourceLine" id="cb10-4" title="4">    <span class="kw">return</span> [UIColor colorWithRed:[numberArray[<span class="dv">0</span>] integerValue]/<span class="fl">255.0</span></a>
+<a class="sourceLine" id="cb10-5" title="5">                           green:[numberArray[<span class="dv">1</span>] integerValue]/<span class="fl">255.0</span></a>
+<a class="sourceLine" id="cb10-6" title="6">                            blue:[numberArray[<span class="dv">2</span>] integerValue]/<span class="fl">255.0</span></a>
+<a class="sourceLine" id="cb10-7" title="7">                           alpha:<span class="dv">1</span>];</a>
+<a class="sourceLine" id="cb10-8" title="8">};</a>
+<a class="sourceLine" id="cb10-9" title="9">OHMSetAdapter([MYModel class], @{<span class="st">@&quot;favoriteColor&quot;</span>: colorFromNumberArray, <span class="st">@&quot;leastFavoriteColor&quot;</span>: colorFromNumberArray});</a></code></pre></div>
 <p>Note that the key for the adapter is the key on the model object, not on the response. And adapters are added for a property, not a type. If the above example had multiple properties that were colors, you would have to set an adapter block for each property. It would be smart to reuse adapter blocks in your code.</p>
 <p>The <code>OHMValueAdapterBlock</code> type is a block that takes an <code>id</code> and returns an <code>id</code>. <em>i.e</em> <code>typedef id(^OHMValueAdapterBlock)(id);</code></p>
-<h2>Using it in a project</h2>
+<h2 id="using-it-in-a-project">Using it in a project</h2>
 <p>Use <a href="http://www.cocoapods.org">CocoaPods</a>, add OHMKit to your <code>PodFile</code>, and run <code>$ pod install</code></p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode ruby"><code class="sourceCode ruby"><a class="sourceLine" id="cb11-1" data-line-number="1">pod <span class="st">&#39;OHMKit&#39;</span></a></code></pre></div>
-<h2>How?</h2>
+<div class="sourceCode" id="cb11"><pre class="sourceCode ruby"><code class="sourceCode ruby"><a class="sourceLine" id="cb11-1" title="1">pod <span class="st">&#39;OHMKit&#39;</span></a></code></pre></div>
+<h2 id="how">How?</h2>
 <p>OHMKit is a <a href="http://en.wikipedia.org/wiki/Mixin">mixin</a> that makes it easy to keep any direct knowledge of the idiosyncrasies of the service you're consuming tucked away in a single place.</p>
 <p>It leverages the power of Key Value Coding (<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/KeyValueCoding.html">KVC</a>) that's built right in to Cocoa. It safely wraps <code>-setValue:forKey:</code> and <code>-setValue:forUndefinedKey:</code> to make calls to <code>setValuesForKeysWithDictionary:</code> extremely powerful.</p>
-<h2>Contributing</h2>
+<h2 id="contributing">Contributing</h2>
 <p>Bug fixes, pull requests, enhancement requests and feedback are welcome.</p>
 <p>If you plan on contributing code, please notice that OHMKit has tests. If you're fixing a bug, please include a test that exposes the bug and therefore guards against a regression.</p>
-<h2>TODO</h2>
-<h3>Undefined Keys</h3>
+<h2 id="todo">TODO</h2>
+<h3 id="undefined-keys">Undefined Keys</h3>
 <p>The behavior of undefined keys should be configurable at 3 levels:</p>
 <ol>
 <li>Raise, because I should know about everything.</li>
@@ -229,16 +229,16 @@ code span.wa { color: #008000; font-weight: bold; } /* Warning */
 <li>Add keys to a dictionary so that serialization/deserialization can be symmetric</li>
 </ol>
 <p>Option 2 is currently the only behavior, and I'm inclined to leave is as the default behavior.</p>
-<h3>NSCoding</h3>
+<h3 id="nscoding">NSCoding</h3>
 <p>It might be nice if we built a way to make a class <code>NSCoding</code> compatible if it's not already. I like <a href="https://github.com/github/Mantle">Mantle</a>, but I don't want to be told what my super class should be.</p>
-<h3>NSValueTransformer</h3>
+<h3 id="nsvaluetransformer">NSValueTransformer</h3>
 <p>Adapter blocks versus <code>NSValueTransformer</code>s. There's no reason why both can't co-exist.</p>
-<h1>License</h1>
+<h1 id="license">License</h1>
 <p>Copyright (c) 2013-2015 Fabian Canas. All rights reserved.</p>
 <p>This code is distributed under the terms and conditions of the MIT license.</p>
-<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
 <p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
-<p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
 </article>
 </main>
 </body>

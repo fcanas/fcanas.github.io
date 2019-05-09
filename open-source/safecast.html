@@ -26,13 +26,13 @@
 <p><a href="https://github.com/fcanas/SafeCast" target="_blank" class="social-github"></a></p>
 <div class="none"></div>
 <ul>
-<li><a href="https://travis-ci.org/fcanas/SafeCast"><img src="http://img.shields.io/travis/fcanas/SafeCast.svg?style=flat" alt="CI Status" /></a></li>
-<li><a href="http://cocoadocs.org/docsets/SafeCast"><img src="https://img.shields.io/cocoapods/v/SafeCast.svg?style=flat" alt="Version" /></a></li>
-<li><a href="http://cocoadocs.org/docsets/SafeCast"><img src="https://img.shields.io/cocoapods/l/SafeCast.svg?style=flat" alt="License" /></a></li>
+<li><p><a href="https://travis-ci.org/fcanas/SafeCast"><img src="http://img.shields.io/travis/fcanas/SafeCast.svg?style=flat" alt="CI Status" /></a></p></li>
+<li><p><a href="http://cocoadocs.org/docsets/SafeCast"><img src="https://img.shields.io/cocoapods/v/SafeCast.svg?style=flat" alt="Version" /></a></p></li>
+<li><p><a href="http://cocoadocs.org/docsets/SafeCast"><img src="https://img.shields.io/cocoapods/l/SafeCast.svg?style=flat" alt="License" /></a></p></li>
 <li><p><a href="http://cocoadocs.org/docsets/SafeCast"><img src="https://img.shields.io/cocoapods/p/SafeCast.svg?style=flat" alt="Platform" /></a></p></li>
-<li>Cast objects in Objective-C, not in C</li>
-<li>Enumerate objects in collections only if they're of a certain kind, or conform to a protocol</li>
-<li>Be Safe</li>
+<li><p>Cast objects in Objective-C, not in C</p></li>
+<li><p>Enumerate objects in collections only if they're of a certain kind, or conform to a protocol</p></li>
+<li><p>Be Safe</p></li>
 <li><p>Be Concice</p></li>
 </ul>
 <p>Objective-C is C, and C is perilous. Don't blindly cast objects. Stick to high-level language features, and write more readable code.</p>
@@ -61,19 +61,19 @@ NSMutableArray *mArray = [NSMutableArray safe_cast:array];
 </pre>
 <p>SafeCast has quite a few methods like this, covering <code>NSArray</code>, <code>NSSet</code>, <code>NSDictionary</code>, and <code>NSOrderedSet</code>.</p>
 <p>I doubt it would be a good idea to give coverage to collections like <code>NSMapTable</code> or <code>NSHashTable</code>, so that's not planned.</p>
-<h2>A Whole Library for <em>that</em>?</h2>
+<h2 id="a-whole-library-for-that">A Whole Library for <em>that</em>?</h2>
 <p>Well, first of all, it's <em>really</em> small. The documentation in the headers is <em>much</em> bigger than the code. And it's tested. You may not need it. But it has a lot of things going for it.</p>
-<h3>Easy to integrate</h3>
+<h3 id="easy-to-integrate">Easy to integrate</h3>
 <p>SafeCast is available as a <a href="http://guides.cocoapods.org/using/getting-started.html">CocoaPod</a>.</p>
 <pre>
 pod 'SafeCast'
 </pre>
-<h3>Be concice and direct with your intent</h3>
+<h3 id="be-concice-and-direct-with-your-intent">Be concice and direct with your intent</h3>
 <p>It definitely takes fewer lines of code. In my opinion it's easier to read and think about than the more verbose, way of doing it safely. It keeps your type-safety checks up front and at a high level.</p>
-<h3>Be Safe</h3>
+<h3 id="be-safe">Be Safe</h3>
 <p>Maybe you know what you're doing. But do you always do the right thing? How many people are in your code base? And how well do they all know Objective-C's C underbelly? More and more developers are coming in having worked with higher-level or dynamic languages, and may not realize what's safe and what's not.</p>
 <p>SafeCast wants to make it easier to safely cast ... to cast only when it's safe to do so.</p>
-<h2>Status</h2>
+<h2 id="status">Status</h2>
 <p>Please send feedback, pull-requests, and coffee.</p>
 </article>
 </main>

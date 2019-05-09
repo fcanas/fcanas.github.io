@@ -34,13 +34,6 @@ body {
   color: #222;
 }
 
-@media (prefers-dark-interface) {
-  html {
-    color: #fff;
-    background-color: #24292e;
-  }
-}
-
 * { line-height: 1.5em; }
 
 /* Wrapped headings should be slightly tighter */
@@ -142,13 +135,6 @@ pre {
   overflow-x: auto;
 }
 
-@media (prefers-dark-interface) {
-  html {
-    color: #fff;
-    background-color: #444;
-  }
-}
-
 pre code {
   padding: 0;
   border: none;
@@ -244,3 +230,26 @@ hr {
 }
 
 ol, article date { color: #aaa; }
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: #fff;
+    background-color: #24292e;
+  }
+  
+    a {
+    text-decoration: none;
+    color: #55f;
+  }
+  a:visited { color: #75c; }
+  /* Don't color visited nav links */
+
+  nav a:visited { color: #55f; }
+  thead, tfoot {
+    background-color: #222;
+  }
+  th, td {
+    padding: 3px;
+    border: solid 1px #222;
+  }
+}
