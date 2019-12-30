@@ -239,12 +239,12 @@ ol, article date { color: #aaa; }
   
     a {
     text-decoration: none;
-    color: #55f;
+    color: #59f;
   }
-  a:visited { color: #75c; }
+  a:visited { color: #86c; }
   /* Don't color visited nav links */
 
-  nav a:visited { color: #55f; }
+  nav a:visited { color: #59f; }
   thead, tfoot {
     background-color: #222;
   }
