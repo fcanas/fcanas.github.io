@@ -26,13 +26,13 @@
 <article>
 <h1>Safe Casting in Objective-C</h1>
 <date>2014-02-15</date>
-<p>I wrote a small safe casting library for Objective-C. It's available on <a href="https://github.com/fcanas/SafeCast">GitHub</a>.</p>
+<p>I wrote a small safe casting library for Objective-C. It’s available on <a href="https://github.com/fcanas/SafeCast">GitHub</a>.</p>
 <h2 id="the-story">The Story</h2>
 <p>Somewhere on the web I took a quiz to determine how well I know Objective-C. One question infuriated me at the time asked something like “if you have an array <code>NSArray *a</code>, how do you make it an <code>NSMutableArray</code>?” The answer was supposedly</p>
 <pre class="objc"><code>NSMutableArray *mutableArray = (NSMutableArray *)a;</code></pre>
 <p>But this is tremendously dangerous, wrong, crazy… The real answer is something like</p>
 <pre class="objc"><code>NSMutableArray *mutableArray = [a mutableCopy];</code></pre>
-<p>Unless you want to actually modify the same instance that <code>a</code> is <em>if</em> it’s a mutable array, in which case you have to check whether it's mutable.</p>
+<p>Unless you want to actually modify the same instance that <code>a</code> is <em>if</em> it’s a mutable array, in which case you have to check whether it’s mutable.</p>
 <pre class="objc"><code>NSMutableArray *mutableArray;
 if ([a isKindOfClass:[NSMutableArray class]]) {
     mutableArray = a;
