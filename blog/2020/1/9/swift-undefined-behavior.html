@@ -98,7 +98,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb1"><pre class="sourceCode numberSource objectivec numberLines"><code class="sourceCode objectivec"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">@interface</span> <span class="dt">SomeThing</span> : <span class="dt">NSObject</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="kw">@property</span> (<span class="kw">nonatomic</span>,<span class="kw">nonnull</span>) <span class="dt">NSScrollView</span> *scrollView;</span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="kw">@end</span></span></code></pre></div>
-<p>But there’s a problem with the implementation. It’s empty. Given the following implementation, a new instance of <code>SomeThing</code> will have a nil array property, in violation of its interface. The compiler does not complain.</p>
+<p>But there’s a problem with the implementation. It’s empty. Given the following implementation, a new instance of <code>SomeThing</code> will have a nil scroll view property, in violation of its interface. The compiler does not complain.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode numberSource objectivec numberLines"><code class="sourceCode objectivec"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">@implementation</span> <span class="dt">SomeThing</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="kw">@end</span></span></code></pre></div>
 <p>The scroll view property, which should be <code>nonnull</code>, or in Swift, not optional, is never given a value on initialization. So what happens when we use if from Swift?</p>
