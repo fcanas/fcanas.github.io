@@ -156,7 +156,6 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <blockquote>
 <p>Non-optional expression of type ‘NSSScrollView’ used in a check for optionals</p>
 </blockquote>
-<p>// image //</p>
 <p>Or a slightly different error around conditional binding “Initializer for conditional binding must have optional type, not ‘NSScrollView’.”</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode numberSource swift numberLines"><code class="sourceCode swift"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">let</span> thing: <span class="dt">SomeThing</span> = <span class="dt">SomeThing</span>()</span>
 <span id="cb6-2"><a href="#cb6-2"></a>guard <span class="kw">let</span> scrollView = thing.scrollView <span class="cf">else</span> {</span>
@@ -166,7 +165,6 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <blockquote>
 <p>Initializer for conditional binding must have optional type, not ‘NSScrollView’.</p>
 </blockquote>
-<p>// image //</p>
 <p>Or if we try and compare the value directly, something a little more interesting happens:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode numberSource swift numberLines"><code class="sourceCode swift"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">let</span> thing: <span class="dt">SomeThing</span> = <span class="dt">SomeThing</span>()</span>
 <span id="cb7-2"><a href="#cb7-2"></a><span class="kw">let</span> scrollView = thing.scrollView</span>
