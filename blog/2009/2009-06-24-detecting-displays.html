@@ -1,18 +1,15 @@
----
-layout: post
-title: Detecting Displays
-categories: []
-tags:
-- cocoa
-- mac
-- objective-c
-- quartz
-status: publish
-type: post
-published: true
-meta: {}
----
-<p style="margin-left:0px; margin-right:0px">In the process of making <a href="http://www.fabiancanas.com/Projects/MirrorDisplays/">Mirror Displays</a> I learned more or less what Quartz Display Services in Mac <span>OS X</span>has to offer. It more or less lets to get and set all size, position, color, gamma, mirroring settings for attached monitors. It lets you fade the monitors in and out, and lets your app monopolize output to any monitors. An important element to the Display Services though, is that you can register to be notified of any changes to the displays.</p><p>I’m writing this particular post because I know that Java has some <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4417795">problems</a> when it comes to dynamically detecting multiple monitors when you go and connect and disconnect them. Though I certainly hope Sun eventually fixes the problem, this sounded like the sort of thing that unfortunately needs to be solved on the native platform. I haven’t done any programming in Windows or Linux in a long time, but I hope I can help those using Mac <span>OS X</span> by showing you a barebones program that just sits and listens for display changes. I’m not going to make it talk to Java, but you make a little client-server setup, or maybe you could use the <a href="http://developer.apple.com/documentation/Cocoa/Conceptual/ScriptingBridgeConcepts/Introduction/Introduction.html">Scripting Bridge</a> that’s available with Leopard if you want to get fancy.</p><p>First, the design for the app is not particularly important. I chose one of the easier paths, but probably not the sleekest. I made a new Cocoa application, defined a new Cocoa object named Detector, and put an instance of it in the application’s nib file so it one would get initialized as soon as the app started running. All the object does is register a function callback for notifications when it’s loaded, and stop the function from being called when the object is deallocated (the program exits). As I said, this was just what I decided to do to get the thing up and running as fast as possible. It’s only important to mention so the code actually makes sense.</p><pre>@implementation Detector
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"><title>Detecting Displays</title><style type="text/css">code{white-space: pre;}</style><link rel="stylesheet" href="https://fabiancanas.com/writ.min.css"><link rel="stylesheet" href="https://fabiancanas.com/code.css"></head><body><header><h1>fabián cañas</h1>
+<nav>
+<ul>
+  <li><a href='/'>about</a></li>
+  <li><a href='/blog/'>writing</a></li>
+  <li><a href='/software/'>software</a></li>
+  |
+  <li><a href='https://www.github.com/fcanas'>GitHub</a></li>
+  <li style='display: none;'><a href='https://www.twitter.com/fcanas'>Twitter</a></li>
+  <li><a rel="me" href="https://mastodon.social/@fcanas">Mastodon</a></li>
+</ul>
+</nav></header><main><article><h1>Detecting Displays</h1><p>In the process of making <a href='http://www.fabiancanas.com/Projects/MirrorDisplays/'>Mirror Displays</a> I learned more about what Quartz Display Services in Mac <span>OS X</span> has to offer.&shy;It more or less lets to get and set all size, position, color, gamma, mirroring settings for attached monitors.&shy;It lets you fade the monitors in and out, and lets your app monopolize output to any monitors. An important element to the Display Services though, is that you can register to be notified of any changes to the displays.</p><p>I’m writing this particular post because I know that Java has some <a href='http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4417795'>problems</a> when dynamically detecting multiple monitors when you connect and disconnect them. Though I hope Sun eventually fixes the problem, this sounded like the sort of thing that needs to be solved on the native platform. I haven’t done any programming in Windows or Linux in a long time, but I hope I can help those using Mac OS X by showing you a barebones program that just sits and listens for display changes. I’m not going to make it talk to Java, but you make a little client-server setup, or maybe you could use the <a href='http://developer.apple.com/documentation/Cocoa/Conceptual/ScriptingBridgeConcepts/Introduction/Introduction.html'>Scripting Bridge</a> that’s available with Leopard if you want to get fancy.</p><p>First, the design for the app is not particularly important. I chose one of the easier paths, but probably not the sleekest. I made a new Cocoa application, defined a new Cocoa object named Detector, and put an instance of it in the application’s nib file so it one would get initialized as soon as the app started running. All the object does is register a function callback for notifications when it’s loaded, and stop the function from being called when the object is deallocated (the program exits). As I said, this was just what I decided to do to get the thing up and running as fast as possible. It’s only important to mention so the code actually makes sense.</p><pre>@implementation Detector
 
 -(void) awakeFromNib
 {
@@ -82,7 +79,6 @@ break;
 NSReleaseAlertPanel(panel);
 }
 }
-
 </pre><p>This function uses another function I wrote when working with Display services to decode the CGErrorsthat come up:</p><pre>NSString* CGErrorToString(CGError err){
 switch (err) {
 case kCGErrorSuccess:
@@ -129,5 +125,4 @@ return @"An error occured but its code is unknown by Quartz Display Services as 
 break;
 }
 }
-
-</pre><p>Whichever files these three code blocks end up in, they each need to have access to the Application Services framework, and so it must be added to the project and the appropriate header must be included</p>
+</pre><p>Whichever files these three code blocks end up in, they each need to have access to the Application Services framework, and so it must be added to the project and the appropriate header must be included.</p></article></main></body></html>

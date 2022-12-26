@@ -1,12 +1,15 @@
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <meta name="author" content="">
-  <meta name="dcterms.date" content="2020-01-09">
-  <title>Optionals in Swift Objective-C Interoperability</title>
-  <style type="text/css">code{white-space: pre;}</style>
-  <style type="text/css">
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"><title>Optionals in Swift Objective-C Interoperability</title><style type="text/css">code{white-space: pre;}</style><link rel="stylesheet" href="https://fabiancanas.com/writ.min.css"><link rel="stylesheet" href="https://fabiancanas.com/code.css"></head><body><header><h1>fabián cañas</h1>
+<nav>
+<ul>
+  <li><a href='/'>about</a></li>
+  <li><a href='/blog/'>writing</a></li>
+  <li><a href='/software/'>software</a></li>
+  |
+  <li><a href='https://www.github.com/fcanas'>GitHub</a></li>
+  <li style='display: none;'><a href='https://www.twitter.com/fcanas'>Twitter</a></li>
+  <li><a rel="me" href="https://mastodon.social/@fcanas">Mastodon</a></li>
+</ul>
+</nav></header><main><article><h1>Optionals in Swift Objective-C Interoperability</h1><date>2020-01-09</date><style type="text/css">
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -25,13 +28,13 @@ pre.numberSource code > span
   { position: relative; left: -4em; counter-increment: source-line; }
 pre.numberSource code > span > a:first-child::before
   { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
+	position: relative; left: -1em; text-align: right; vertical-align: baseline;
+	border: none; display: inline-block;
+	-webkit-touch-callout: none; -webkit-user-select: none;
+	-khtml-user-select: none; -moz-user-select: none;
+	-ms-user-select: none; user-select: none;
+	padding: 0 4px; width: 4em;
+	color: #aaaaaa;
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
@@ -69,48 +72,19 @@ code span.vs { color: #4e9a06; } /* VerbatimString */
 code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
   </style>
   <style media="screen" type="text/css">
-    .sourceCode { overflow: visible; }
+	.sourceCode { overflow: visible; }
   </style>
-  <link rel="stylesheet" href="/writ.min.css">
-</head>
-<body>
-<header>
-<h1>fabián cañas</h1>
-<nav>
-<ul>
-  <li><a href='/'>about</a></li>
-  <li><a href='/blog/'>writing</a></li>
-  <li><a href='/software/'>software</a></li>
-  |
-  <li><a href='https://www.github.com/fcanas'>GitHub</a></li>
-  <li><a href='https://www.twitter.com/fcanas'>Twitter</a></li>
-</ul>
-</nav>
-</header>
-<main>
-<article>
-<h1>Optionals in Swift Objective-C Interoperability</h1>
-<date>2020-01-09</date>
 <blockquote>
-<p>The following observations were made with Swift 5.1.3 and Xcode 11.3. It’s my hope that the contents of this page can be made irrelevant in the near future.</p>
-</blockquote>
-<p>I want to show you something sneaky that can happen when mixing Objective-C and Swift code. Let’s say we have a class written in Objective-C with the following interface:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource objectivec numberLines"><code class="sourceCode objectivec"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">@interface</span> <span class="dt">SomeThing</span> : <span class="dt">NSObject</span></span>
+<p>The following observations were made with Swift 5.1.3 and Xcode 11.3. It’s my hope that the contents of this page can be made irrelevant in the near future.</p></blockquote>
+<p>I want to show you something sneaky that can happen when mixing Objective-C and Swift code. Let’s say we have a class written in Objective-C with the following interface:</p><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource objectivec numberLines"><code class="sourceCode objectivec"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">@interface</span> <span class="dt">SomeThing</span> : <span class="dt">NSObject</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="kw">@property</span> (<span class="kw">nonatomic</span>,<span class="kw">nonnull</span>) <span class="dt">NSScrollView</span> *scrollView;</span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="kw">@end</span></span></code></pre></div>
-<p>But there’s a problem with the implementation. It’s empty. Given the following implementation, a new instance of <code>SomeThing</code> will have a nil scroll view property, in violation of its interface. The compiler does not complain.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource objectivec numberLines"><code class="sourceCode objectivec"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">@implementation</span> <span class="dt">SomeThing</span></span>
+<p>But there’s a problem with the implementation. It’s empty. Given the following implementation, a new instance of <code>SomeThing</code> will have a nil scroll view property, in violation of its interface. The compiler does not complain.</p><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource objectivec numberLines"><code class="sourceCode objectivec"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">@implementation</span> <span class="dt">SomeThing</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="kw">@end</span></span></code></pre></div>
-<p>The scroll view property, which should be <code>nonnull</code>, or in Swift, not optional, is never given a value on initialization. So what happens when we use if from Swift?</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource swift numberLines"><code class="sourceCode swift"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">let</span> thing: <span class="dt">SomeThing</span> = <span class="dt">SomeThing</span>()</span>
+<p>The scroll view property, which should be <code>nonnull</code>, or in Swift, not optional, is never given a value on initialization. So what happens when we use if from Swift?</p><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource swift numberLines"><code class="sourceCode swift"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">let</span> thing: <span class="dt">SomeThing</span> = <span class="dt">SomeThing</span>()</span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="kw">let</span> scrollView: <span class="dt">NSScrollView</span> = thing.scrollView</span></code></pre></div>
-<p>I’ve explicitly added types to these variables to show that they’re not optional. Those explicit types are the types that are inferred by the compiler if they weren’t there. Swift doesn’t think they’re optional, and doesn’t treat them as optional in any way.</p>
-<p>What do you think will happen when the program runs?</p>
-<hr />
-<p>Absolutely nothing.</p>
-<p>Most people expect it would crash. It doesn’t crash. It instantiates a <code>SomeThing</code> into <code>thing</code>. Then <code>thing</code>’s “scroll view” is read and put into <code>scrollView</code>, and exits without any problems at all.</p>
-<p>Let’s go a little crazy…</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource swift numberLines"><code class="sourceCode swift"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">let</span> thing: <span class="dt">SomeThing</span> = <span class="dt">SomeThing</span>()</span>
+<p>I’ve explicitly added types to these variables to show that they’re not optional. Those explicit types are the types that are inferred by the compiler if they weren’t there. Swift doesn’t think they’re optional, and doesn’t treat them as optional in any way.</p><p>What do you think will happen when the program runs?</p><hr />
+<p>Absolutely nothing.</p><p>Most people expect it would crash. It doesn’t crash. It instantiates a <code>SomeThing</code> into <code>thing</code>. Then <code>thing</code>’s “scroll view” is read and put into <code>scrollView</code>, and exits without any problems at all.</p><p>Let’s go a little crazy…</p><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource swift numberLines"><code class="sourceCode swift"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">let</span> thing: <span class="dt">SomeThing</span> = <span class="dt">SomeThing</span>()</span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="kw">let</span> scrollView: <span class="dt">NSScrollView</span> = thing.scrollView</span>
 <span id="cb4-3"><a href="#cb4-3"></a></span>
 <span id="cb4-4"><a href="#cb4-4"></a><span class="kw">let</span> contentSize: <span class="dt">CGSize</span> = scrollView.contentSize</span>
@@ -139,46 +113,33 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb4-27"><a href="#cb4-27"></a><span class="kw">let</span> clipView: <span class="dt">NSClipView</span> = scrollView.contentView</span>
 <span id="cb4-28"><a href="#cb4-28"></a><span class="co">// No problem...</span></span>
 <span id="cb4-29"><a href="#cb4-29"></a>clipView.backgroundColor = <span class="dt">NSColor</span>.blue</span></code></pre></div>
-<p>All of that code runs without a problem at all.</p>
-<p>Lines 1-20 show methods that return sized structs, like CGSize, or C primitives like floats, ints, and enums with those types, Swift will return a perfectly valid zero-filled value.</p>
-<p>Line 22 shows that calling a method with no return value is perfectly valid.</p>
-<p>Line 27 shows that a nonnull return value on the nil scrollView is subject to the same problem at the root of all of this. clipView is a non-optional reference to an <code>NSClipView</code> object. But it’s actually nil.</p>
-<p>And line 29, setting a value on the nil clipView, rounds out the typical operations we may want to do on an object. Swift doesn’t complain at all about setting a value on a nil objects. This shouldn’t be surprising since for Objective-C objects, it’s the same as calling a method.</p>
-<p>Any Objective-C things we want to do with these objects succeeds, which is nearly everything since they’re Objective-C objects. We’ve entered the territory of undefined behavior. It’s a sort of “Objective-C mode”.</p>
-<p>There are things we can do to detect this non-optional nil condition. Indeed, the simplest way to get this to fail is to print the unexpectedly nil object. But maybe we can do better than that.</p>
-<h2 id="detecting-nil-when-nil-isnt-possible">Detecting nil when nil isn’t possible</h2>
-<p>Say we want to guard against this. The problem is that since Swift doesn’t think this value can be nil, it’s not trivial to check. Comparing the non-optional value results in a warning: “Non-optional expression of type ‘NSSScrollView’ used in a check for optionals”</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource swift numberLines"><code class="sourceCode swift"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">let</span> thing: <span class="dt">SomeThing</span> = <span class="dt">SomeThing</span>()</span>
+<p>All of that code runs without a problem at all.</p><p>Lines 1-20 show methods that return sized structs, like CGSize, or C primitives like floats, ints, and enums with those types, Swift will return a perfectly valid zero-filled value.</p><p>Line 22 shows that calling a method with no return value is perfectly valid.</p><p>Line 27 shows that a nonnull return value on the nil scrollView is subject to the same problem at the root of all of this. clipView is a non-optional reference to an <code>NSClipView</code> object. But it’s actually nil.</p><p>And line 29, setting a value on the nil clipView, rounds out the typical operations we may want to do on an object. Swift doesn’t complain at all about setting a value on a nil objects. This shouldn’t be surprising since for Objective-C objects, it’s the same as calling a method.</p><p>Any Objective-C things we want to do with these objects succeeds, which is nearly everything since they’re Objective-C objects. We’ve entered the territory of undefined behavior. It’s a sort of “Objective-C mode”.</p><p>There are things we can do to detect this non-optional nil condition. Indeed, the simplest way to get this to fail is to print the unexpectedly nil object. But maybe we can do better than that.</p><h2 id="detecting-nil-when-nil-isnt-possible">Detecting nil when nil isn’t possible</h2>
+<p>Say we want to guard against this. The problem is that since Swift doesn’t think this value can be nil, it’s not trivial to check. Comparing the non-optional value results in a warning: “Non-optional expression of type ‘NSSScrollView’ used in a check for optionals”</p><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource swift numberLines"><code class="sourceCode swift"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">let</span> thing: <span class="dt">SomeThing</span> = <span class="dt">SomeThing</span>()</span>
 <span id="cb5-2"><a href="#cb5-2"></a>guard <span class="kw">let</span> scrollView: <span class="dt">NSScrollView</span> = thing.scrollView <span class="cf">else</span> {</span>
 <span id="cb5-3"><a href="#cb5-3"></a>    struct AnonymousError: Error {}</span>
 <span id="cb5-4"><a href="#cb5-4"></a>    throw AnonymousError()</span>
 <span id="cb5-5"><a href="#cb5-5"></a>}</span></code></pre></div>
 <blockquote>
-<p>Non-optional expression of type ‘NSSScrollView’ used in a check for optionals</p>
+Non-optional expression of type ‘NSSScrollView’ used in a check for optionals
 </blockquote>
-<p>Or a slightly different error around conditional binding “Initializer for conditional binding must have optional type, not ‘NSScrollView’.”</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource swift numberLines"><code class="sourceCode swift"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">let</span> thing: <span class="dt">SomeThing</span> = <span class="dt">SomeThing</span>()</span>
+<p>Or a slightly different error around conditional binding “Initializer for conditional binding must have optional type, not ‘NSScrollView’.”</p><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource swift numberLines"><code class="sourceCode swift"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">let</span> thing: <span class="dt">SomeThing</span> = <span class="dt">SomeThing</span>()</span>
 <span id="cb6-2"><a href="#cb6-2"></a>guard <span class="kw">let</span> scrollView = thing.scrollView <span class="cf">else</span> {</span>
 <span id="cb6-3"><a href="#cb6-3"></a>    struct AnonymousError: Error {}</span>
 <span id="cb6-4"><a href="#cb6-4"></a>    throw AnonymousError()</span>
 <span id="cb6-5"><a href="#cb6-5"></a>}</span></code></pre></div>
 <blockquote>
-<p>Initializer for conditional binding must have optional type, not ‘NSScrollView’.</p>
+Initializer for conditional binding must have optional type, not ‘NSScrollView’.
 </blockquote>
-<p>Or if we try and compare the value directly, something a little more interesting happens:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource swift numberLines"><code class="sourceCode swift"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">let</span> thing: <span class="dt">SomeThing</span> = <span class="dt">SomeThing</span>()</span>
+<p>Or if we try and compare the value directly, something a little more interesting happens:</p><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource swift numberLines"><code class="sourceCode swift"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">let</span> thing: <span class="dt">SomeThing</span> = <span class="dt">SomeThing</span>()</span>
 <span id="cb7-2"><a href="#cb7-2"></a><span class="kw">let</span> scrollView = thing.scrollView</span>
 <span id="cb7-3"><a href="#cb7-3"></a><span class="cf">if</span> scrollView == nil {</span>
 <span id="cb7-4"><a href="#cb7-4"></a>    print(<span class="st">&quot;The compiler says we won&#39;t get here.&quot;</span>)</span>
 <span id="cb7-5"><a href="#cb7-5"></a>    print(<span class="st">&quot;But if we run the program, we do&quot;</span>)</span>
 <span id="cb7-6"><a href="#cb7-6"></a>}</span></code></pre></div>
 <blockquote>
-<p>Comparing non-optional value of type ‘NSScrollView’ to ‘nil’ always returns false</p>
+Comparing non-optional value of type ‘NSScrollView’ to ‘nil’ always returns false
 </blockquote>
-<p>It says the non-optional value shouldn’t be compared to nil, and that it’s always false. But at run time, the nil is detected, and we print the statement.</p>
-<p>None of these are ideal since there are warnings. Can we write a function to erase the non-null nature of this variable?</p>
-<p>Well… not like this:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource swift numberLines"><code class="sourceCode swift"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">func</span> isNil(_ o: <span class="dt">Any</span>?) -&gt; <span class="dt">Bool</span> {</span>
+<p>It says the non-optional value shouldn’t be compared to nil, and that it’s always false. But at run time, the nil is detected, and we print the statement.</p><p>None of these are ideal since there are warnings. Can we write a function to erase the non-null nature of this variable?</p><p>Well… not like this:</p><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource swift numberLines"><code class="sourceCode swift"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">func</span> isNil(_ o: <span class="dt">Any</span>?) -&gt; <span class="dt">Bool</span> {</span>
 <span id="cb8-2"><a href="#cb8-2"></a>    <span class="cf">switch</span> o {</span>
 <span id="cb8-3"><a href="#cb8-3"></a>    <span class="cf">case</span> .none:</span>
 <span id="cb8-4"><a href="#cb8-4"></a>        <span class="cf">return</span> true</span>
@@ -190,8 +151,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb8-10"><a href="#cb8-10"></a><span class="cf">if</span> isNil(scrollView) {</span>
 <span id="cb8-11"><a href="#cb8-11"></a>    print(<span class="st">&quot;This doesn&#39;t print.&quot;</span>)</span>
 <span id="cb8-12"><a href="#cb8-12"></a>}</span></code></pre></div>
-<p>However if the function takes an <code>AnyObject?</code> parameter, it does have the intended effect:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource swift numberLines"><code class="sourceCode swift"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">func</span> isNil(_ o: <span class="dt">AnyObject</span>?) -&gt; <span class="dt">Bool</span> {</span>
+<p>However if the function takes an <code>AnyObject?</code> parameter, it does have the intended effect:</p><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource swift numberLines"><code class="sourceCode swift"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">func</span> isNil(_ o: <span class="dt">AnyObject</span>?) -&gt; <span class="dt">Bool</span> {</span>
 <span id="cb9-2"><a href="#cb9-2"></a>    <span class="cf">switch</span> o {</span>
 <span id="cb9-3"><a href="#cb9-3"></a>    <span class="cf">case</span> .none:</span>
 <span id="cb9-4"><a href="#cb9-4"></a>        <span class="cf">return</span> true</span>
@@ -203,49 +163,35 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb9-10"><a href="#cb9-10"></a><span class="cf">if</span> isNil(scrollView) {</span>
 <span id="cb9-11"><a href="#cb9-11"></a>    print(<span class="st">&quot;It works if we make it an AnyObject?&quot;</span>)</span>
 <span id="cb9-12"><a href="#cb9-12"></a>}</span></code></pre></div>
-<p>We could use a function like the second <code>isNil</code> to detect, assert, and adapt our logic around this unusual case.</p>
-<h2 id="swift-extensions">Swift Extensions</h2>
-<p>If you make a Swift extension to the Objective-C class and call them on one of these <code>nil</code> things that aren’t supposed to exist, those methods still get called.</p>
-<p>Still working with out unexpectedly nil scroll view instance, we can do something like this:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource swift numberLines"><code class="sourceCode swift"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">extension</span> <span class="dt">NSScrollView</span> {</span>
+<p>We could use a function like the second <code>isNil</code> to detect, assert, and adapt our logic around this unusual case.</p><h2 id="swift-extensions">Swift Extensions</h2>
+<p>If you make a Swift extension to the Objective-C class and call them on one of these <code>nil</code> things that aren’t supposed to exist, those methods still get called.</p><p>Still working with out unexpectedly nil scroll view instance, we can do something like this:</p><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource swift numberLines"><code class="sourceCode swift"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">extension</span> <span class="dt">NSScrollView</span> {</span>
 <span id="cb10-2"><a href="#cb10-2"></a>    <span class="kw">func</span> doAThing() {</span>
 <span id="cb10-3"><a href="#cb10-3"></a>        print(<span class="st">&quot;doing it&quot;</span>) <span class="co">// &lt;- This will get called</span></span>
 <span id="cb10-4"><a href="#cb10-4"></a>    }</span>
 <span id="cb10-5"><a href="#cb10-5"></a>}</span></code></pre></div>
-<p>In those circumstances, you can be inside an instance method of an object and have <code>self</code> be <code>0x0</code>. And since the type on <code>self</code> is not optional, the silent unexpected nil values can continue to propagate.</p>
-<p>Extension methods open up the opportunity for new unexpected behavior though. They execute code instead of running in an unusual “Obective-C” mode where messaging nil returns zero-like values or no-ops. So extension methods can have side-effects like the print statement above. And they can also return non-zero values:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource swift numberLines"><code class="sourceCode swift"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">extension</span> <span class="dt">NSScrollView</span> {</span>
+<p>In those circumstances, you can be inside an instance method of an object and have <code>self</code> be <code>0x0</code>. And since the type on <code>self</code> is not optional, the silent unexpected nil values can continue to propagate.</p><p>Extension methods open up the opportunity for new unexpected behavior though. They execute code instead of running in an unusual “Objective-C” mode where messaging nil returns zero-like values or no-ops. So extension methods can have side-effects like the print statement above. And they can also return non-zero values:</p><div class="sourceCode" id="cb11"><pre class="sourceCode numberSource swift numberLines"><code class="sourceCode swift"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">extension</span> <span class="dt">NSScrollView</span> {</span>
 <span id="cb11-2"><a href="#cb11-2"></a>    <span class="kw">func</span> oneHundred() -&gt; Float {</span>
 <span id="cb11-3"><a href="#cb11-3"></a>        <span class="cf">return</span> <span class="dv">100</span> <span class="co">// &lt;- Now scrollView.oneHundred() can return 100</span></span>
 <span id="cb11-4"><a href="#cb11-4"></a>    }</span>
 <span id="cb11-5"><a href="#cb11-5"></a>}</span></code></pre></div>
 <h2 id="foundation-objects">Foundation Objects</h2>
-<p>Something really interesting happens with Foundation objects. <code>NSCalendar</code> is a class in Foundation. So if we make a class like this, again with an invalid empty implementation:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource objectivec numberLines"><code class="sourceCode objectivec"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">@interface</span> <span class="dt">CalendarProvider</span> : <span class="dt">NSObject</span></span>
+<p>Something really interesting happens with Foundation objects. <code>NSCalendar</code> is a class in Foundation. So if we make a class like this, again with an invalid empty implementation:</p><div class="sourceCode" id="cb12"><pre class="sourceCode numberSource objectivec numberLines"><code class="sourceCode objectivec"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">@interface</span> <span class="dt">CalendarProvider</span> : <span class="dt">NSObject</span></span>
 <span id="cb12-2"><a href="#cb12-2"></a><span class="kw">@property</span> (<span class="kw">nonatomic</span>, <span class="kw">nonnull</span>) <span class="dt">NSCalendar</span> *calendar;</span>
 <span id="cb12-3"><a href="#cb12-3"></a><span class="kw">@end</span></span></code></pre></div>
-<p>And try and use it from Swift like this:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource swift numberLines"><code class="sourceCode swift"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">let</span> calendarProvider = <span class="dt">CalendarProvider</span>()</span>
+<p>And try and use it from Swift like this:</p><div class="sourceCode" id="cb13"><pre class="sourceCode numberSource swift numberLines"><code class="sourceCode swift"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">let</span> calendarProvider = <span class="dt">CalendarProvider</span>()</span>
 <span id="cb13-2"><a href="#cb13-2"></a><span class="kw">let</span> calendar = calendarProvider.calendar</span>
 <span id="cb13-3"><a href="#cb13-3"></a><span class="kw">let</span> weekStartsOn = calendar.firstWeekday</span>
 <span id="cb13-4"><a href="#cb13-4"></a><span class="kw">let</span> weekdays: [<span class="dt">String</span>] = calendar.weekdaySymbols</span></code></pre></div>
-<p>We might expect the same bad behavior we’ve been exploring so far.</p>
-<p>But that’s not what we find.</p>
-<p>The program crashes on the second ine. This happens because an Objective-C <code>NSCalendar</code> is a <code>Calendar</code> in Swift. But this isn’t just a rename. It’s bridged to the Swift Foundation <code>Calendar</code> type.</p>
-<p>What’s happening here isn’t that we crash when getting an unexpected value out of <code>calendarProvider</code>, but that Swift automatically converts any instances of <code>NSCalendar</code> objects with a C or Objective-C implementation with a <code>Calendar</code> object from the Swift Foundation library. The Swift Foundation library’s <code>Calendar</code> has a method <code>_unconditionallyBridgeFromObjectiveC</code> that’s part of the <code>_ObjectiveCBridgeable</code> protocol that converts an <code>Optional&lt;NSCalendar&gt;</code> to a <code>Foundation.Calendar</code>. we can look at <a href="https://github.com/apple/swift-corelibs-foundation/blob/914a8ae328d04f71e286c74fc3cb6e79dd9461ae/Foundation/Calendar.swift#L1187">the source for <code>Calendar._unconditionallyBridgeFromObjectiveC</code></a>.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource swift numberLines"><code class="sourceCode swift"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw">public</span> <span class="kw">static</span> <span class="kw">func</span> _unconditionallyBridgeFromObjectiveC(_ source: <span class="dt">NSCalendar</span>?) -&gt; <span class="dt">Calendar</span> {</span>
+<p>We might expect the same bad behavior we’ve been exploring so far.</p><p>But that’s not what we find.</p><p>The program crashes on the second ine. This happens because an Objective-C <code>NSCalendar</code> is a <code>Calendar</code> in Swift. But this isn’t just a rename. It’s bridged to the Swift Foundation <code>Calendar</code> type.</p><p>What’s happening here isn’t that we crash when getting an unexpected value out of <code>calendarProvider</code>, but that Swift automatically converts any instances of <code>NSCalendar</code> objects with a C or Objective-C implementation with a <code>Calendar</code> object from the Swift Foundation library. The Swift Foundation library’s <code>Calendar</code> has a method <code>_unconditionallyBridgeFromObjectiveC</code> that’s part of the <code>_ObjectiveCBridgeable</code> protocol that converts an <code>Optional&lt;NSCalendar&gt;</code> to a <code>Foundation.Calendar</code>. we can look at <a href="https://github.com/apple/swift-corelibs-foundation/blob/914a8ae328d04f71e286c74fc3cb6e79dd9461ae/Foundation/Calendar.swift#L1187">the source for <code>Calendar._unconditionallyBridgeFromObjectiveC</code></a>.</p><div class="sourceCode" id="cb14"><pre class="sourceCode numberSource swift numberLines"><code class="sourceCode swift"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw">public</span> <span class="kw">static</span> <span class="kw">func</span> _unconditionallyBridgeFromObjectiveC(_ source: <span class="dt">NSCalendar</span>?) -&gt; <span class="dt">Calendar</span> {</span>
 <span id="cb14-2"><a href="#cb14-2"></a>    <span class="kw">var</span> result: <span class="dt">Calendar</span>? = nil</span>
 <span id="cb14-3"><a href="#cb14-3"></a>    _forceBridgeFromObjectiveC(source!, result: &amp;result)</span>
 <span id="cb14-4"><a href="#cb14-4"></a>    <span class="cf">return</span> result!</span>
 <span id="cb14-5"><a href="#cb14-5"></a>}</span></code></pre></div>
-<p>What’s interesting here is that the argument to the bridge function is an <code>Optional&lt;NSCalendar&gt;</code>. The static method, by its signature, accepts nil. What’s happening then? In this case, The culprit for the crash and what saves us from unexpected behavior later on is a force unwrap. Though the value that’s actually passed in to the function is <code>Optional&lt;NSCalendar&gt;.some(nil)</code>, which is still not a valid value and we’re still in undefined behavior territory, so it’s pleasantly surprising that a force unwrap catches this case.</p>
-<h2 id="array-properties">Array Properties</h2>
-<p>Nonnull array properties in Objective-C get bridged to Swift in a very strange way. The following Objective-C class declared a public nonnull <code>NSArray</code> property.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource objectivec numberLines"><code class="sourceCode objectivec"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">@interface</span> <span class="dt">OffendingObject</span> : <span class="dt">NSObject</span></span>
+<p>What’s interesting here is that the argument to the bridge function is an <code>Optional&lt;NSCalendar&gt;</code>. The static method, by its signature, accepts nil. What’s happening then? In this case, The culprit for the crash and what saves us from unexpected behavior later on is a force unwrap. Though the value that’s actually passed in to the function is <code>Optional&lt;NSCalendar&gt;.some(nil)</code>, which is still not a valid value and we’re still in undefined behavior territory, so it’s pleasantly surprising that a force unwrap catches this case.</p><h2 id="array-properties">Array Properties</h2>
+<p>Nonnull array properties in Objective-C get bridged to Swift in a very strange way. The following Objective-C class declared a public nonnull <code>NSArray</code> property.</p><div class="sourceCode" id="cb15"><pre class="sourceCode numberSource objectivec numberLines"><code class="sourceCode objectivec"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">@interface</span> <span class="dt">OffendingObject</span> : <span class="dt">NSObject</span></span>
 <span id="cb15-2"><a href="#cb15-2"></a><span class="kw">@property</span> (<span class="kw">nonnull</span>) <span class="dt">NSArray</span> *array;</span>
 <span id="cb15-3"><a href="#cb15-3"></a><span class="kw">@end</span></span></code></pre></div>
-<p>A description method is added here to illustrate the state of the object later.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource objectivec numberLines"><code class="sourceCode objectivec"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw">@implementation</span> <span class="dt">OffendingObject</span></span>
+<p>A description method is added here to illustrate the state of the object later.</p><div class="sourceCode" id="cb16"><pre class="sourceCode numberSource objectivec numberLines"><code class="sourceCode objectivec"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw">@implementation</span> <span class="dt">OffendingObject</span></span>
 <span id="cb16-2"><a href="#cb16-2"></a></span>
 <span id="cb16-3"><a href="#cb16-3"></a>- (<span class="dt">NSString</span> *)description</span>
 <span id="cb16-4"><a href="#cb16-4"></a>{</span>
@@ -257,35 +203,25 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb16-10"><a href="#cb16-10"></a>}</span>
 <span id="cb16-11"><a href="#cb16-11"></a></span>
 <span id="cb16-12"><a href="#cb16-12"></a><span class="kw">@end</span></span></code></pre></div>
-<p>What happens when we try and interact with an offending object with the following Swift program? Remember that the object’s array is bridged to a Swift <code>Array</code> property.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource swift numberLines"><code class="sourceCode swift"><span id="cb17-1"><a href="#cb17-1"></a><span class="kw">let</span> obj = <span class="dt">OffendingObject</span>()</span>
+<p>What happens when we try and interact with an offending object with the following Swift program? Remember that the object’s array is bridged to a Swift <code>Array</code> property.</p><div class="sourceCode" id="cb17"><pre class="sourceCode numberSource swift numberLines"><code class="sourceCode swift"><span id="cb17-1"><a href="#cb17-1"></a><span class="kw">let</span> obj = <span class="dt">OffendingObject</span>()</span>
 <span id="cb17-2"><a href="#cb17-2"></a>print(obj)</span>
 <span id="cb17-3"><a href="#cb17-3"></a>print(obj.array)</span>
 <span id="cb17-4"><a href="#cb17-4"></a>print(obj)</span>
 <span id="cb17-5"><a href="#cb17-5"></a>obj.array.append(<span class="st">&quot;thing&quot;</span>)</span>
 <span id="cb17-6"><a href="#cb17-6"></a>print(obj)</span></code></pre></div>
-<p>Run it, and you get this output.</p>
-<pre><code>&lt;OffendingObject: 0x1007b0380&gt;(
-    array: (null)
+<p>Run it, and you get this output.</p><pre><code>&lt;OffendingObject: 0x1007b0380&gt;(
+	array: (null)
 )
 []
 &lt;OffendingObject: 0x1007b0380&gt;(
-    array: (null)
+	array: (null)
 )
 &lt;OffendingObject: 0x1007b0380&gt;(
-    array: (
-    thing
+	array: (
+	thing
 )
 )</code></pre>
-<p>There are at least two very strange things going on in this program. Lines 1 and 2 are uneventful. We can instantiate an <code>OffendingObject</code>, and print its description. Its array property is appropriately is represented by the description Objective-C give nil in a format string, “(null)”.</p>
-<p>In line 3, strange things start to happen. <code>print(obj.array)</code> accesses the array property in Swift. That expression should result in nil, which should be a bit of a problem for Swift. Instead, it describes an empty array, as if there were no contractual violation by the <code>OffendingObject</code> at all. If we store the value of obj.array at that point, we do indeed get an empty <code>Array&lt;Any&gt;</code>. It suggests what happens next, which gets really interesting.</p>
-<p>We check the object’s property again in line 4 by printing the description of the object. Its array property is still nil.</p>
-<p>This situation doesn’t look self-consistent. Under some conditions, Swift will create an Array if it doesn’t find one where it’s expected.</p>
-<p>In line 5, we add a string, “thing” to the object’s array. Somewhat surprisingly, that doesn’t crash. And the <code>OffendingObject</code> ends up with an array seemingly conjured out of nowhere that contains a value.</p>
-<p>Swift Arrays and Objective-C arrays are funny though. If we set aside where the new empty array comes from for a moment, the rest of the behavior we’ve seen with arrays makes sense. An <code>NSArray</code> can’t be mutated. But swift arrays are different. Semantically, they are value types, not reference types. So changing a <code>var example: Array</code> by adding a new element is the same as creating a new array and assigning it back to the <code>var example</code> container. It’s the variable <code>example</code> that changes, not the <code>Array</code>.</p>
-<p>The reason the Swift code to “add to” that array works is because the <code>OffendingObject</code> is compatible with those operations. <code>NSArray</code> isn’t mutable, but the <code>array</code> <em>property</em> is readwrite. So the code is getting the array in the property, creating a new array with those contents <em>plus</em> a new object, then storing that new array back into the <code>OffendingObject</code>’s property.</p>
-<p>That just leaves the question of where that empty <code>Array</code> is coming from. Like <code>NSCalendar</code> above, <code>NSArray</code> is bridged to a Swift <code>Array</code>, and we can look at <a href="https://github.com/apple/swift-corelibs-foundation/blob/914a8ae328d04f71e286c74fc3cb6e79dd9461ae/Foundation/Array.swift">the implementation for <code>_unconditionallyBridgeFromObjectiveC</code></a> directly.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource swift numberLines"><code class="sourceCode swift"><span id="cb19-1"><a href="#cb19-1"></a><span class="kw">static</span> <span class="kw">public</span> <span class="kw">func</span> _unconditionallyBridgeFromObjectiveC(_ source: NSArray?) -&gt; Array {</span>
+<p>There are at least two very strange things going on in this program. Lines 1 and 2 are uneventful. We can instantiate an <code>OffendingObject</code>, and print its description. Its array property is appropriately is represented by the description Objective-C give nil in a format string, “(null)”.</p><p>In line 3, strange things start to happen. <code>print(obj.array)</code> accesses the array property in Swift. That expression should result in nil, which should be a bit of a problem for Swift. Instead, it describes an empty array, as if there were no contractual violation by the <code>OffendingObject</code> at all. If we store the value of obj.array at that point, we do indeed get an empty <code>Array&lt;Any&gt;</code>. It suggests what happens next, which gets really interesting.</p><p>We check the object’s property again in line 4 by printing the description of the object. Its array property is still nil.</p><p>This situation doesn’t look self-consistent. Under some conditions, Swift will create an Array if it doesn’t find one where it’s expected.</p><p>In line 5, we add a string, “thing” to the object’s array. Somewhat surprisingly, that doesn’t crash. And the <code>OffendingObject</code> ends up with an array seemingly conjured out of nowhere that contains a value.</p><p>Swift Arrays and Objective-C arrays are funny though. If we set aside where the new empty array comes from for a moment, the rest of the behavior we’ve seen with arrays makes sense. An <code>NSArray</code> can’t be mutated. But swift arrays are different. Semantically, they are value types, not reference types. So changing a <code>var example: Array</code> by adding a new element is the same as creating a new array and assigning it back to the <code>var example</code> container. It’s the variable <code>example</code> that changes, not the <code>Array</code>.</p><p>The reason the Swift code to “add to” that array works is because the <code>OffendingObject</code> is compatible with those operations. <code>NSArray</code> isn’t mutable, but the <code>array</code> <em>property</em> is readwrite. So the code is getting the array in the property, creating a new array with those contents <em>plus</em> a new object, then storing that new array back into the <code>OffendingObject</code>’s property.</p><p>That just leaves the question of where that empty <code>Array</code> is coming from. Like <code>NSCalendar</code> above, <code>NSArray</code> is bridged to a Swift <code>Array</code>, and we can look at <a href="https://github.com/apple/swift-corelibs-foundation/blob/914a8ae328d04f71e286c74fc3cb6e79dd9461ae/Foundation/Array.swift">the implementation for <code>_unconditionallyBridgeFromObjectiveC</code></a> directly.</p><div class="sourceCode" id="cb19"><pre class="sourceCode numberSource swift numberLines"><code class="sourceCode swift"><span id="cb19-1"><a href="#cb19-1"></a><span class="kw">static</span> <span class="kw">public</span> <span class="kw">func</span> _unconditionallyBridgeFromObjectiveC(_ source: NSArray?) -&gt; Array {</span>
 <span id="cb19-2"><a href="#cb19-2"></a>    <span class="cf">if</span> <span class="kw">let</span> object = source {</span>
 <span id="cb19-3"><a href="#cb19-3"></a>        <span class="kw">var</span> value: Array&lt;Element&gt;?</span>
 <span id="cb19-4"><a href="#cb19-4"></a>        _conditionallyBridgeFromObjectiveC(object, result: &amp;value)</span>
@@ -294,26 +230,14 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb19-7"><a href="#cb19-7"></a>        <span class="cf">return</span> Array&lt;Element&gt;()</span>
 <span id="cb19-8"><a href="#cb19-8"></a>    }</span>
 <span id="cb19-9"><a href="#cb19-9"></a>}</span></code></pre></div>
-<p>This code is doing something very similar to our <code>isNil</code> function above. The <code>if let</code> check on line 2 correctly identifies the <code>nil</code> value, we jump to line 7, where a new empty <code>Array</code> is created and returned.</p>
-<h2 id="what-do-we-do-now">What do we do now?</h2>
-<p>Swift is an incredible language. It’s in the top few of my favorite languages, and one of the languages I know best. I delighted in finding this issue and digging into it because I love a good mystery. And I also see this sort of issue as one of the growing pains of any language. Swift is growing up, and it’s going to develop quirks and gotchas, and language features people are strongly advised against using. That’s delightful.</p>
-<p>That’s how I felt early in the investigation. My feelings towards the language haven’t changed, but I see this behavior as hugely problematic. Swift is breaking what, in my mind, were the two biggest promises it was making:</p>
-<ol type="1">
+<p>This code is doing something very similar to our <code>isNil</code> function above. The <code>if let</code> check on line 2 correctly identifies the <code>nil</code> value, we jump to line 7, where a new empty <code>Array</code> is created and returned.</p><h2 id="what-do-we-do-now">What do we do now?</h2>
+<p>Swift is an incredible language. It’s in the top few of my favorite languages, and one of the languages I know best. I delighted in finding this issue and digging into it because I love a good mystery. And I also see this sort of issue as one of the growing pains of any language. Swift is growing up, and it’s going to develop quirks and gotchas, and language features people are strongly advised against using. That’s delightful.</p><p>That’s how I felt early in the investigation. My feelings towards the language haven’t changed, but I see this behavior as hugely problematic. Swift is breaking what, in my mind, were the two biggest promises it was making:</p><ol type="1">
 <li>The safety afforded by a strong type system</li>
 <li>Stellar Objective-C interoperability</li>
 </ol>
-<p>The good news is that the Swift team knows about the issue: <a href="https://bugs.swift.org/browse/SR-8622">SR-8622</a> and <a href="https://bugs.swift.org/browse/SR-120">SR-120</a>.</p>
-<p>The bad news is currently medium priority and has been known since mid-2018, or earlier depending on how you read it.</p>
-<p>The other good news is that a reasonable solution has at least been mentioned in <a href="https://bugs.swift.org/browse/SR-8622?focusedCommentId=39184&amp;page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#comment-39184">SR-8622</a>:</p>
-<blockquote cite="https://bugs.swift.org/browse/SR-8622?focusedCommentId=39184&amp;page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#comment-39184">
-<p>The cost of checking every nonnull return value was determined to be too high, but maybe we could do it in Debug builds.</p>
-<footer>
+<p>The good news is that the Swift team knows about the issue: <a href="https://bugs.swift.org/browse/SR-8622">SR-8622</a> and <a href="https://bugs.swift.org/browse/SR-120">SR-120</a>.</p><p>The bad news is currently medium priority and has been known since mid-2018, or earlier depending on how you read it.</p><p>The other good news is that a reasonable solution has at least been mentioned in <a href="https://bugs.swift.org/browse/SR-8622?focusedCommentId=39184&amp;page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#comment-39184">SR-8622</a>:</p><blockquote cite="https://bugs.swift.org/browse/SR-8622?focusedCommentId=39184&amp;page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#comment-39184">
+<p>The cost of checking every nonnull return value was determined to be too high, but maybe we could do it in Debug builds.</p><footer>
 —Jordan Rose, <cite>SR-8622</cite>
 </footer>
 </blockquote>
-<p>Having the the compiler automatically check and assert that nonnull Objective-C types returned by Objective-C methods are indeed present would be fantastic, whether for debug builds or as an independent flag. I hope Apple, or some Swift open source contributor can make that happen soon.</p>
-<p>In the mean time, I’m not going to be using Swift any less. It’s important to know where the sharp edges are.</p>
-</article>
-</main>
-</body>
-</html>
+<p>Having the the compiler automatically check and assert that nonnull Objective-C types returned by Objective-C methods are indeed present would be fantastic, whether for debug builds or as an independent flag. I hope Apple, or some Swift open source contributor can make that happen soon.</p><p>In the mean time, I’m not going to be using Swift any less. It’s important to know where the sharp edges are.</p></article></main></body></html>

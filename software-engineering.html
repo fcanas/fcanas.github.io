@@ -1,15 +1,4 @@
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <meta name="author" content="2016-10-24">
-  <title>Software Engineering</title>
-  <style type="text/css">code{white-space: pre;}</style>
-  <link rel="stylesheet" href="/writ.min.css">
-</head>
-<body>
-<header>
-<h1>fabián cañas</h1>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"><title>Software Engineering</title><style type="text/css">code{white-space: pre;}</style><link rel="stylesheet" href="https://fabiancanas.com/writ.min.css"><link rel="stylesheet" href="https://fabiancanas.com/code.css"></head><body><header><h1>fabián cañas</h1>
 <nav>
 <ul>
   <li><a href='/'>about</a></li>
@@ -17,25 +6,7 @@
   <li><a href='/software/'>software</a></li>
   |
   <li><a href='https://www.github.com/fcanas'>GitHub</a></li>
-  <li><a href='https://www.twitter.com/fcanas'>Twitter</a></li>
+  <li style='display: none;'><a href='https://www.twitter.com/fcanas'>Twitter</a></li>
+  <li><a rel="me" href="https://mastodon.social/@fcanas">Mastodon</a></li>
 </ul>
-</nav>
-</header>
-<main>
-<article>
-<h1>Software Engineering</h1>
-<p>These are some of my observations and thoughts about best-practices for software engineering.</p>
-<h2 id="er-er">Er-er</h2>
-<p>Classes that end in <em>er</em> are suspicious. Especially managers and controllers. They tend to have more than one responsibility to begin with, and easily accumulate more responsibilities by being easy targets to match against new functionality. “Manager” and “Controller” are so non-specific as to be completely invisible when you’re looking around a code base looking for where to put a new little bit of code. A <code>SearchManager</code> or <code>SearchController</code> are only bound by the general domain of “something having to do with search”.</p>
-<p>For OOP, consider instead decomposing search into <code>Query</code>, <code>SearchParameters</code>, <code>Result</code>, and so on.</p>
-<h2 id="logging-is-a-side-effect">Logging is a side-effect</h2>
-<p>Logging is a side effect. And depending on how you’re logging, it’s possibly adding a dependency, or strongly coupling a domain, ui, or other component to a logging component. Especially deep in domain models, consider surfacing all the information needed to log, all errors for example. And logging further out in the stack.</p>
-<h2 id="always-return">Always Return</h2>
-<p>Methods with a <code>void</code> return are suspicious. They’re guaranteed to have side-effects if they’re at all useful. I’d like to practice a convention where <code>void</code> methods return <code>self</code> instead. This makes chaining easier. <code>void</code> methods that take arguments may be better off returning the arguments themselves, though I’m inclined towards <code>self</code>. This needs more thought.</p>
-<p>Methods with a <code>void</code> return that don’t take arguments are doubly suspicious. They are a very procedural in nature, and in my experience are an OOP trap into spaghetti code. That’s not to say that these are forbidden. It can be very useful to capture a bit of repetitive code out of an object. But be vigilant as to whether a different pattern may be appropriate.</p>
-<h2 id="use-self-in-methods">Use Self in Methods</h2>
-<p>If an instance method doesn’t use <code>self</code>, it shouldn’t be an instance method. Maybe it should be a class method, or a free function. But examine what structure it operates on and you may find it should be an extension on that type.</p>
-</article>
-</main>
-</body>
-</html>
+</nav></header><main><article><h1>Software Engineering</h1><date>2016-10-24</date><p>These are some of my observations and thoughts about best-practices for software&shy;engineering.</p><h2>Er-er</h2><p>Classes that end in <em>er</em> are suspicious. Especially managers and controllers.&shy;They tend to have more than one responsibility to begin with, and easily&shy;accumulate more responsibilities by being easy targets to match against new&shy;functionality. “Manager” and “Controller” are so non-specific as to be&shy;completely invisible when you’re looking around a code base looking for where to&shy;put a new little bit of code. A <code>SearchManager</code> or <code>SearchController</code> are&shy;only bound by the general domain of “something having to do with search”.</p><p>For OOP, consider instead decomposing search into <code>Query</code>, <code>SearchParameters</code>,&shy;<code>Result</code>, and so on.</p><h2>Logging is a side-effect</h2><p>Logging is a side effect. And depending on how you’re logging, it’s possibly&shy;adding a dependency, or strongly coupling a domain, ui, or other component to a&shy;logging component. Especially deep in domain models, consider surfacing all the&shy;information needed to log, all errors for example. And logging further out in&shy;the stack.</p><h2>Always Return</h2><p>Methods with a <code>void</code> return are suspicious. They’re guaranteed to have&shy;side-effects if they’re at all useful. I’d like to practice a convention where&shy;<code>void</code> methods return <code>self</code> instead. This makes chaining easier. <code>void</code> methods&shy;that take arguments may be better off returning the arguments themselves, though&shy;I’m inclined towards <code>self</code>. This needs more thought.</p><p>Methods with a <code>void</code> return that don’t take arguments are doubly suspicious.&shy;They are a very procedural in nature, and in my experience are an OOP trap into&shy;spaghetti code. That’s not to say that these are forbidden. It can be very&shy;useful to capture a bit of repetitive code out of an object. But be vigilant as&shy;to whether a different pattern may be appropriate.</p><h2>Use Self in Methods</h2><p>If an instance method doesn’t use <code>self</code>, it shouldn’t be an instance method.&shy;Maybe it should be a class method, or a free function. But examine what&shy;structure it operates on and you may find it should be an extension on that&shy;type.</p></article></main></body></html>

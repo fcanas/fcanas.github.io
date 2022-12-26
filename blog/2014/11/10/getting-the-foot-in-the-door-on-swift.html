@@ -1,83 +1,18 @@
-<html>
-
-<head><title>Getting the Foot in the Door on Swift</title>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="/writ.min.css">
-</head>
-
-<body>
-  <header>
-    <h1>fabián cañas</h1>
-    <nav>
-    <ul>
-      <li><a href='/'>about</a></li>
-      <li><a href='/blog/'>writing</a></li>
-      <li><a href='/software/'>software</a></li>
-      |
-      <li><a href='https://www.github.com/fcanas'>GitHub</a></li>
-      <li><a href='https://www.twitter.com/fcanas'>Twitter</a></li>
-    </ul>
-    </nav>
-  </header>
-  <main>
-<article>
-<h1>Getting the Foot in the Door on Swift</h1>
-<date>2014-11-10</date>
-<p>I’m writing a lot of Swift now. </p>
-
-<p>I've been wary about Swift since it was announced. It's definitely not the language some people think it is (omg it looks like javascript!). I love Objective-C and I love <a href="https://github.com/fcanas/OHMKit">diving deep into the runtime</a>.</p>
-
-<p>I've had false starts with Swift in the last few months. But I finally made it over the hump. I'm now writing, and will soon enough be shipping production Swift code.</p>
-
-<h2 id="howistarted">How I Started</h2>
-
-<p>I recently started a new project. And before it got too large, I decided to take one <em>very</em> simple class (about 75 lines) I had already written in Objective-C and transliterate it to Swift. It hurt. It was kind of hard. I iterated on it until it read like what I think Swift should read like. And it turned out to be about half the size.</p>
-
-<p>Then I took a couple of classes that first class talked to, and changed those over to Swift. The process was a lot faster and a lot easier.</p>
-
-<p>In that area of responsibility for the app, I wrote everything in Swift from there on. It’s been three weeks, and I’m now reasonably productive in Swift.</p>
-
-<h2 id="whereiam">Where I Am</h2>
-
-<p>I’m not writing idiomatic, concise Swift except in trivial classes. For nearly every function I write, I can revisit and simplify it just by using the language better. I'm putting in the time to make things pretty good. But I don't have the luxury or the need to make every line of code excellent right now. I'll get there with practice.</p>
-
-<p>I know I’m not being as elegant as I could be with structs and protocols. I keep falling back to inheriting from <code>NSObject</code> in places where I’m pretty sure I wouldn’t have to if I thought about things carefully. </p>
-
-<p>It’s a exhausting working in a new language, so maybe the overall design of what I’m writing is suffering. I’m embracing immutability, and my code is getting more “functional”, but I’m far from writing “functional Swift”.</p>
-
-<p>I’m using Objective-C APIs in Swift. Apple made that easy. I’m reasonably comfortable writing basic Swift interfaces to be used from Objective-C. But even those simple Swift interfaces often end up not reading like idiomatic Objective-C. As a fall-back, I’ve made a header to declare some Objective-C protocols to make the interfaces between some objects exactly how I want them to be. I’m confident that’s a crutch I won’t have to keep using for too much longer.</p>
-
-<p>Optionals are great. I know what’s going on over 90% of the time when I type <code>?</code>, <code>!</code>, <code>as</code>, <code>as?</code>, <code>??</code>, <em>etc</em>. I still need to explore, write, and read more Swift to find the cleanest way to express checks and transformations around optionals. I find that my first-pass is usually convoluted and can be expressed much more simply.</p>
-
-<h2 id="whatshard">What’s Hard</h2>
-
-<p>Mostly the tools.</p>
-
-<blockquote>
-  <p>Xcode can only refactor C and Objective-C code.</p>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"><title>Getting the Foot in the Door on Swift</title><style type="text/css">code{white-space: pre;}</style><link rel="stylesheet" href="https://fabiancanas.com/writ.min.css"><link rel="stylesheet" href="https://fabiancanas.com/code.css"></head><body><header><h1>fabián cañas</h1>
+<nav>
+<ul>
+  <li><a href='/'>about</a></li>
+  <li><a href='/blog/'>writing</a></li>
+  <li><a href='/software/'>software</a></li>
+  |
+  <li><a href='https://www.github.com/fcanas'>GitHub</a></li>
+  <li style='display: none;'><a href='https://www.twitter.com/fcanas'>Twitter</a></li>
+  <li><a rel="me" href="https://mastodon.social/@fcanas">Mastodon</a></li>
+</ul>
+</nav></header><main><article><h1>Getting the Foot in the Door on Swift</h1><date>2014-11-10</date><p>I’m writing a lot of Swift now.</p><p>I’ve been wary about Swift since it was announced. It’s definitely not the language some people think it is (omg it looks like javascript!). I love Objective-C and I love <a href="https://github.com/fcanas/OHMKit">diving deep into the runtime</a>.</p><p>I’ve had false starts with Swift in the last few months. But I finally made it over the hump. I’m now writing, and will soon enough be shipping production Swift code.</p><h2>How I Started</h2><p>I recently started a new project. And before it got too large, I decided to take one <em>very</em> simple class (about 75 lines) I had already written in Objective-C and transliterate it to Swift. It hurt. It was kind of hard. I iterated on it until it read like what I think Swift should read like. And it turned out to be about half the size.</p><p>Then I took a couple of classes that first class talked to, and changed those over to Swift. The process was a lot faster and a lot easier.</p><p>In that area of responsibility for the app, I wrote everything in Swift from there on. It’s been three weeks, and I’m now reasonably productive in Swift.</p><h2>Where I Am</h2><p>I’m not writing idiomatic, concise Swift except in trivial classes. For nearly every function I write, I can revisit and simplify it just by using the language better. I’m putting in the time to make things pretty good. But I don’t have the luxury or the need to make every line of code excellent right now. I’ll get there with practice.</p><p>I know I’m not being as elegant as I could be with structs and protocols. I keep falling back to inheriting from <code>NSObject</code> in places where I’m pretty sure I wouldn’t have to if I thought about things carefully.</p><p>It’s a exhausting working in a new language, so maybe the overall design of what I’m writing is suffering. I’m embracing immutability, and my code is getting more “functional”, but I’m far from writing “functional Swift”.</p><p>I’m using Objective-C APIs in Swift. Apple made that easy. I’m reasonably comfortable writing basic Swift interfaces to be used from Objective-C. But even those simple Swift interfaces often end up not reading like idiomatic Objective-C. As a fall-back, I’ve made a header to declare some Objective-C protocols to make the interfaces between some objects exactly how I want them to be. I’m confident that’s a crutch I won’t have to keep using for too much longer.</p><p>Optionals are great. I know what’s going on over 90% of the time when I type <code>?</code>, <code>!</code>, <code>as</code>, <code>as?</code>, <code>??</code>, <em>etc</em>. I still need to explore, write, and read more Swift to find the cleanest way to express checks and transformations around optionals. I find that my first-pass is usually convoluted and can be expressed much more simply.</p><h2>What’s Hard</h2><p>Mostly the tools.</p><blockquote>
+  Xcode can only refactor C and Objective-C code.
 </blockquote>
-
-<p>That's absurd. Powerful refactoring tools should be made much easier with a statically-typed compiled language.</p>
-
-<p>Xcode loves to beachball whenever I’m changing the type of just about anything. SourceKit crashes very frequently, or so I’m told via some HUD-style alerts. And sometimes live type-inference and type-checking just silently stop working, option-click stops working, and the whole editing experience is degraded until I restart Xcode.</p>
-
-<p>Swift seems like it’s stuck between Object-Oriented and Functional worlds. The tools, the documentation, and my habits aren’t helping me navigate that space. For example an array doesn’t have an <code>indexOf</code> method, or anything resembling it. Instead, there’s a <code>find</code> function that works on all manner of collections. As <a href="http://stackoverflow.com/questions/24028860/how-to-find-index-of-list-item-in-apples-swift">one user on Stack Overflow put it</a>: </p>
-
-<blockquote>
-  <p>“Coming from the OOP world, how am I supposed to find this kind of free floating functions?” </p>
+<p>That’s absurd. Powerful refactoring tools should be made much easier with a statically-typed compiled language.</p><p>Xcode loves to beachball whenever I’m changing the type of just about anything. SourceKit crashes very frequently, or so I’m told via some HUD-style alerts. And sometimes live type-inference and type-checking just silently stop working, option-click stops working, and the whole editing experience is degraded until I restart Xcode.</p><p>Swift seems like it’s stuck between Object-Oriented and Functional worlds. The tools, the documentation, and my habits aren’t helping me navigate that space. For example an array doesn’t have an <code>indexOf</code> method, or anything resembling it. Instead, there’s a <code>find</code> function that works on all manner of collections. As <a href="http://stackoverflow.com/questions/24028860/how-to-find-index-of-list-item-in-apples-swift">one user on Stack Overflow put it</a>:</p><blockquote>
+  “Coming from the OOP world, how am I supposed to find this kind of free floating functions?” 
 </blockquote>
-
-<p>I haven’t found a good answer. Between functions and conveniences like the nil coalescing operator (<code>??</code> is great!) I feel like I’m only using half the language. Until I read the Swift book instead of search through it, I'll probably continue missing out on some great features.</p>
-
-<p>Playgrounds are a mess. I’ve found that playgrounds are reasonable for exploring the language a little bit. But I’ve still not been able to use them to explore an idea. I tried and failed to use a playground as a place to rapidly iterate on an algorithm. It seemed like internal components kept crashing. It was completely unclear when the output would update to match the typed program. Getting code to draw is confusing and unstable. Some frameworks seem to load, but give playgrounds a lot of trouble (MapKit). Maybe the <a href="https://developer.apple.com/swift/blog/?id=18">REPL</a> will be better. </p>
-
-<p>In a prior life I was addicted to MATLAB and Mathematica’s ridiculously awesome interactive tools. If playgrounds can achieve a quarter of what those environments can do, the Cocoa development world will be a much better place. That kind of interactivity is hugely powerful for learning and exploration. Right now it’s not even close.</p>
-
-<h2 id="howfarivecome">How Far I’ve Come</h2>
-
-<p>After giving up on playgrounds, I was able to write a harness Mac app in what remained of the day — 100% in Swift. I’m now free to develop and explore some algorithm ideas with only a small compile-and-run delay. It was like taking the training wheels off Swift. It felt great. I just wrote something recognizable as a Mac app, in Swift, in less than a day!</p>
-
-<p>If I just have to crank out something familiar, I’m still nowhere near as productive in Swift as I am in Objective-C. But since I’m not just blindly implementing some spec most of the time, I don’t find I’m much slower than I would normally be (except when I have to write code that would normally have existed at the C level, <em>e.g.</em> moving data around between <code>UnsafeMutablePointer</code>s).</p>
-
-<p>It only took about three weeks to get here.</p>
+<p>I haven’t found a good answer. Between functions and conveniences like the nil coalescing operator (<code>??</code> is great!) I feel like I’m only using half the language. Until I read the Swift book instead of search through it, I’ll probably continue missing out on some great features.</p><p>Playgrounds are a mess. I’ve found that playgrounds are reasonable for exploring the language a little bit. But I’ve still not been able to use them to explore an idea. I tried and failed to use a playground as a place to rapidly iterate on an algorithm. It seemed like internal components kept crashing. It was completely unclear when the output would update to match the typed program. Getting code to draw is confusing and unstable. Some frameworks seem to load, but give playgrounds a lot of trouble (MapKit). Maybe the <a href="https://developer.apple.com/swift/blog/?id=18">REPL</a> will be better.</p><p>In a prior life I was addicted to MATLAB and Mathematica’s ridiculously awesome interactive tools. If playgrounds can achieve a quarter of what those environments can do, the Cocoa development world will be a much better place. That kind of interactivity is hugely powerful for learning and exploration. Right now it’s not even close.</p><h2>How Far I’ve Come</h2><p>After giving up on playgrounds, I was able to write a harness Mac app in what remained of the day — 100% in Swift. I’m now free to develop and explore some algorithm ideas with only a small compile-and-run delay. It was like taking the training wheels off Swift. It felt great. I just wrote something recognizable as a Mac app, in Swift, in less than a day!</p><p>If I just have to crank out something familiar, I’m still nowhere near as productive in Swift as I am in Objective-C. But since I’m not just blindly implementing some spec most of the time, I don’t find I’m much slower than I would normally be (except when I have to write code that would normally have existed at the C level, <em>e.g.</em> moving data around between <code>UnsafeMutablePointer</code>s).</p><p>It only took about three weeks to get here.</p></article></main></body></html>
