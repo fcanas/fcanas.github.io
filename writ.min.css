@@ -231,13 +231,15 @@ hr {
 
 ol, article date { color: #aaa; }
 
+.warning { background: rgba(230, 17, 10, 0.3); padding: 0.5em 0.75em 0.3em; margin: 0.5em; border-radius: 0.75em; border: 1px solid rgba(171, 13, 7, 0.72); }
+
 @media (prefers-color-scheme: dark) {
   body {
     color: #fff;
     background-color: #24292e;
   }
   
-    a {
+  a {
     text-decoration: none;
     color: #59f;
   }
@@ -252,5 +254,9 @@ ol, article date { color: #aaa; }
     padding: 3px;
     border: solid 1px #222;
   }
-  .warning { background: rgba(230, 17, 10, 0.3); padding: 0.5em 0.75em 0.3em; margin: 0.5em; border-radius: 0.75em; border: 1px solid rgba(171, 13, 7, 0.72); }
+
+  code {background-color: #333;color:white;border-color: #555;}
+
+  pre {background-color: #333;color:white;border-color: #555;}
 }
+
