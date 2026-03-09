@@ -1,0 +1,120 @@
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+    padding: 2rem 0;
+}
+
+.gallery-item a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    display: block;
+}
+
+/* Lightbox (native dialog, injected by gallery.js) */
+.lightbox {
+    border: none;
+    background: transparent;
+    padding: 0;
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow: visible;
+}
+
+.lightbox::backdrop {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+figure.lightbox-content {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 2rem;
+    max-width: min(1200px, 90vw);
+    box-sizing: border-box;
+    background: #fff;
+    margin: 0;
+    padding: 2rem;
+    border-radius: 4px;
+    max-height: 85vh;
+    overflow: auto;
+    position: relative;
+}
+
+.lightbox-content img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    max-height: 80vh;
+    min-width: 0;
+}
+
+.lightbox-content figcaption {
+    color: #333;
+    margin-top: 0.5rem;
+}
+
+.close-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+/* Detail page */
+.painting-detail-container {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 3rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem 0;
+}
+
+.detail-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+}
+
+.detail-info h2 {
+    margin-top: 0;
+}
+
+.metadata-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.5rem 1rem;
+    margin: 1rem 0;
+}
+
+.metadata-grid dt {
+    font-weight: bold;
+}
+
+.metadata-grid dd {
+    margin: 0;
+}
+
+.back-link {
+    margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+    .lightbox-content,
+    .painting-detail-container {
+        grid-template-columns: 1fr;
+    }
+}
