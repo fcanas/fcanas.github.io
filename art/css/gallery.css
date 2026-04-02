@@ -112,9 +112,12 @@ figure.lightbox-content {
     margin-top: 2rem;
 }
 
-@media (max-width: 768px) {
-    .lightbox-content,
+@media (max-width: 960px) {
     .painting-detail-container {
+        grid-template-columns: 1fr;
+    }
+
+    figure.lightbox-content {
         grid-template-columns: 1fr;
     }
 }
