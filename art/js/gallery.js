@@ -1,3 +1,16 @@
+const usesImperial = ['US', 'MM', 'LR'].includes(
+    new Intl.Locale(navigator.language).maximize().region
+);
+
+function formatDimensions(hIn, wIn) {
+    if (usesImperial) {
+        return `${hIn} \u00d7 ${wIn} in`;
+    }
+    const hCm = +(hIn * 2.54).toFixed(1);
+    const wCm = +(wIn * 2.54).toFixed(1);
+    return `${hCm} \u00d7 ${wCm} cm`;
+}
+
 // Progressive enhancement: lightbox via native <dialog>
 const dialog = document.createElement('dialog');
 dialog.className = 'lightbox';
@@ -27,7 +40,8 @@ document.querySelectorAll('a.lightbox-link').forEach(link => {
         const year = link.dataset.year;
         const month = link.dataset.month;
         const material = link.dataset.material;
-        const dimensions = link.dataset.dimensions;
+        const dimHeight = link.dataset.dimHeight;
+        const dimWidth = link.dataset.dimWidth;
 
         dialogImg.src = link.dataset.image;
         dialogImg.alt = link.dataset.alt;
@@ -45,9 +59,9 @@ document.querySelectorAll('a.lightbox-link').forEach(link => {
             dialogCaption.appendChild(document.createElement('br'));
             dialogCaption.appendChild(document.createTextNode(material));
         }
-        if (dimensions) {
+        if (dimHeight && dimWidth) {
             dialogCaption.appendChild(document.createElement('br'));
-            dialogCaption.appendChild(document.createTextNode(dimensions));
+            dialogCaption.appendChild(document.createTextNode(formatDimensions(parseFloat(dimHeight), parseFloat(dimWidth))));
         }
 
         dialog.showModal();

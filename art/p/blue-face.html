@@ -42,7 +42,19 @@
 
                     
                     <dt>Dimensions</dt>
-                    <dd>18&#34;x18&#34;</dd>
+                    <dd class="dimensions"
+                        data-in="18 × 18 in"
+                        data-cm="45.7 × 45.7 cm"
+                    ></dd>
+                    <script>
+                    (function() {
+                        var dd = document.querySelector('.dimensions');
+                        var imperial = ['US', 'MM', 'LR'].includes(
+                            new Intl.Locale(navigator.language).maximize().region
+                        );
+                        dd.textContent = imperial ? dd.dataset.in : dd.dataset.cm;
+                    })();
+                    </script>
                     
                 </dl>
 
